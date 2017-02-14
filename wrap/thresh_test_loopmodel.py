@@ -67,7 +67,7 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['noaa']
+    dsetnames=['um']
 ndstr=str(ndset)
 
 for d in range(ndset):
