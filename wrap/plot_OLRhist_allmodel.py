@@ -31,6 +31,7 @@ testfile=False    # Uses a test file with short period
 testyear=False    # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
+title=True      # plot title
 sub="SA"
 
 ### Directory
@@ -170,6 +171,8 @@ print modnm
 plt.legend(modnm, loc='upper left',fontsize='xx-small')
 plt.xlabel('OLR', fontsize=13.0, weight='demibold', color='k')
 plt.ylabel('frequency density', fontsize=13.0, weight='demibold', color='k')
+if title: plt.title('Histogram of OLR: '+dsetstr,\
+                    fontsize=13.0, weight='demibold', color='k')
 
 ### Save figure
 histfig=bkdir+'/linehist_olr.'+dsetstr+'.png'

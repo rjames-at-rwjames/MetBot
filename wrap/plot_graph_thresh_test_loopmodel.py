@@ -34,6 +34,7 @@ testyear=True    # Only uses first 365 days of olr data
 compare=True     # option to compare with histograms from other datasets
 compto=['noaa','um']     # list of datasets to compare to
 comptom=['noaa','anqjn'] # list of models to compare to
+title=True       # plot title
 sub="SA"
 
 ## Multi dset?
@@ -263,5 +264,8 @@ for d in range(ndset):
         ax2.set_ylabel('No of TTTs at given OLR threshold', fontsize=11.0, weight='demibold', color='fuchsia')
         for tl in ax2.get_yticklabels():
             tl.set_color('fuchsia')
+
+        if title: plt.title('Test for OLR threshold: ' +dset+'_'+name, \
+                            fontsize=13.0, weight='demibold', color='k')
 
         plt.savefig(figdir+dset+'_'+name+'_threshtestgraph.png')
