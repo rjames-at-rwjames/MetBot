@@ -27,8 +27,8 @@ import MetBot.SynopticAnatomy as sy
 import MetBot.dset_dict as dsetdict
 
 ### Running options
-testfile=True    # Uses a test file with short period
-testyear=True    # Only uses first 365 days of olr data
+testfile=False    # Uses a test file with short period
+testyear=False    # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 sub="SA"
@@ -37,14 +37,14 @@ sub="SA"
 bkdir=cwd+"/../../../CTdata/metbot_multi_dset/"
 
 ## Multi dset?
-dsets='all'     # "all" or "spec" to choose specific dset(s)
+dsets='spec'     # "all" or "spec" to choose specific dset(s)
 if dsets=='all':
     ndset=len(dsetdict.dset_deets)
     dsetnames=list(dsetdict.dset_deets)
     dsetstr = 'all_dset'
 elif dsets=='spec': # edit for the dset you want
-    ndset=1
-    dsetnames=['um']
+    ndset=2
+    dsetnames=['noaa','cmip5']
     dsetstr = '_'.join(dsetnames)
 ndstr=str(ndset)
 print 'Running on datasets:'
@@ -62,7 +62,11 @@ print 'Total number of models = '+str(nallmod)
 
 ### Open array for names for cbar
 modnm=["" for x in range(nallmod)] # creates a list of strings for modnames
+
+### Display options for plot
 styls=['solid','dashed','dotted','dash-dot']
+lws=[3,2,1]
+zorders=[3,2,1]
 
 ### Start plot
 fig, ax1 = plt.subplots()
@@ -98,7 +102,7 @@ for d in range(ndset):
 
         ### Open OLR data
         ncout = mync.openolr_multi(infile, vname, name,\
-                                   dataset=dset, subs=sub)
+				dataset=dset, subs=sub)
         ndim = len(ncout)
         if ndim == 5:
             olr, time, lat, lon, dtime = ncout
@@ -149,7 +153,7 @@ for d in range(ndset):
         y, binEdges=np.histogram(vrbh.ravel(),bins=b,density=True)
         bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
         #plt.plot(bincentres,y,col(z),styl(z))
-        plt.plot(bincentres,y,linestyle=styls[d])
+        plt.plot(bincentres,y,linestyle=styls[d],linewidth=lws[d],zorder=zorders[d])
         plt.xlim(100, 320)
         plt.yticks(np.arange(0.002, 0.016, 0.004))
 
@@ -163,7 +167,7 @@ for d in range(ndset):
 ax1.plot((230, 230), (0, 0.014),'k')
 ax1.plot((245, 245), (0, 0.014),'k')
 print modnm
-plt.legend(modnm, loc='upper left',fontsize='x-small')
+plt.legend(modnm, loc='upper left',fontsize='xx-small')
 
 ### Save figure
 histfig=bkdir+'/linehist_olr.'+dsetstr+'.png'
