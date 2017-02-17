@@ -37,17 +37,17 @@ dsets='all'     # "all" or "spec" to choose specific dset(s)
 if dsets=='all':
     ndset=len(dsetdict.dset_deets)
     dsetnames=list(dsetdict.dset_deets)
-    dsetstr='all_dset'
+    dsetstr='all_dset'+'_'+str(ndset)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
     dsetnames=['cmip5']
-    dsetstr='_'.join(dsetnames)
+    dsetstr=('_'.join(dsetnames))+'_'+str(ndset)
 print 'Running on datasets:'
 print dsetnames
 
 
 ### Count total number of models
-nm_dset=np.zeros(3)
+nm_dset=np.zeros(ndset)
 for d in range(ndset):
     dset = dsetnames[d]
     nmod = len(dsetdict.dset_deets[dset])
