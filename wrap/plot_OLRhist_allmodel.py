@@ -44,15 +44,15 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
     dsetstr = 'all_dset'
 elif dsets=='spec': # edit for the dset you want
-    ndset=2
-    dsetnames=['noaa','cmip5']
+    ndset=5
+    dsetnames=['noaa','ncep','era','20cr','um']
     dsetstr = '_'.join(dsetnames)
 ndstr=str(ndset)
 print 'Running on datasets:'
 print dsetnames
 
 ### Count total number of models
-nm_dset=np.zeros(3)
+nm_dset=np.zeros(ndset)
 for d in range(ndset):
     dset = dsetnames[d]
     nmod = len(dsetdict.dset_deets[dset])
@@ -65,9 +65,9 @@ print 'Total number of models = '+str(nallmod)
 modnm=["" for x in range(nallmod)] # creates a list of strings for modnames
 
 ### Display options for plot
-styls=['solid','dashed','dotted','dash-dot']
-lws=[3,2,1]
-zorders=[3,2,1]
+styls=['solid','dashed','dotted','dashed','solid']
+lws=[3,2,2,2,1]
+zorders=[3,2,2,2,1]
 
 ### Start plot
 fig, ax1 = plt.subplots()
