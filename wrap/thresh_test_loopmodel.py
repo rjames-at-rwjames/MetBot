@@ -67,7 +67,7 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['cmip5']
+    dsetnames=['um']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -83,7 +83,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['ACCESS1-0']
+        mnames=['u-ab674']
     nmstr=str(nmod)
 
     for m in range(nmod):
