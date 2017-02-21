@@ -380,7 +380,7 @@ def opennc2(ncfile,varstr,mname,dset,sub=False,levselect=False,subtime=False):
            UM .pp files
 
     USAGE: varstr - string
-           dset   - string valid: um, umpr, cmip5, noaa
+           dset   - string valid: um, umpr, cmip5, noaa, ncep, era, 20cr
            sub    - tuple - ((latmin,latmax),(lonmin,lonmax))
                    or string - see options availble in mynetcdf.isubs
            levselect - will return level slice closest to given value

@@ -300,26 +300,30 @@ class SynopticEvents:
         [date, label, nxtdate, nxtlabel, nxtIndex, prevIndex]
 
         Returns dictionary of tracks'''
-        matches = self.__mbsmatch__(mbs,ch,maxdist=maxdist)
-        # a view into just the Index fields of matches
-        print 'Building tracks index dictionary...'
-        m = matches[:,4:]
-        tracks={}
-        # Since track start occurs with no prevIndex but has a nxtIndex
-        nxtNonxt = (m[:,0]>0) | (m[:,0]==-999)
-        istart=np.where((m[:,1]==-1) & nxtNonxt )[0]
-        for ix in istart:
-            trk=[ix,]
-            inxt = m[ix,0]
-            if inxt == -999:
-                dummy="this track will only have one position"
-            else:
-                while inxt>0:
-                    trk.append(inxt)
-                    inxt=m[inxt,0]
-            if len(trk)>=trklen:
-                trklabel = matches[ix,0]*100+matches[ix,1]
-                tracks[trklabel] = trk
+        tracks = {}
+        if len(mbs) > 1:
+            matches = self.__mbsmatch__(mbs,ch,maxdist=maxdist)
+            # a view into just the Index fields of matches
+            print 'Building tracks index dictionary...'
+            m = matches[:,4:]
+
+            # Since track start occurs with no prevIndex but has a nxtIndex
+            nxtNonxt = (m[:,0]>0) | (m[:,0]==-999)
+            istart=np.where((m[:,1]==-1) & nxtNonxt )[0]
+            for ix in istart:
+                trk=[ix,]
+                inxt = m[ix,0]
+                if inxt == -999:
+                    dummy="this track will only have one position"
+                else:
+                    while inxt>0:
+                        trk.append(inxt)
+                        inxt=m[inxt,0]
+                if len(trk)>=trklen:
+                    trklabel = matches[ix,0]*100+matches[ix,1]
+                    tracks[trklabel] = trk
+        else:
+            print 'Not enough CBs to build tracks'
 
         return tracks
 
@@ -468,16 +472,19 @@ class SynopticEvents:
         for k in keylist:
             print 'GETTING TRACKS FOR:', k
             # GET THE TRACKS
-            self.tracks[k] = self.__blobtracks__(self.blobs[k]['mbs'],\
-                             self.blobs[k]['ch'],trklen=trklen,maxdist=maxdist)
-            # GET KEY PROPERTIES NEEDED IN buildevents below
-            self.trackshr[k] = self.__trkmbsfield__('hrtime',self.tracks[k],\
-                                                    self.blobs[k]['mbs'])
-            self.trackscX[k] = self.__trkmbsfield__('cX',self.tracks[k],\
-                                                    self.blobs[k]['mbs'])
-            self.trackscY[k] = self.__trkmbsfield__('cY',self.tracks[k],\
-                                                     self.blobs[k]['mbs'])
-            print 'SUCCESS!\n'
+            if len(self.blobs[k]['mbs']) > 0:
+                self.tracks[k] = self.__blobtracks__(self.blobs[k]['mbs'],\
+                                 self.blobs[k]['ch'],trklen=trklen,maxdist=maxdist)
+                # GET KEY PROPERTIES NEEDED IN buildevents below
+                self.trackshr[k] = self.__trkmbsfield__('hrtime',self.tracks[k],\
+                                                        self.blobs[k]['mbs'])
+                self.trackscX[k] = self.__trkmbsfield__('cX',self.tracks[k],\
+                                                        self.blobs[k]['mbs'])
+                self.trackscY[k] = self.__trkmbsfield__('cY',self.tracks[k],\
+                                                         self.blobs[k]['mbs'])
+                print 'SUCCESS!\n'
+            else:
+                print 'No CBs detected, leaving dictionaries empty'
 
     def buildevents(self,basetrkkey='noaa-olr-0-0',trklen=1,maxdist=1000e3):
         '''Builds list of Events
@@ -494,34 +501,37 @@ class SynopticEvents:
             '''
             self.buildtracks(trklen=trklen,maxdist=maxdist)
         # MATCH REFERENCE BLOBTRACKS TO CANDIDATE DAYS
-        ix_base = self.mbskeys.index(basetrkkey)
-        flagmbs = self.blobs[self.flagkey]['mbs']
-        candtracks = self.tracks[self.mbskeys[ix_base]]
-        candblobs = self.blobs[self.mbskeys[ix_base]]['mbs']
+        if len(self.tracks) == 0:
+            print 'No CBs detected, leaving dictionaries empty'
+        else:
+            ix_base = self.mbskeys.index(basetrkkey)
+            flagmbs = self.blobs[self.flagkey]['mbs']
+            candtracks = self.tracks[self.mbskeys[ix_base]]
+            candblobs = self.blobs[self.mbskeys[ix_base]]['mbs']
         
-        if len(candtracks)==0:
-            print "Cannot proceed as no candidate base tracks available!"
-            return False
-        asstrks = self.__tracks2blobs__(flagmbs,candtracks, candblobs)
-        self.asstrks=asstrks
-        ixflagblob, flagtrackkeys = asstrks[:,0], asstrks[:,2]
-        Bequeath = self
-        count=1
-        print 'Building events...'
+            if len(candtracks)==0:
+                print "Cannot proceed as no candidate base tracks available!"
+                return False
+            asstrks = self.__tracks2blobs__(flagmbs,candtracks, candblobs)
+            self.asstrks=asstrks
+            ixflagblob, flagtrackkeys = asstrks[:,0], asstrks[:,2]
+            Bequeath = self
+            count=1
+            print 'Building events...'
 
-        tms=timer()
-        for k in np.unique(flagtrackkeys):
-            tmk=timer()
-            iflag = np.where(flagtrackkeys == k)[0]
-            an_event = Event(Bequeath, k, ixflagblob[iflag],\
-                             basetrkkey=basetrkkey,maxdist_otherblobs=3000e3)
-            self.events[k]=an_event
-            print 'Built event: %d/%d in %4.2f s'\
-                   %(count,len(np.unique(flagtrackkeys)),(timer()-tmk))
-            count += 1
-        print "...that took",(timer()-tms)/60,"mins"
-        uniques = self.uniqueevents()
-        addtrkarrs(self)
+            tms=timer()
+            for k in np.unique(flagtrackkeys):
+                tmk=timer()
+                iflag = np.where(flagtrackkeys == k)[0]
+                an_event = Event(Bequeath, k, ixflagblob[iflag],\
+                                 basetrkkey=basetrkkey,maxdist_otherblobs=3000e3)
+                self.events[k]=an_event
+                print 'Built event: %d/%d in %4.2f s'\
+                       %(count,len(np.unique(flagtrackkeys)),(timer()-tmk))
+                count += 1
+            print "...that took",(timer()-tms)/60,"mins"
+            uniques = self.uniqueevents()
+            addtrkarrs(self)
 
     def addeventrain(self,rainkeys,type='station',heavy=20.,\
                     datadir='/home/neil/sogehome/data/'):
