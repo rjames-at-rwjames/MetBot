@@ -867,6 +867,7 @@ def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
                 lcm=plt.cm.gist_rainbow
                 #clevs=[215,220,225,230,235,240,245,250,255,260]
                 clevs=[220,230,240,250,260]
+                clevs = [230, 235, 240, 245, 250]
                 cs=plt.contourf(lon,lat,vrb[t,:,:],clevs,cmap=lcm,extend='min')
                 #plt.contour(lon, lat, vrb[t, :, :], clevs,colors='k')
                 plt.colorbar(cs)
