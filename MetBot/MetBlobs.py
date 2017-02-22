@@ -481,6 +481,53 @@ def DrawContourAngles(blobs,gpx,m=plt):
             cnx,cny = cb.convhull[:,0], cb.convhull[:,1]
         m.plot(cnx,cny,cl,lw=3.)
         m.scatter(mcx,mcy,s=300.,c='m',marker='d')
+
+def DrawContourAngles_lrd(blobs, gpx, m=plt, lurid=True):
+    if lurid:
+        cols = ['k']
+    else:
+        cols = ['r', 'b', 'c', 'm', 'g', 'r', 'b', 'c', 'm', 'g']
+    for rp in xrange(5): cols.extend(cols)
+    for i in blobs.keys():
+        cl = cols[i]
+        cb = blobs[i]
+        cx, cy = cb.centroid[1], cb.centroid[0]
+        ### Draw angle arrow for blob
+        ex = np.cos(np.deg2rad(cb.degs)) * 6
+        ey = np.sin(np.deg2rad(cb.degs)) * 6
+        if cb.degs < 0: ey = -ey
+        if hasattr(m, 'drawgreatcircle'):
+            cx, cy = gpx.xp2lon(cx), gpx.yp2lat(cy)
+            ex, ey = gpx.xp2lon(ex), gpx.yp2lat(ey)
+            mcx, mcy = m(cx, cy)
+            mex, mey = m(ex, ey)
+            mex2, mey2 = m(-ex, -ey)
+        else:
+            cx, cy = gpx.xp2lon(cx), gpx.yp2lat(cy)
+            ex, ey = gpx.xp2lon(ex), gpx.yp2lat(ey)
+            mcx, mcy, mex, mey = cx, cy, ex, ey
+            mex2, mey2 = -ex, -ey
+        if lurid:
+            plt.arrow(mcx, mcy, mex, mey, width=.07, fc=cl, ec='k')
+            plt.arrow(mcx, mcy, mex2, mey2, width=.07, fc=cl, ec='k')
+        else:
+            plt.arrow(mcx, mcy, mex, mey, width=.07, fc=cl, ec='r')
+            plt.arrow(mcx, mcy, mex2, mey2, width=.07, fc=cl, ec='r')
+        txt = "Cloudband\nTilt: %03.0f" % (cb.degs)
+        if not lurid:
+            plt.text(mcx, mcy, txt, color='c', fontsize=14., fontweight='bold')
+        ### Draw contour
+        if hasattr(m, 'drawgreatcircle'):
+            contour = cb.convhull
+            cnx, cny = m(contour[:, 0], contour[:, 1])
+        else:
+            # cnx,cny = cb.convhullpix[:,0], cb.convhullpix[:,1]
+            cnx, cny = cb.convhull[:, 0], cb.convhull[:, 1]
+        m.plot(cnx, cny, cl, lw=3.)
+        if lurid:
+            m.scatter(mcx, mcy, s=300., c='k', marker='d')
+        else:
+            m.scatter(mcx, mcy, s=300., c='m', marker='d')
         
 
 # MAIN FUNCTIONS
@@ -680,7 +727,7 @@ def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
     return metblobs[ikeep,:], blobtime[ikeep,:], chlist
 
 def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
-             interact=False):
+             lurid=False,interact=False):
     '''mbs, blbim = MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',
                              showblobs=True)
     Main blobbing loop
@@ -816,9 +863,17 @@ def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
             latplot = np.hstack((lat[0]-dlat/2.,lat+dlat/2.))
             lonplot = np.hstack((lon[0]-dlon/2.,lon+dlon/2.))
             plt.figure(num=mfig.number)
-            plt.pcolormesh(lonplot,latplot,vrb[t,:,:],cmap=mycmap)
+            if lurid:
+                lcm=plt.cm.gist_rainbow
+                #clevs=[215,220,225,230,235,240,245,250,255,260]
+                clevs=[220,230,240,250,260]
+                cs=plt.contourf(lon,lat,vrb[t,:,:],clevs,cmap=lcm,extend='min')
+                #plt.contour(lon, lat, vrb[t, :, :], clevs,colors='k')
+                plt.colorbar(cs)
+            else:
+                plt.pcolormesh(lonplot,latplot,vrb[t,:,:],cmap=mycmap)
             plt.grid()
-            DrawContourAngles(blobs,gpx,m=plt)
+            DrawContourAngles_lrd(blobs,gpx,m=plt,lurid=True)
             plt.xlim(lonplot[0],lonplot[-1]);plt.ylim(latplot[-1],latplot[0])
             plt.draw()
             plt.figure(num=bfig.number)

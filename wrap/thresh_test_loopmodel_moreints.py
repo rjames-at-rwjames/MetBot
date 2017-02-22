@@ -49,15 +49,17 @@ onlynew=False     # Option to only run if the synop file doesn't exist yet
 txtout=True      # output text file with ntts for each thresh
 
 ### Thresholds
-th_opts=np.arange(170,300,2)
+th_opts=[240]
+#th_opts=np.arange(170,300,2)
 n_th=len(th_opts)
 
 
 ### More running options - set to false for now
 getdistr=False    # Save a figure showing histogram of OLR values
 
-showblb=False    # Show the blobs while running
-intract=False    # Interactive running of showblobs
+showblb=True    # Show the blobs while running
+lurd=True      # to show OLR in colour - only works if showblb also True
+intract=True    # Interactive running of showblobs
 
 ### Ensure only look at Southern Africa
 sub="SA"
@@ -186,7 +188,8 @@ for d in range(ndset):
                 ### Get mbs 0-0
                 if getmbs:
                     mbs, mbt, chull = blb.MetBlobs_th(olr,dtime,time,lat,lon,v,\
-                                                   thresh,sub=sub,showblobs=showblb,interact=intract)
+                                                   thresh,sub=sub,showblobs=showblb,\
+                                                      lurid=lurd,interact=intract)
                     blb.mbsave(outsuf+v+".mbs",mbs,mbt,chull)
                     del mbs,mbt,chull
 
