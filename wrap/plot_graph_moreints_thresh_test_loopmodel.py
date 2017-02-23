@@ -27,8 +27,8 @@ import MetBot.SynopticAnatomy as sy
 import MetBot.dset_dict as dsetdict
 
 ### Running options
-testfile=True    # Uses a test file with short period
-testyear=True    # Only uses first 365 days of olr data
+testfile=False    # Uses a test file with short period
+testyear=False    # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 compare=True     # option to compare with histograms from other datasets
@@ -45,7 +45,7 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['noaa']
+    dsetnames=['cmip5']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -61,7 +61,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['cdr']
+        mnames=['CNRM-CM5']
     nmstr=str(nmod)
 
     for m in range(nmod):

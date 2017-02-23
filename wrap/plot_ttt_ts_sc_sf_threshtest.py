@@ -38,13 +38,13 @@ seasopt="coreseason"    # for spatiofreq plots
 tsplot=True             # to get timeseries plot
 scplot=True             # to get seasonal cycle plots
 sfplot=True             # to get spatiofrequency plot
-testyear=True           # To use output from a test
-testfile=True           # Uses a test file with short period
+testyear=False           # To use output from a test
+testfile=False           # Uses a test file with short period
                         # (testfile designed to be used together with testyear
                         # ..but testyear can be used seperately)
 res='noaa'            # Option to plot at 'noaa' res or 'native' res
 nos4cbar=(1,7,1)        # choose the intervals for spatiofreq cbar
-th_opts=[230,240,250]
+th_opts=[236,246]
 n_th=len(th_opts)
 
 ### Multi dset?
