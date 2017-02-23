@@ -112,7 +112,7 @@ for d in range(ndset):
 
         ### Loop domains to open plot
         doms=['All','Continental','Oceanic']
-        ytop=[20,8,16]
+        #ytop=[20,8,16]
         for r in range(len(doms)):
 
             ### Loop mons to open plot
@@ -167,11 +167,11 @@ for d in range(ndset):
 
                 plt.figure(num=doms[r] + mons[q])
                 plt.xticks(np.arange(1, n_th+1), thnames, fontsize=13.0)  # thres labels
-                plt.xlim(1,n_th+1)
-                plt.yticks(np.arange(1, (ytop[r]+2)), fontsize=13.0)
-                plt.ylim(0, ytop[r])
+                plt.xlim(0,n_th+1)
+                #plt.yticks(np.arange(1, (ytop[r]+2)), fontsize=13.0)
+                #plt.ylim(0, ytop[r])
                 plt.ylabel('No. of Cloudbands', fontsize=13.0, weight='demibold')
-                plt.title(doms[r]+'_'+dset+'_'+name, fontweight='demibold')
+                plt.title(doms[r]+'_'+dset+'_'+name+'_'+mons[q], fontweight='demibold')
 
                 fname=figdir+dset+'_'+name+'_'+doms[r]+'_boxplot_multi_thresh.'+mons[q]+'.png'
                 plt.savefig(fname, dpi=150)
