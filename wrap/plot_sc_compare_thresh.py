@@ -145,11 +145,11 @@ for d in range(ndset):
                 if doms[r]=='Oceanic':s_in=ke
 
                 ### Get seasonal cycle
-		        if len(s_in) > 0:
+		if len(s_in) > 0:
                     scycle, cyclestats, yrs = stats.seasonalcycle(s, s_in)
 		
                     ### Calc mean or median
-        	        if which=='mean':
+        	    if which=='mean':
                         plotdata=scycle.mean(0)
                     elif which=='median':
                         plotdata=np.median(scycle,0)
@@ -174,3 +174,5 @@ for d in range(ndset):
 
             fname=figdir+dset+'_'+name+'_'+doms[r]+'_scycle_multi_thresh.'+fext+'.png'
             plt.savefig(fname, dpi=150)
+
+	plt.close('all')
