@@ -112,7 +112,7 @@ for d in range(ndset):
 
         ### Loop domains to open plot
         doms=['All','Continental','Oceanic']
-	ytop=[20,8,16]
+        ytop=[20,8,16]
         for r in range(len(doms)):
             plt.figure(num=doms[r])
 
@@ -132,11 +132,11 @@ for d in range(ndset):
 
             ### Select events
             ks = s.events.keys();ks.sort() # all
-	    if len(ks) > 0:
-	        kw, ke = stats.spatialsubset(s,False,cutlon=40.) # events west and east of 40E
-	    else:
-		kw=[]
-		ke=[]
+            if len(ks) > 0:
+                kw, ke = stats.spatialsubset(s,False,cutlon=40.) # events west and east of 40E
+            else:
+                kw=[]
+                ke=[]
 
             ### Loop domains
             for r in range(len(doms)):
@@ -145,18 +145,17 @@ for d in range(ndset):
                 if doms[r]=='Oceanic':s_in=ke
 
                 ### Get seasonal cycle
-		if len(s_in) > 0:
-			scycle, cyclestats, yrs = stats.seasonalcycle(s, s_in)
+		        if len(s_in) > 0:
+                    scycle, cyclestats, yrs = stats.seasonalcycle(s, s_in)
 		
-			### Calc mean or median
+                    ### Calc mean or median
         	        if which=='mean':
-                	    plotdata=scycle.mean(0)
-	                elif which=='median':
-        	            plotdata=np.median(scycle,0)
-		else:
-			print 'No events for this threshold'
-			plotdata=np.zeros(12)
-
+                        plotdata=scycle.mean(0)
+                    elif which=='median':
+                        plotdata=np.median(scycle,0)
+                else:
+                    print 'No events for this threshold'
+                    plotdata=np.zeros(12)
 
                 plt.figure(num=doms[r])
                 plt.plot(np.arange(1, 13), plotdata, lw=2,zorder=t+1)
@@ -166,7 +165,7 @@ for d in range(ndset):
 
             plt.figure(num=doms[r])
             plt.xticks(np.arange(1, 13), monthstr, fontsize=13.0)  # month labels
-	    plt.xlim(1,12)
+            plt.xlim(1,12)
             plt.yticks(np.arange(1, (ytop[r]+2)), fontsize=13.0)
             plt.ylim(0, ytop[r])
             plt.ylabel('No. of Cloudbands', fontsize=13.0, weight='demibold')
@@ -175,4 +174,3 @@ for d in range(ndset):
 
             fname=figdir+dset+'_'+name+'_'+doms[r]+'_scycle_multi_thresh.'+fext+'.png'
             plt.savefig(fname, dpi=150)
-
