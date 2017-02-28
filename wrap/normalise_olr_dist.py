@@ -36,8 +36,8 @@ import MetBot.dset_dict as dsetdict
 
 
 ### Running options
-testfile=False    # Uses a test file with short period
-testyear=False    # Only uses first 365 days of olr data
+testfile=True    # Uses a test file with short period
+testyear=True    # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 sub="SA"        # southern african domain
@@ -138,12 +138,14 @@ modnm=["" for x in range(nallmod)] # creates a list of strings for modnames
 
 ### Display options for plot
 styls=['dashed','solid','dotted','dashed','solid']
-lws=[2,2,2,2,1]
+lws=[3,2,2,2,1]
 zorders=[3,2,2,2,1]
 
 ### Open figures
 plt.figure(num='z-vals')
 plt.figure(num='inflated')
+plt.figure(num='means',figsize=[10,3])
+plt.figure(num='stds',figsize=[10,3])
 
 z=0
 ### Loop datasets
@@ -230,14 +232,21 @@ for d in range(ndset):
         thismean=np.mean(olrvals)
         thisstd=np.std(olrvals)
 
-        ### Get z values
+        ### Plot mean and std
+        plt.figure(num='means')
+        plt.plot(thismean,1,'^',markersize=20)
+
+        plt.figure(num='stds')
+        plt.plot(thisstd,1,'^',markersize=20)
+
+        ### Get z scores
         olr_zvals=(olrvals-thismean)/thisstd
 
         ### Inflate normalised data
         inflata=(olr_zvals*refstd)+refmean
         #inflata=(olr_zvals+refmean)*refstd
 
-        ### Plot distribution of z values
+        ### Plot distribution of z scores
         plt.figure(num='z-vals')
         y, binEdges = np.histogram(olr_zvals, bins=50, density=True)
         bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
@@ -258,18 +267,50 @@ for d in range(ndset):
         print 'Finished running on ' + name
         print 'This is model '+mcnt+' of '+nmstr+' in list'
 
-### Edits to z value figure
+
+### Edits to means figure
+plt.figure(num='means')
+
+### Add refmean
+plt.plot(refmean,1,'o',markersize=35,zorder=1)
+plt.xlim(235,255)
+plt.ylim(0,2)
+plt.yticks([0,1,2])
+plt.legend(modnm, loc='upper left',fontsize='x-small',markerscale=0.5)
+
+### Save
+meanfig=bkdir+'/olr_means.'+dsetstr+'.png'
+plt.savefig(meanfig)
+
+### Edits to stds figure
+plt.figure(num='stds')
+
+### Add refstd
+plt.plot(refstd,1,'o',markersize=35,zorder=1)
+plt.xlim(30,50)
+plt.ylim(0,2)
+plt.yticks([0,1,2])
+plt.legend(modnm, loc='upper left',fontsize='x-small',markerscale=0.5)
+
+### Save
+stdfig=bkdir+'/olr_stds.'+dsetstr+'.png'
+plt.savefig(stdfig)
+
+
+### Edits to z score figure
 plt.figure(num='z-vals')
 
 ### Plot legend and axis
 plt.legend(modnm, loc='upper left',fontsize='xx-small')
-plt.xlabel('z value', fontsize=13.0, weight='demibold', color='k')
+plt.xlabel('z score', fontsize=13.0, weight='demibold', color='k')
 plt.ylabel('frequency density', fontsize=13.0, weight='demibold', color='k')
-if title: plt.title('Histogram of OLR z values: '+dsetstr,\
+plt.ylim(0,0.6)
+plt.plot((0, 0), (0, 0.6),'k')
+if title: plt.title('Histogram of OLR z scores: '+dsetstr,\
                     fontsize=13.0, weight='demibold', color='k')
 
 ### Save figure
-zvalfig=bkdir+'/olr_zvalues.'+dsetstr+'.png'
+zvalfig=bkdir+'/olr_zscores.'+dsetstr+'.png'
 plt.savefig(zvalfig)
 
 
