@@ -36,8 +36,8 @@ import MetBot.dset_dict as dsetdict
 
 
 ### Running options
-testfile=True    # Uses a test file with short period
-testyear=True    # Only uses first 365 days of olr data
+testfile=False    # Uses a test file with short period
+testyear=False    # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 sub="SA"        # southern african domain
@@ -109,8 +109,8 @@ else:
         startd = date(ystart, mstart, dstart)
         begind = date(int(beginatyr), 01, 01)
         daysgap = (begind - startd).days
-    olr = olr[daysgap:, :, :];
-    time = time[daysgap:];
+    olr = olr[daysgap:, :, :]
+    time = time[daysgap:]
     dtime = dtime[daysgap:]
 if testyear:
     if cal == "360_day":
@@ -185,11 +185,6 @@ for d in range(ndset):
         indir=bkdir+"/"+dset+"/"
         infile=indir+name+".olr.day.mean."+ys+".nc"
         print infile
-        # outdir=indir+name+"/"
-        # if testyear: outdir=outdir+'test/'
-        # else: outdir=outdir
-        # my.mkdir_p(outdir)
-        # outsuf=outdir+name+'_'
 
         ### Open OLR data
         ncout = mync.openolr_multi(infile,vname,name,\
