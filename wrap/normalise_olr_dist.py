@@ -119,7 +119,7 @@ if testyear:
         olr, dtime, time = olr[:365, :, :], dtime[:365], time[:365]
 
 ### Calc mean and std of ref olr
-refolrvals = olr.ravel()
+refolrvals = np.nan_to_num(olr.ravel())
 refmean = np.mean(refolrvals)
 refstd = np.std(refolrvals)
 
@@ -226,7 +226,7 @@ for d in range(ndset):
                 olr, dtime, time = olr[:365,:,:],dtime[:365],time[:365]
 
         ### Calculate mean and std dev
-        olrvals=olr.ravel()
+        olrvals=np.nan_to_num(olr.ravel())
         thismean=np.mean(olrvals)
         thisstd=np.std(olrvals)
 
