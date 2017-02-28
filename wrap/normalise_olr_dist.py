@@ -281,6 +281,9 @@ y, binEdges = np.histogram(refolrvals, bins=50, density=True)
 bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
 plt.plot(bincentres, y, linestyle='solid', linewidth=3, color='k', zorder=zorders[d])
 
+### Add 240 threshold
+plt.plot((240, 240), (0, 0.014),'k')
+
 ### Plot legend and axes
 plt.legend(modnm, loc='upper left',fontsize='xx-small')
 plt.xlim(100, 320)
