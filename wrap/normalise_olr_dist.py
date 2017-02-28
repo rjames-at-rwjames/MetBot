@@ -36,8 +36,8 @@ import MetBot.dset_dict as dsetdict
 
 
 ### Running options
-testfile=True    # Uses a test file with short period
-testyear=True    # Only uses first 365 days of olr data
+testfile=False    # Uses a test file with short period
+testyear=False    # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 
@@ -55,7 +55,7 @@ if dsets=='all':
     dsetstr = 'all_dset'
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['cmip5']
+    dsetnames=['um']
     dsetstr = '_'.join(dsetnames)
 ndstr=str(ndset)
 print 'Running on datasets:'
