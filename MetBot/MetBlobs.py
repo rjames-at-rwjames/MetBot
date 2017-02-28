@@ -629,7 +629,7 @@ def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
                 if interact:
                     plt.pause(0.05)
                     d=raw_input('Press: x to stop; b to go backwards')
-                else: d=='nada'
+                else: d='nada'
                 if d=='x':
                     break
                 elif d=='b':
@@ -800,7 +800,7 @@ def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
                 if interact:
                     plt.pause(0.05)
                     d=raw_input('Press: x to stop; b to go backwards')
-                else: d=='nada'
+                else: d='nada'
                 if d=='x':
                     break
                 elif d=='b':
