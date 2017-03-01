@@ -92,9 +92,9 @@ for d in range(ndset):
         else:
             ys=moddct['yrfname']
         if testyear:
-            beginatyr=moddct['startyr']
-        else:
             beginatyr=moddct['testyr']
+        else:
+            beginatyr = moddct['startyr']
 
         ### Location for olr input
         indir=bkdir+dset+"/"

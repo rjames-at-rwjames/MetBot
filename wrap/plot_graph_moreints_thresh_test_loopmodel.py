@@ -78,9 +78,9 @@ for d in range(ndset):
         else:
             ys=moddct['yrfname']
         if testyear:
-            beginatyr=moddct['startyr']
-        else:
             beginatyr=moddct['testyr']
+        else:
+            beginatyr = moddct['startyr']
 
         ### Location for olr input
         bkdir=cwd+"/../../../CTdata/metbot_multi_dset/"
