@@ -206,6 +206,9 @@ for do in range(len(doms)):
                     indir=botdir+dset+"/"
                     outdir=indir+name+"/"
                     outsuf=outdir+name+'_'
+                    cal = moddct['calendar']
+                    ys = moddct['yrfname']
+                    beginatyr = moddct['startyr']
 
                     ### Open rain data
                     globp = 'pr'
@@ -213,7 +216,6 @@ for do in range(len(doms)):
                         raindset = 'trmm'
                         rainmod = 'trmm_3b42v7'
                         rmoddct = dsetdict.dset_deets[raindset][rainmod]
-                        runits = rmoddct['prtimeunit']
                         rcal = rmoddct['calendar']
                         rys = rmoddct['yrfname']
                         rbeginatyr = rmoddct['startyr']
@@ -221,7 +223,6 @@ for do in range(len(doms)):
                         raindset = dset
                         rainmod = name
                         rmoddct = moddct
-                        runits = units
                         rcal = cal
                         rys = ys
                         rbeginatyr = beginatyr
