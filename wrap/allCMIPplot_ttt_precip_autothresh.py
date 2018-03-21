@@ -148,9 +148,9 @@ for do in range(len(doms)):
             cnt = 1
             ### Finalising plot
             if metatype=='all':
-                mapsuf = plottyp+'_'+seas + '_' + subrain + '_4'+ monmean
+                mapsuf = plottype+'_'+seas + '_' + subrain + '_4'+ monmean
             elif metatype=='ttt':
-                mapsuf = plottyp+'_'+seas + '_' + subrain + '_4'+ monmean +'_'+thname+'_'+under_dayof+'_'+dom
+                mapsuf = plottype+'_'+seas + '_' + subrain + '_4'+ monmean +'_'+thname+'_'+under_dayof+'_'+dom
 
             if heavy:
                 mapsuf=mapsuf+'_hvthr'+hvthr
@@ -214,14 +214,8 @@ for do in range(len(doms)):
                         rmoddct = dsetdict.dset_deets[raindset][rainmod]
                         runits = rmoddct['prtimeunit']
                         rcal = rmoddct['calendar']
-                        if testfile:
-                            rys = rmoddct['testfileyr']
-                        else:
-                            rys = rmoddct['yrfname']
-                        if testyear:
-                            rbeginatyr = rmoddct['testyr']
-                        else:
-                            rbeginatyr = rmoddct['startyr']
+                        rys = rmoddct['yrfname']
+                        rbeginatyr = rmoddct['startyr']
                     else:
                         raindset = dset
                         rainmod = name

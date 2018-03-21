@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="da1d8ab4-5a15-4ca9-8222-e7a9193447e1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MetBot/AdvancedPlots.py" afterPath="$PROJECT_DIR$/MetBot/AdvancedPlots.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" />
     </list>
     <ignored path="MetBot.iws" />
@@ -27,8 +26,8 @@
       <file leaf-file-name="allCMIPplot_ttt_precip_autothresh.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="336" column="44" lean-forward="true" selection-start-line="336" selection-start-column="44" selection-end-line="336" selection-end-column="44" />
+            <state relative-caret-position="282">
+              <caret line="221" column="40" lean-forward="true" selection-start-line="221" selection-start-column="40" selection-end-line="221" selection-end-column="40" />
               <folding>
                 <element signature="e#408#426#0" expanded="true" />
               </folding>
@@ -73,6 +72,9 @@
       <find>spatiofreq4</find>
       <find>beginatyr</find>
       <find>key</find>
+      <find>plottype</find>
+      <find>plottyp</find>
+      <find>test</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -201,7 +203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521634304380</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
+      <created>1521635034191</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1521635034191</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -329,8 +338,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="336" column="44" lean-forward="true" selection-start-line="336" selection-start-column="44" selection-end-line="336" selection-end-column="44" />
+        <state relative-caret-position="282">
+          <caret line="221" column="40" lean-forward="true" selection-start-line="221" selection-start-column="40" selection-end-line="221" selection-end-column="40" />
           <folding>
             <element signature="e#408#426#0" expanded="true" />
           </folding>
