@@ -336,7 +336,7 @@ for do in range(len(doms)):
 
                     print 'Plotting for model '+rainname
                     plt.subplot(yplots,xplots,cnt)
-                    allmask=ap.gridrainmap_single(s,keys,rain,rlat,rlon,rdtime,\
+                    allmask=ap.gridrainmap_single(s,keys,rain,rlat,rlon,rdtime,name2,\
                                                   season=seas,key=key,ptype=plottype,mmean=monmean,\
                                                   under_of=under_dayof, \
                                                   savefig=False, labels=nTTTlab,\
