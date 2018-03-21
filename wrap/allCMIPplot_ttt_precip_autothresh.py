@@ -178,8 +178,7 @@ for do in range(len(doms)):
                          "noaa/noaa.olr.day.mean." + yr_noaa + ".nc"
                 olrdump, timedump, noaalat, noaalon, dtimedump = mync.openolr(f_noaa, 'olr', subs=sub)
 
-                m = pt.AfrBasemap(noaalat, noaalon, drawstuff=True, prj='cyl',fno=1
-                                     rsltn='l')
+                m = pt.AfrBasemap(noaalat, noaalon, drawstuff=True, prj='cyl',fno=1, rsltn='l')
 
             ### Multi dset?
             # dsets='spec'

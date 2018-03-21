@@ -1307,7 +1307,6 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     f, ax = plt.gcf(), plt.gca()  # get reference and set axes
     axcl=f.add_axes([0.9, 0.15, 0.02, 0.7])
     cbar = plt.colorbar(cs, cax=axcl)
-    cbar.set_label(cbar_lab)
 
     if savefig:
         figname='Rainmap.png'
