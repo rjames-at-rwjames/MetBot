@@ -48,31 +48,31 @@ testfile=False           # Uses a test file with short period
 threshtest=False         # Option to run on thresholds + and - 5Wm2 as a test
 
 # options to plot all days
-allplot=False            # plot total rainfall
-all_cnt_anom=False       # plot % of days which have +ve anomalies
+allplot=True            # plot total rainfall
+all_cnt_anom=True       # plot % of days which have +ve anomalies
 
 # options to plot ttt...
-tot_ttt_plot=False      # plot total rainfall from TTTs
-per_ttt_plot=False      # plot percentage rainfall from TTTs (tot_ttt/tot_all)
-rain_per_ttt_plot=False  # plot average rain per TTT day (rain composite)
+tot_ttt_plot=True      # plot total rainfall from TTTs
+per_ttt_plot=True      # plot percentage rainfall from TTTs (tot_ttt/tot_all)
+rain_per_ttt_plot=True  # plot average rain per TTT day (rain composite)
 comp_anom_ttt_plot=True  # plot rain per TTT as anom from long term daily mean for each month
-comp_anom_ag_plot=False # plot comp anom with agtest on composite
-comp_anom_cnt_plot=False     # plot count of the number of days above or below average
+comp_anom_ag_plot=True # plot comp anom with agtest on composite
+comp_anom_cnt_plot=True     # plot count of the number of days above or below average
 perc_ag=70              # show if this % or more days agree
 
 # options to plot all - heavy pr
 hvthrs=['0','10','25','50']
-all_wet_cnt=False       # plot number of days over hvthr - either total or per mon depending on 'monmean'
-all_wet_sum=False       # plot rainfall from days over hvthr - either total or per mon depending on 'monmean'
-aper_wet_cnt=False       # plot % of days that are over hvthr
-aper_wet_sum=False       # plot % of precip which is falling on days over hvthr
+all_wet_cnt=True       # plot number of days over hvthr - either total or per mon depending on 'monmean'
+all_wet_sum=True       # plot rainfall from days over hvthr - either total or per mon depending on 'monmean'
+aper_wet_cnt=True       # plot % of days that are over hvthr
+aper_wet_sum=True       # plot % of precip which is falling on days over hvthr
 
 # options to plot ttt - heavy pr
-ttt_wet_cnt=False        # plot number of  days over hvthr - either total or per mon depending on 'monmean'
-tper_wet_cnt=False       # % of days over hvthr contributed by TTTs
-per_tttd_wet=False       # plot % of TTT days which have precip over this threshold
-ttt_wet_sum=False       # plot rainfall from days over hvthr - either total or per mon depending on 'monmean'
-tper_wet_sum=False       # % of precip from days over hvthr contributed by TTTs
+ttt_wet_cnt=True        # plot number of  days over hvthr - either total or per mon depending on 'monmean'
+tper_wet_cnt=True       # % of days over hvthr contributed by TTTs
+per_tttd_wet=True       # plot % of TTT days which have precip over this threshold
+ttt_wet_sum=True       # plot rainfall from days over hvthr - either total or per mon depending on 'monmean'
+tper_wet_sum=True       # % of precip from days over hvthr contributed by TTTs
 
 
 under_dayof='dayof'     # if "dayof" plots all rain on TTT days
@@ -81,7 +81,7 @@ monmean='day'           # to control the output - is there averaging?
                         # 'day' is daily mean
                         # 'mon' is monthly mean
                         # 'tot' is total
-nTTTlab=False            # labels each plot with # or % of TTTs
+nTTTlab=True            # labels each plot with # or % of TTTs
 
 freecol=False           # free colour bar
 refkey='0'              # 0 or all
@@ -99,7 +99,7 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['noaa']
+    dsetnames=['cmip5']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -115,7 +115,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['cdr']
+        mnames=['ACCESS1-0']
     nmstr=str(nmod)
 
     for m in range(nmod):
