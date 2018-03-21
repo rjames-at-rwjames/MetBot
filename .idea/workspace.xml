@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="da1d8ab4-5a15-4ca9-8222-e7a9193447e1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MetBot/AdvancedPlots.py" afterPath="$PROJECT_DIR$/MetBot/AdvancedPlots.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" />
     </list>
     <ignored path="MetBot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,11 +33,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="allCMIPplot_ttt_precip_autothresh.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="allCMIPplot_ttt_precip_autothresh.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="384">
-              <caret line="338" column="85" lean-forward="false" selection-start-line="338" selection-start-column="85" selection-end-line="338" selection-end-column="85" />
+              <caret line="338" column="86" lean-forward="false" selection-start-line="338" selection-start-column="86" selection-end-line="338" selection-end-column="86" />
               <folding>
                 <element signature="e#408#426#0" expanded="true" />
               </folding>
@@ -45,7 +45,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AdvancedPlots.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AdvancedPlots.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="375">
@@ -102,8 +102,8 @@
       <list>
         <option value="$PROJECT_DIR$/MetBot/EventStats.py" />
         <option value="$PROJECT_DIR$/wrap/plot_ttt_precip_autothresh.py" />
-        <option value="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" />
         <option value="$PROJECT_DIR$/MetBot/AdvancedPlots.py" />
+        <option value="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" />
       </list>
     </option>
   </component>
@@ -243,7 +243,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521637719341</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
+      <created>1521637800048</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1521637800048</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -361,21 +368,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="338" column="85" lean-forward="false" selection-start-line="338" selection-start-column="85" selection-end-line="338" selection-end-column="85" />
-          <folding>
-            <element signature="e#408#426#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="1296" column="19" lean-forward="false" selection-start-line="1296" selection-start-column="19" selection-end-line="1296" selection-end-column="19" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="384">
+          <caret line="338" column="86" lean-forward="false" selection-start-line="338" selection-start-column="86" selection-end-line="338" selection-end-column="86" />
+          <folding>
+            <element signature="e#408#426#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
