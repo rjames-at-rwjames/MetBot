@@ -78,7 +78,8 @@ tper_wet_sum=True       # % of precip from days over hvthr contributed by TTTs
 under_dayof='dayof'     # if "dayof" plots all rain on TTT days
                         #   if "under" plots rain under TTTs (based on blobs)
 monmean='day'           # to control the output - is there averaging?
-                        # 'day' is daily mean
+                        # 'day' is daily mean - note that day is not currently
+                        #          set up to work with all opts e.g. wet day counts
                         # 'mon' is monthly mean
                         # 'tot' is total
 nTTTlab=True            # labels each plot with # or % of TTTs

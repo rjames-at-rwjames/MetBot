@@ -324,10 +324,12 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
                 wetdaysum[i,j] = wet_sum
 
         wetdays_p_mon=wetdaycnt/nys
+        wetdays_p_day=wetdaycnt/len(datesmon)
         wetdays_mean=np.nanmean(wetdays_p_mon)
         wetdays_per=(wetdaycnt/ndays_mon)*100.0
 
         wetsum_p_mon=wetdaysum/nys
+        wetsum_p_day=wetdaysum/len(datesmon)
         wetsum_mean=np.nanmean(wetsum_p_mon)
         wetsum_per=(wetdaysum/rainsum_all)*100.0
 
@@ -344,6 +346,8 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
                 data4plot=wetdaycnt
             elif mmean=='mon':
                 data4plot=wetdays_p_mon
+            elif mmean=='day':
+                data4plot=wetdays_p_day
             titstat=wetdays_mean
 
         elif ptype=='all_wet_sum':
@@ -351,6 +355,8 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
                 data4plot=wetdaysum
             elif mmean=='mon':
                 data4plot=wetsum_p_mon
+            elif mmean=='day':
+                data4plot=wetsum_p_day
             titstat=wetsum_mean
 
         elif ptype=='aper_wet_cnt':
@@ -753,9 +759,560 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
     cbar.set_label(cbar_lab)
 
     if savefig:
-        plt.savefig(figdir+'/Rainmap_'+ptype+'_'+file_suffix+'_'+under_of+'.png',dpi=150)
+        figname=figdir+'/Rainmap_'+ptype+'_'+file_suffix+'_'+under_of+'.png'
+        plt.savefig(figname,dpi=150)
+        print 'Saving figure as '+figname
 
     return data4plot
+
+def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,season='NDJFM',key='noaa-olr-0-0',\
+                       ptype='per_ttt',mmean='mon',under_of='dayof',\
+                       savefig=False, labels=False,agthresh='perc_ag',heavy='0'):
+    '''Produces single plot of ttt rainfall based on keys that are input
+    need to open the rain data with lon and lat and also the synop file
+    see e.g. allCMIPplot_ttt_precip_autothresh.py
+
+    plot types
+        tot_all - sum of total precip
+        all_cnt - % of all days with +ve pr anoms
+
+        all_wet_cnt - plot number of days over hvthr - either total or per mon depending on 'monmean'
+        all_wet_sum - plot rainfall from days over hvthr - either total or per mon depending on 'monmean'
+        aper_wet_cnt - % of days that are hvthr days
+        aper_wet_sum - plot % of precip which is falling on hvthr days
+
+
+        tot_ttt - sum of precip from TTTs
+        per_ttt - percent of precip from TTTs
+        rain_per_ttt - rain per ttt event
+        comp_anom_ttt - rain per ttt as anom from monthly mean precip
+        comp_anom_ag - as comp anom but with ag test
+        comp_anom_cnt - % days with +ve or -ve anomalies
+
+        ttt_wet_cnt- number of hvthr days - either total or per mon depending on 'monmean'
+        tper_wet_cnt- % of hvthr days contributed by TTTs
+        per_tttd_wet - % of TTT days which have precip over this threshold
+        ttt_wet_sum- rainfall from hvthr days - either total or per mon depending on 'monmean'
+        tper_wet_sum- % of hvthr day precip contributed by TTTs
+
+    under_of -> "dayof" is rain on day of TTTs, "under" is rain under TTTs
+    '''
+    if not eventkeys:
+        eventkeys=[]
+        for ed in s.uniques:
+            eventkeys.append(ed[0])
+
+    yrs = np.unique(rdtime[:,0])
+    nys=len(yrs)
+
+    # Get list of dates for these events
+    # and if 'under' a list of chs
+    edts = []
+    if under_of == 'under':
+        chs = []
+    ecnt=1
+    for k in eventkeys:
+        e = s.events[k]
+        dts = s.blobs[key]['mbt'][e.ixflags]
+        #dts=e.trkdtimes
+        for dt in range(len(dts)):
+            if ecnt==1:
+                edts.append(dts[dt])
+                if under_of=='under':
+                    chs.append(e.blobs[key]['ch'][e.trk[dt]])
+            else:
+                tmpdt=np.asarray(edts)
+                # Check if it exists already
+                ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
+                     [dts[dt][1]], [dts[dt][2]], [0])
+                if len(ix)==0:
+                    edts.append(dts[dt])
+                    if under_of == 'under':
+                        chs.append(e.blobs[key]['ch'][e.trk[dt]])
+            ecnt+=1
+    edts = np.asarray(edts)
+    edts[:, 3] = 0
+    if under_of == 'under':
+        chs=np.asarray(chs)
+    print "Number of original TTT days found =  " + str(len(edts))
+
+    # Get n lat and lon
+    nlon=len(rlon)
+    nlat=len(rlat)
+
+    # Get months
+    if season=='NDJFM':
+        mns=[11,12,1,2,3]
+        nmn=len(mns)
+    print season
+    print mns
+
+    # Select rain for these years
+    firstyear = yrs[0]
+    lastyear = yrs[nys - 1]
+    raindat = np.where((rdtime[:, 0] >= firstyear) & (rdtime[:, 0] <= lastyear))
+    rainperiod = rain[raindat, :, :]
+    rainperiod = np.squeeze(rainperiod)
+    newdates = rdtime[raindat]
+
+    # Select rain for these mons
+    raindat2 = np.where((rdtime[:,1] >= mns[0]) | (rdtime[:,1] <= mns[3]))
+    rainseas = np.squeeze(rainperiod[raindat2,:,:])
+    dateseas = newdates[raindat2]
+
+    ndays_seas=len(dateseas)
+    rainsum_all=np.nansum(rainseas,0)
+    rainsum_seas=rainsum_all/nys
+    rainsum_monthly=rainsum_seas/nmn
+    rainsum_daily=rainsum_all/len(dateseas)
+
+    #Days over hvthr
+    hvthr=float(heavy)
+    wetdaycnt=np.zeros((nlat, nlon), dtype=np.float32)
+    wetdaysum=np.zeros((nlat, nlon), dtype=np.float32)
+    for i in range(nlat):
+        for j in range(nlon):
+            wet_ind = np.where(rainseas[:, i, j] > hvthr)[0]
+
+            count = len(wet_ind)
+            wet_sel = rainseas[wet_ind,i,j]
+            wet_sum = np.nansum(wet_sel,0)
+
+            wetdaycnt[i,j] = count
+            wetdaysum[i,j] = wet_sum
+
+    wetdays_p_seas=wetdaycnt/nys
+    wetdays_p_mon=wetdays_p_seas/nmn
+    wetdays_p_day=wetdaycnt/len(dateseas)
+    wetdays_mean=np.nanmean(wetdays_p_seas)
+    wetdays_per=(wetdaycnt/ndays_seas)*100.0
+
+    wetsum_p_seas=wetdaysum/nys
+    wetsum_p_mon=wetsum_p_seas/nmn
+    wetsum_p_day=wetdaysum/len(dateseas)
+    wetsum_mean=np.nanmean(wetsum_p_seas)
+    wetsum_per=(wetdaysum/rainsum_all)*100.0
+
+    if ptype=='tot_all':
+        if mmean=='mon':
+            data4plot=rainsum_monthly
+        elif mmean=='day':
+            data4plot=rainsum_daily
+        elif mmean=='tot':
+            data4plot=rainsum_all
+
+    elif ptype=='all_wet_cnt':
+        if mmean=='tot':
+            data4plot=wetdaycnt
+        elif mmean=='mon':
+            data4plot=wetdays_p_mon
+        elif mmean=='day':
+            data4plot=wetdays_p_day
+        titstat=wetdays_mean
+
+    elif ptype=='all_wet_sum':
+        if mmean=='tot':
+            data4plot=wetdaysum
+        elif mmean=='mon':
+            data4plot=wetsum_p_mon
+        elif mmean=='day':
+            data4plot=wetsum_p_day
+        titstat=wetsum_mean
+
+    elif ptype=='aper_wet_cnt':
+        data4plot=wetdays_per
+
+    elif ptype=='aper_wet_sum':
+            data4plot=wetsum_per
+
+    elif ptype=='all_cnt':
+
+        all_anoms = np.zeros((ndays_seas, nlat, nlon), dtype=np.float32)
+        for day in range(ndays_seas):
+            this_anom = rainseas[day, :, :] - rainsum_daily
+            all_anoms[day, :, :] = this_anom
+
+        all_pos_pcent = np.zeros((nlat, nlon), dtype=np.float32)
+
+        for i in range(nlat):
+            for j in range(nlon):
+                count_p = len(np.where(all_anoms[:, i, j] > 0)[0])
+                perc_p = (float(count_p) / float(ndays_seas)) * 100
+                all_pos_pcent[i, j] = perc_p
+
+        data4plot=all_pos_pcent
+
+    else:
+
+        #TTT rain
+        edateseas = edts
+        if under_of=='under':
+            chs_seas=chs
+
+        indices = []
+        if under_of == 'under':
+            chs_4rain = []
+        for edt in range(len(edateseas)):
+            ix = my.ixdtimes(dateseas, [edateseas[edt][0]], \
+                             [edateseas[edt][1]], [edateseas[edt][2]], [0])
+            if len(ix) >= 1:
+                indices.append(ix)
+                if under_of=='under':
+                    chs_4rain.append(chs_seas[edt])
+        if len(indices) >= 2:
+            indices = np.squeeze(np.asarray(indices))
+            if under_of=='under':
+                chs_4rain=np.asarray(chs_4rain)
+        else:
+            indices = indices
+            if under_of=='under':
+                chs_4rain=np.squeeze(np.asarray(chs_4rain))
+        nttt_seas = len(indices)
+        print "Number of TTT days found in rain dataset for seas " + seas + " =  " + str(nttt_seas)
+
+        if under_of == 'dayof':
+
+            if nttt_seas == 0:
+                rainsum_ttt = np.zeros((nlat, nlon), dtype=np.float32)
+            else:
+                rainsel = rainseas[indices, :, :]
+
+                if nttt_seas>=2:
+                    rainsum_ttt=np.nansum(rainsel,0)
+                else:
+                    rainsum_ttt=np.squeeze(rainsel)
+
+            rainsum_ttt_seas=rainsum_ttt/nys
+            rainsum_ttt_monthly=rainsum_ttt_seas/nmn
+            rainsum_ttt_daily=rainsum_ttt/ndays_seas
+
+            rainperttt=rainsum_ttt/nttt_seas
+
+            comp_anom = rainperttt - rainsum_daily
+
+            # Wet days
+            ttt_wetdaycnt = np.zeros((nlat, nlon), dtype=np.float32)
+            ttt_wetdaysum = np.zeros((nlat, nlon), dtype=np.float32)
+            for i in range(nlat):
+                for j in range(nlon):
+                    wet_ind = np.where(rainsel[:, i, j] > hvthr)[0]
+                    count = len(wet_ind)
+                    wet_sel = rainsel[wet_ind, i, j]
+                    wet_sum = np.nansum(wet_sel, 0)
+
+                    ttt_wetdaycnt[i, j] = count
+                    ttt_wetdaysum[i, j] = wet_sum
+
+            ttt_wetdays_p_seas = ttt_wetdaycnt / nys
+            ttt_wetdays_p_mon = ttt_wetdays_p_seas / nmn
+            ttt_wetdays_mean = np.nanmean(ttt_wetdays_p_mon)
+            ttt_wetdays_per = (ttt_wetdaycnt / wetdaycnt)* 100.0
+            per_ttt_wthis = (ttt_wetdaycnt / nttt_seas)  * 100.0
+
+            ttt_wetsum_p_seas = ttt_wetdaysum / nys
+            ttt_wetsum_p_mon = ttt_wetsum_p_seas / nmn
+            ttt_wetsum_mean = np.nanmean(ttt_wetsum_p_mon)
+            ttt_wetsum_per = (ttt_wetdaysum / wetdaysum)* 100.0
+
+            if ptype=='comp_anom_ag' or ptype=='comp_anom_cnt':
+                if nttt_seas >= 1:
+                    anoms = np.zeros((nttt_seas, nlat, nlon), dtype=np.float32)
+                    for day in range(nttt_seas):
+                        this_anom = rainsel[day, :, :] - rainsum_daily
+                        anoms[day, :, :] = this_anom
+
+                    if ptype == 'comp_anom_ag':
+
+                        anoms_signs = np.sign(anoms)
+                        comp_signs = np.sign(comp_anom)
+
+
+                        mask_zeros = np.zeros((nlat, nlon), dtype=np.float32)
+                        for i in range(nlat):
+                            for j in range(nlon):
+                                count = len(np.where(anoms_signs[:, i, j] == comp_signs[i, j])[0])
+                                perc = (float(count) / float(nttt_seas)) * 100
+                                if perc >= agthresh:
+                                    mask_zeros[i, j] = 1
+                                else:
+                                    mask_zeros[i, j] = 0
+
+
+                    elif ptype=='comp_anom_cnt':
+
+                        pos_pcent=np.zeros((nlat, nlon), dtype=np.float32)
+                        neg_pcent=np.zeros((nlat, nlon), dtype=np.float32)
+                        #zero_pcent=np.zeros((nlat, nlon), dtype=np.float32)
+
+                        for i in range(nlat):
+                            for j in range(nlon):
+                                count_p = len(np.where(anoms[:, i, j] > 0)[0])
+                                count_n = len(np.where(anoms[:, i, j] < 0)[0])
+                                #count_z = len(np.where(anoms[:, i, j] == 0)[0])
+
+
+                                perc_p = (float(count_p) / float(nttt_seas)) * 100
+                                perc_n = (float(count_n) / float(nttt_seas)) * 100
+                                #perc_z = (float(count_z) / float(nttt_mon)) * 100
+                                #print perc_z
+
+
+                                pos_pcent[i,j]=perc_p
+                                neg_pcent[i,j]=perc_n
+                                #zero_pcent[i,j]=perc_z
+
+        elif under_of=='under':
+
+            if nttt_seas == 0:
+                rainsum_ttt = np.zeros((nlat, nlon), dtype=np.float32)
+            else:
+                rainsel = rainseas[indices, :, :]
+                ttt_rain_dates = dateseas[indices]
+                ndt=nttt_seas
+
+                masked_rain=np.ma.zeros((ndt,nlat,nlon),dtype=np.float32)
+                for rdt in range(ndt):
+                    chmask = my.poly2mask(rlon,rlat,chs_4rain[rdt])
+                    r=np.ma.MaskedArray(rainsel[rdt,:,:],mask=~chmask)
+                    masked_rain[rdt,:,:]=r
+
+                if nttt_seas >= 2:
+                    rainsum_ttt = np.ma.sum(masked_rain, 0) # maskd elements set to 0
+                else:
+                    rainsum_ttt = np.ma.squeeze(masked_rain)
+
+            rainsum_ttt_monthly = rainsum_ttt / nys
+            rainsum_ttt_daily = rainsum_ttt / ndays_seas
+
+            rainperttt = rainsum_ttt / nttt_seas
+
+
+    if ptype=='tot_ttt':
+        if mmean == 'mon':
+            data4plot = rainsum_ttt_monthly
+        elif mmean == 'day':
+            data4plot = rainsum_ttt_daily
+        elif mmean == 'tot':
+            data4plot = rainsum_ttt
+    elif ptype=='per_ttt':
+        if mmean == 'mon':
+            rainperc_ttt=(rainsum_ttt_monthly/rainsum_monthly)*100.0
+        elif mmean == 'day':
+            rainperc_ttt = (rainsum_ttt_daily / rainsum_daily) * 100.0
+        elif mmean == 'tot':
+            rainperc_ttt=(rainsum_ttt/rainsum_all)*100.0
+        data4plot=rainperc_ttt
+    elif ptype=='rain_per_ttt':
+        data4plot=rainperttt
+    elif ptype=='comp_anom_ttt':
+        data4plot=comp_anom
+    elif ptype=='comp_anom_ag':
+        #data4plot=comp_anom[::3,::3]
+        data4plot=comp_anom
+    elif ptype=='comp_anom_cnt':
+        data4plot=pos_pcent
+    elif ptype=='ttt_wet_cnt':
+        if mmean=='tot':
+            data4plot=ttt_wetdaycnt
+        elif mmean=='mon':
+            data4plot=ttt_wetdays_p_mon
+    elif ptype=='tper_wet_cnt':
+        data4plot=ttt_wetdays_per
+    elif ptype=='ttt_wet_sum':
+        if mmean=='tot':
+            data4plot=ttt_wetdaysum
+        elif mmean=='mon':
+            data4plot=ttt_wetsum_p_mon
+    elif ptype=='tper_wet_sum':
+        data4plot=ttt_wetsum_per
+    elif ptype=='per_tttd_wet':
+        data4plot=per_ttt_wthis
+
+    newlon=rlon
+    newlat=rlat
+
+    # Draw basemap
+    m, f = blb.SAfrBasemap(rlat, rlon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
+
+    #Plot
+    plon,plat = np.meshgrid(newlon,newlat)
+
+    # all plot cbars
+    if ptype=='tot_all':
+        if mmean=='tot':
+            clevs=[0,800,1600,2400,3200,4000,4800,5600]
+        elif mmean=='mon':
+            clevs=[0,50,100,150,200,250,300,350]
+        elif mmean=='day':
+            clevs=[0.0,1.5,3.0,4.5,6.0,7.5,9.0,10.5,12.0]
+        cm = plt.cm.YlGnBu
+        cbar_lab='mm'
+    elif ptype=='all_cnt':
+        clevs=np.arange(0,50,5)
+        cm = plt.cm.magma_r
+        cbar_lab='%'
+
+    # all hvthr plot cbars
+    elif ptype=='all_wet_cnt' or ptype=='ttt_wet_cnt':
+        cm = plt.cm.YlGnBu
+        cbar_lab = 'days'
+        if hvthr==0:
+            if mmean == 'tot':
+                clevs=np.arange(0,400,40)
+            elif mmean =='mon':
+                clevs=np.arange(0,22,2)
+        elif hvthr==10:
+            if mmean == 'tot':
+                clevs=np.arange(0,225,25)
+            elif mmean =='mon':
+                clevs=np.arange(0,16,1)
+        elif hvthr==25:
+            if mmean == 'tot':
+                clevs=np.arange(0,60,5)
+            elif mmean =='mon':
+                clevs=np.arange(0,5,0.5)
+        elif hvthr==50:
+            if mmean == 'tot':
+                clevs=np.arange(0,16,1)
+            elif mmean =='mon':
+                clevs=np.arange(0,2,0.25)
+
+    elif ptype=='all_wet_sum' or ptype=='ttt_wet_sum':
+        cm = plt.cm.YlGnBu
+        cbar_lab = 'mm'
+        if hvthr==0:
+            if mmean == 'tot':
+                clevs = [0, 800, 1600, 2400, 3200, 4000, 4800, 5600]
+            elif mmean =='mon':
+                clevs = [0, 50, 100, 150, 200, 250, 300, 350]
+        elif hvthr==10:
+            if mmean == 'tot':
+                clevs=np.arange(0,3000,500)
+            elif mmean =='mon':
+                clevs=np.arange(0,300,30)
+        elif hvthr==25:
+            if mmean == 'tot':
+                clevs=np.arange(0,2600,300)
+            elif mmean =='mon':
+                clevs=np.arange(0,200,25)
+        elif hvthr==50:
+            if mmean == 'tot':
+                clevs=np.arange(0,2000,400)
+            elif mmean =='mon':
+                clevs=np.arange(0,100,10)
+
+    elif ptype=='aper_wet_cnt':
+        cm = plt.cm.gnuplot2
+        cbar_lab = '%'
+        if hvthr==0:
+            clevs=np.arange(0,90,10)
+        elif hvthr==10:
+            clevs=np.arange(0,45,5)
+        elif hvthr==25:
+            clevs=np.arange(0,10,1)
+        elif hvthr==50:
+            clevs=np.arange(0,4.5,0.5)
+
+    elif ptype=='aper_wet_sum':
+        cm = plt.cm.gnuplot2
+        cbar_lab = '%'
+        if hvthr==0:
+            clevs=np.arange(0,100,10) # this should be 100% everywhere
+        elif hvthr==10:
+            clevs=np.arange(50,95,5)
+        elif hvthr==25:
+            clevs=np.arange(0,70,10)
+        elif hvthr==50:
+            clevs=np.arange(0,40,5)
+
+
+    elif ptype=='tper_wet_cnt':
+        cm = plt.cm.gnuplot2
+        cbar_lab = '%'
+        clevs = np.arange(0, 100, 10)
+
+    elif ptype=='tper_wet_sum':
+        cm = plt.cm.gnuplot2
+        cbar_lab = '%'
+        if hvthr==0:
+            #clevs = [0, 10, 20, 30, 40, 50, 60] # should be the same as per_ttt
+            clevs = np.arange(0, 60, 10)
+        else:
+            clevs=np.arange(0,60,10)
+
+    elif ptype=='per_tttd_wet':
+        cm = plt.cm.gnuplot2
+        cbar_lab = '%'
+        if hvthr==0:
+            clevs = np.arange(0, 100, 10)
+        elif hvthr==10:
+            clevs = np.arange(0,50,5)
+        elif hvthr==25:
+            clevs = np.arange(0,30,3)
+        elif hvthr==50:
+            clevs = np.arange(0,15,1)
+
+
+    # ttt cbars
+    elif ptype=='tot_ttt':
+        if mmean=='tot':
+            clevs=[0,250,500,750,1000,1250,1500,1750,2000]
+        elif mmean=='mon':
+            clevs=[0,20,40,60,80,100,120,140]
+        elif mmean=='day':
+            clevs=[0,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.2,3.6,4.0]
+        cm=plt.cm.YlGnBu
+        cbar_lab='mm'
+    elif ptype=='per_ttt':
+        clevs=[0,10,20,30,40,50,60]
+        cm = plt.cm.gnuplot2
+        cbar_lab='%'
+    elif ptype=='rain_per_ttt':
+        clevs = [0.0,1.5,3.0,4.5,6.0,7.5,9.0,10.5,12.0]
+        cm = plt.cm.YlGnBu
+        cbar_lab='mm'
+    elif ptype=='comp_anom_ttt' or ptype == 'comp_anom_ag':
+        clevs = np.arange(-4, 4.5, 0.5)
+        cm = plt.cm.seismic_r
+        cbar_lab='mm'
+    elif ptype=='comp_anom_cnt':
+        clevs= np.arange(0,50,5)
+        cm = plt.cm.magma_r
+        cbar_lab='%'
+
+
+    cs = m.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
+
+    if labels:
+        if ptype=='tot_ttt' or ptype=='comp_anom_ttt' or ptype == 'comp_anom_ag':
+            tit=stats.mndict[mn]+': '+str(nttt_mon)+' TTT days '+str(int(round(float(nttt_mon)/float(nys))))+'/yr'
+        elif ptype=='per_ttt' or ptype=='tper_wet_sum':
+            tit=stats.mndict[mn]+': '+str(int(round((float(nttt_mon)/float(ndays_mon))*100.0)))+'% of days have TTTs'
+        elif ptype=='all_wet_cnt' or ptype=='all_wet_sum':
+            tit=stats.mndict[mn]+': mean = '+str(int(round(titstat)))+' per mon'
+        else:
+            tit = stats.mndict[mn]
+    else:
+        tit=stats.mndict[mn]
+    plt.title(tit)
+
+    if ptype == 'comp_anom_ag':
+        if nttt_seas >= 1:
+            hatch = m.contourf(plon, plat, mask_zeros, levels=[-1.0, 0.0, 1.0], hatches=["", '.'], alpha=0)
+
+
+    syp.redrawmap(m,lns=True,resol='verylow')
+    axcl=g.add_axes([0.9, 0.15, 0.02, 0.7])
+    cbar = plt.colorbar(cs, cax=axcl)
+    cbar.set_label(cbar_lab)
+
+    if savefig:
+        figname='Rainmap.png'
+        plt.savefig(figname,dpi=150)
+        print 'Saving figure as '+figname
+
+    return data4plot
+
 
 def gridolrmap_season(s,eventkeys,olr,lat,lon,dtime,cl,season='coreseason',key='noaa-olr-0-0',\
                        ptype='ave_all',mmean='mon',under_of='dayof',figdir='test',file_suffix='test',\
