@@ -1286,15 +1286,15 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
 
     if labels:
         if ptype=='tot_ttt' or ptype=='comp_anom_ttt' or ptype == 'comp_anom_ag':
-            tit=name2+': '+str(nttt_mon)+' TTT days '+str(int(round(float(nttt_mon)/float(nys))))+'/yr'
+            tit=modname+': '+str(nttt_mon)+' TTT days '+str(int(round(float(nttt_mon)/float(nys))))+'/yr'
         elif ptype=='per_ttt' or ptype=='tper_wet_sum':
-            tit=name2+': '+str(int(round((float(nttt_mon)/float(ndays_mon))*100.0)))+'% of days have TTTs'
+            tit=modname+': '+str(int(round((float(nttt_mon)/float(ndays_mon))*100.0)))+'% of days have TTTs'
         elif ptype=='all_wet_cnt' or ptype=='all_wet_sum':
-            tit=name2+': mean = '+str(int(round(titstat)))+' per mon'
+            tit=modname+': mean = '+str(int(round(titstat)))+' per mon'
         else:
-            tit = name2
+            tit = modname
     else:
-        tit=name2
+        tit=modname
     plt.title(tit)
 
     if ptype == 'comp_anom_ag':
