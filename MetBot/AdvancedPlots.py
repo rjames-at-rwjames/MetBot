@@ -1295,14 +1295,15 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
             tit = modname
     else:
         tit=modname
-    plt.title(tit)
+    plt.title(tit, fontsize=8)
 
     if ptype == 'comp_anom_ag':
         if nttt_seas >= 1:
             hatch = m.contourf(plon, plat, mask_zeros, levels=[-1.0, 0.0, 1.0], hatches=["", '.'], alpha=0)
 
 
-    syp.redrawmap(m,lns=True,resol='verylow')
+    m.drawcountries()
+    m.drawcoastlines()
     f, ax = plt.gcf(), plt.gca()  # get reference and set axes
     axcl=f.add_axes([0.9, 0.15, 0.02, 0.7])
     cbar = plt.colorbar(cs, cax=axcl)

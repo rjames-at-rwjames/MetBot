@@ -108,6 +108,14 @@ if heavy:
 else:
     hvthrs=['0']
 
+
+if subrain=='SA_TRMM':
+    figdim=[9,11]
+elif subrain=='SA_CONT':
+    figdim=[9,11]
+elif subrain=='UM_FOC':
+    figdim=[9,11]
+
 ### Get directories
 bkdir=cwd+"/../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
@@ -146,6 +154,7 @@ for do in range(len(doms)):
 
             # Set up plot
             print "Setting up plot..."
+            plt.figure(figsize=figdim)
             cnt = 1
             ### Finalising plot
             if metatype=='all':
@@ -160,6 +169,7 @@ for do in range(len(doms)):
                 mapsuf=mapsuf+'_perc_ag'+perc_ag
 
 
+
             # Get the map
             if cnt == 1:
                 noaadct = dsetdict.dset_deets['noaa']['noaa']
@@ -168,7 +178,7 @@ for do in range(len(doms)):
                          "noaa/noaa.olr.day.mean." + yr_noaa + ".nc"
                 olrdump, timedump, noaalat, noaalon, dtimedump = mync.openolr(f_noaa, 'olr', subs=sub)
 
-                m = blb.SAfrBasemap2(noaalat, noaalon, drawstuff=True, prj='cyl',
+                m = pt.AfrBasemap(noaalat, noaalon, drawstuff=True, prj='cyl',fno=1
                                      rsltn='l')
 
             ### Multi dset?
