@@ -44,7 +44,7 @@ yplots=7
 ### Plot type
 metatype='all' # 'all' or 'ttt' - is it a plot for all rain or just TTT rain
 plottype='tot_all'
-heavy=True
+heavy=False
 perc_ag=70              # show if this % or more days agree
 print 'Running for plottype '+plottype
 
@@ -333,6 +333,10 @@ for do in range(len(doms)):
                             elif dom=='nOcea':
                                 keys=k3
 
+                    else:
+                        s='synop not needed'
+                        keys='keys not needed'
+                        key='key not needed'
 
 
                     print 'Plotting for model '+rainname
@@ -340,7 +344,7 @@ for do in range(len(doms)):
                     allmask=ap.gridrainmap_single(s,keys,rain,rlat,rlon,rdtime,\
                                                   season=seas,key=key,ptype=plottype,mmean=monmean,\
                                                   under_of=under_dayof, \
-                                                  savefig=False, test=False, labels=nTTTlab,\
+                                                  savefig=False, labels=nTTTlab,\
                                                   agthresh=perc_ag, heavy=hvthr)
 
                     cnt +=1

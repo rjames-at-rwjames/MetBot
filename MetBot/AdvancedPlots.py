@@ -797,44 +797,9 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,season='NDJFM',key='noa
 
     under_of -> "dayof" is rain on day of TTTs, "under" is rain under TTTs
     '''
-    if not eventkeys:
-        eventkeys=[]
-        for ed in s.uniques:
-            eventkeys.append(ed[0])
 
     yrs = np.unique(rdtime[:,0])
     nys=len(yrs)
-
-    # Get list of dates for these events
-    # and if 'under' a list of chs
-    edts = []
-    if under_of == 'under':
-        chs = []
-    ecnt=1
-    for k in eventkeys:
-        e = s.events[k]
-        dts = s.blobs[key]['mbt'][e.ixflags]
-        #dts=e.trkdtimes
-        for dt in range(len(dts)):
-            if ecnt==1:
-                edts.append(dts[dt])
-                if under_of=='under':
-                    chs.append(e.blobs[key]['ch'][e.trk[dt]])
-            else:
-                tmpdt=np.asarray(edts)
-                # Check if it exists already
-                ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
-                     [dts[dt][1]], [dts[dt][2]], [0])
-                if len(ix)==0:
-                    edts.append(dts[dt])
-                    if under_of == 'under':
-                        chs.append(e.blobs[key]['ch'][e.trk[dt]])
-            ecnt+=1
-    edts = np.asarray(edts)
-    edts[:, 3] = 0
-    if under_of == 'under':
-        chs=np.asarray(chs)
-    print "Number of original TTT days found =  " + str(len(edts))
 
     # Get n lat and lon
     nlon=len(rlon)
@@ -945,6 +910,42 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,season='NDJFM',key='noa
     else:
 
         #TTT rain
+        if not eventkeys:
+            eventkeys = []
+            for ed in s.uniques:
+                eventkeys.append(ed[0])
+
+        # Get list of dates for these events
+        # and if 'under' a list of chs
+        edts = []
+        if under_of == 'under':
+            chs = []
+        ecnt = 1
+        for k in eventkeys:
+            e = s.events[k]
+            dts = s.blobs[key]['mbt'][e.ixflags]
+            # dts=e.trkdtimes
+            for dt in range(len(dts)):
+                if ecnt == 1:
+                    edts.append(dts[dt])
+                    if under_of == 'under':
+                        chs.append(e.blobs[key]['ch'][e.trk[dt]])
+                else:
+                    tmpdt = np.asarray(edts)
+                    # Check if it exists already
+                    ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
+                                     [dts[dt][1]], [dts[dt][2]], [0])
+                    if len(ix) == 0:
+                        edts.append(dts[dt])
+                        if under_of == 'under':
+                            chs.append(e.blobs[key]['ch'][e.trk[dt]])
+                ecnt += 1
+        edts = np.asarray(edts)
+        edts[:, 3] = 0
+        if under_of == 'under':
+            chs = np.asarray(chs)
+        print "Number of original TTT days found =  " + str(len(edts))
+
         edateseas = edts
         if under_of=='under':
             chs_seas=chs
