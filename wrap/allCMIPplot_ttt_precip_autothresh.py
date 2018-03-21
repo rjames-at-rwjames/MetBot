@@ -109,8 +109,9 @@ else:
     hvthrs=['0']
 
 ### Get directories
-bkdir=cwd+"/../../../CTdata/metbot_multi_dset/"
-prdir=bkdir+"precip_figs_allCMIP/"
+bkdir=cwd+"/../../../CTdata/"
+botdir=bkdir+"metbot_multi_dset/"
+prdir=botdir+"precip_figs_allCMIP/"
 my.mkdir_p(prdir)
 
 ### If ttt plot loop domains
@@ -202,7 +203,7 @@ for do in range(len(doms)):
                     moddct=dsetdict.dset_deets[dset][name]
 
                     ### Location for input & outputs
-                    indir=bkdir+dset+"/"
+                    indir=botdir+dset+"/"
                     outdir=indir+name+"/"
                     outsuf=outdir+name+'_'
 
@@ -226,7 +227,7 @@ for do in range(len(doms)):
                         rbeginatyr = beginatyr
 
                     rainname = rmoddct['prname']
-                    rainfile = bkdir + raindset + "/" + rainmod + "."+globp+".day.mean." + rys + ".nc"
+                    rainfile = botdir + raindset + "/" + rainmod + "."+globp+".day.mean." + rys + ".nc"
                     print 'Opening '+rainfile
 
                     rainout = mync.open_multi(rainfile, globp, rainmod, \
@@ -264,7 +265,7 @@ for do in range(len(doms)):
 
                         ### Get threshold
                         print 'getting threshold....'
-                        threshtxt=bkdir+'thresholds.fmin.all_dset.txt'
+                        threshtxt=botdir+'thresholds.fmin.all_dset.txt'
                         with open(threshtxt) as f:
                             for line in f:
                                 if dset+'\t'+name in line:

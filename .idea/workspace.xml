@@ -26,8 +26,8 @@
       <file leaf-file-name="allCMIPplot_ttt_precip_autothresh.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="221" column="40" lean-forward="true" selection-start-line="221" selection-start-column="40" selection-end-line="221" selection-end-column="40" />
+            <state relative-caret-position="255">
+              <caret line="267" column="40" lean-forward="false" selection-start-line="267" selection-start-column="34" selection-end-line="267" selection-end-column="40" />
               <folding>
                 <element signature="e#408#426#0" expanded="true" />
               </folding>
@@ -56,7 +56,6 @@
       <find>nCont</find>
       <find>wetdays_p_mon</find>
       <find>all_wet_cnt</find>
-      <find>bkdir</find>
       <find>thresh</find>
       <find>aper_wet_cnt</find>
       <find>refkey</find>
@@ -75,6 +74,8 @@
       <find>plottype</find>
       <find>plottyp</find>
       <find>test</find>
+      <find>bkdir</find>
+      <find>botdir</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -210,7 +211,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521635034191</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
+      <created>1521635127417</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1521635127417</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -338,8 +346,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="221" column="40" lean-forward="true" selection-start-line="221" selection-start-column="40" selection-end-line="221" selection-end-column="40" />
+        <state relative-caret-position="255">
+          <caret line="267" column="40" lean-forward="false" selection-start-line="267" selection-start-column="34" selection-end-line="267" selection-end-column="40" />
           <folding>
             <element signature="e#408#426#0" expanded="true" />
           </folding>
