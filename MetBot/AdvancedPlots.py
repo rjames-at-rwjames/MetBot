@@ -38,7 +38,7 @@ def spatiofreq2_season(s,lat,lon,yrs,eventkeys,figno=1,season='coreseason',\
         elif season=='dryseason':mns=[4,5,6,7,8,9]
     elif isinstance(season,list):
         mns=season
-    m, f = blb.SAfrBasemap(lat[4:-7],lon[3:-2],drawstuff=True,prj='cyl',\
+    m, f = blb.SAfrBasemap(lat[4:-7],lon[3:-2],drawstuff=False,prj='cyl',\
            fno=figno,rsltn='l',fontdict=fd)
     if len(mns)==12:plt.close();plt.figure(figsize=[12,10])
     elif len(mns)==6:plt.close();plt.figure(figsize=[13,8])
