@@ -771,7 +771,7 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
 
     return data4plot
 
-def gridrainmap_single(mp,s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',key='noaa-olr-0-0',\
+def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',key='noaa-olr-0-0',\
                        ptype='per_ttt',mmean='mon',under_of='dayof',\
                        savefig=False, labels=False,agthresh='perc_ag',heavy='0'):
     '''Produces single plot of ttt rainfall based on keys that are input
