@@ -1133,7 +1133,7 @@ def gridrainmap_single(mp,s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJF
     newlat=rlat
 
     # Draw basemap
-    #m, f = blb.SAfrBasemap(rlat, rlon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
+    mup, f = blb.SAfrBasemap(rlat, rlon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
 
     #Plot
     plon,plat = np.meshgrid(newlon,newlat)
@@ -1282,7 +1282,7 @@ def gridrainmap_single(mp,s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJF
         cbar_lab='%'
 
 
-    cs = mp.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
+    cs = mup.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
 
     if labels:
         if ptype=='tot_ttt' or ptype=='comp_anom_ttt' or ptype == 'comp_anom_ag':
@@ -1299,7 +1299,7 @@ def gridrainmap_single(mp,s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJF
 
     if ptype == 'comp_anom_ag':
         if nttt_seas >= 1:
-            hatch = mp.contourf(plon, plat, mask_zeros, levels=[-1.0, 0.0, 1.0], hatches=["", '.'], alpha=0)
+            hatch = mup.contourf(plon, plat, mask_zeros, levels=[-1.0, 0.0, 1.0], hatches=["", '.'], alpha=0)
 
 
     mp.drawcountries()
