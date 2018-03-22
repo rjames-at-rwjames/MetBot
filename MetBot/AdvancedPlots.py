@@ -1139,7 +1139,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     newlat=rlat
 
     # Draw basemap
-    mup, f = pt.AfrBasemap(rlat, rlon, drawstuff=False, prj='cyl', fno=1, rsltn='l')
+    mp, f = pt.AfrBasemap(rlat, rlon, drawstuff=False, prj='cyl', fno=1, rsltn='l')
 
     #Plot
     plon,plat = np.meshgrid(newlon,newlat)
@@ -1288,7 +1288,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
         cbar_lab='%'
 
 
-    cs = mup.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
+    cs = mp.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
 
     if labels:
         if ptype=='tot_ttt' or ptype=='comp_anom_ttt' or ptype == 'comp_anom_ag':
@@ -1305,11 +1305,11 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
 
     if ptype == 'comp_anom_ag':
         if nttt_seas >= 1:
-            hatch = mup.contourf(plon, plat, mask_zeros, levels=[-1.0, 0.0, 1.0], hatches=["", '.'], alpha=0)
+            hatch = mp.contourf(plon, plat, mask_zeros, levels=[-1.0, 0.0, 1.0], hatches=["", '.'], alpha=0)
 
 
-    mup.drawcountries()
-    mup.drawcoastlines()
+    mp.drawcountries()
+    mp.drawcoastlines()
     f, ax = plt.gcf(), plt.gca()  # get reference and set axes
     axcl=f.add_axes([0.91, 0.15, 0.01, 0.6])
     cbar = plt.colorbar(cs, cax=axcl)

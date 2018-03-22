@@ -169,17 +169,6 @@ for do in range(len(doms)):
             if plottype=='comp_anom_ag':
                 mapsuf=mapsuf+'_perc_ag'+perc_ag
 
-
-            # Get the map
-            # if cnt == 1:
-            #     noaadct = dsetdict.dset_deets['noaa']['noaa']
-            #     yr_noaa = noaadct['yrfname']
-            #     f_noaa = botdir + \
-            #              "noaa/noaa.olr.day.mean." + yr_noaa + ".nc"
-            #     olrdump, timedump, noaalat, noaalon, dtimedump = mync.openolr(f_noaa, 'olr', subs=sub)
-            #
-            #     mp = pt.AfrBasemap(noaalat, noaalon, drawstuff=True, prj='cyl',fno=1, rsltn='l')
-
             ### Multi dset?
             # dsets='spec'
             # ndset=1
