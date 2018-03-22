@@ -203,9 +203,9 @@ for do in range(len(doms)):
                 mnames = list(dset_mp.dset_deets[dset])
                 nmstr = str(nmod)
 
-                for m in range(nmod):
-                    name=mnames[m]
-                    mcnt=str(m+1)
+                for mo in range(nmod):
+                    name=mnames[mo]
+                    mcnt=str(mo+1)
                     print 'Running on ' + name
                     print 'This is model '+mcnt+' of '+nmstr+' in list'
 
