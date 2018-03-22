@@ -11,11 +11,13 @@
 # .....directory: here ../../CTdata/metbot_multi_dset/$dset/
 # naming of ncfiles used here /$dset/$name.olr.day.mean.$firstyear_$lastyear.nc
 
-import numpy as np
-import matplotlib.pyplot as plt
-import mpl_toolkits.basemap as bm
+import os
+import sys
 from datetime import date
-import sys,os
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 cwd=os.getcwd()
 sys.path.append(cwd+'/..')
 sys.path.append(cwd+'/../../RTools')
@@ -155,7 +157,7 @@ for do in range(len(doms)):
 
             # Set up plot
             print "Setting up plot..."
-            plt.figure(figsize=figdim)
+            g,ax = plt.subplots(figsize=figdim)
             cnt = 1
             ### Finalising plot
             if metatype=='all':
@@ -168,7 +170,6 @@ for do in range(len(doms)):
 
             if plottype=='comp_anom_ag':
                 mapsuf=mapsuf+'_perc_ag'+perc_ag
-
 
 
             # Get the map
