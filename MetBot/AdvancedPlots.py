@@ -1139,7 +1139,7 @@ def gridrainmap_single(mp,s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJF
     newlat=rlat
 
     # Draw basemap
-    mup, f = pt.AfrBasemap(rlat, rlon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
+    mup, f = pt.AfrBasemap(rlat, rlon, drawstuff=False, prj='cyl', fno=1, rsltn='l')
 
     #Plot
     plon,plat = np.meshgrid(newlon,newlat)
