@@ -1,4 +1,7 @@
 # AdvancedPlots.py
+import os
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -7,6 +10,10 @@ import MetBlobs as blb
 import SynopticAnatomy as sy
 import SynopticPlot as syp
 import mytools as my
+
+cwd=os.getcwd()
+sys.path.append(cwd+'/../../RTools')
+import PlotTools as pt
 
 
 ### SUBPLOT FUNCTIONS
@@ -1132,7 +1139,7 @@ def gridrainmap_single(mp,s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJF
     newlat=rlat
 
     # Draw basemap
-    mup, f = blb.SAfrBasemap(rlat, rlon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
+    mup, f = pt.AfrBasemap(rlat, rlon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
 
     #Plot
     plon,plat = np.meshgrid(newlon,newlat)
