@@ -48,8 +48,8 @@
       <file leaf-file-name="AdvancedPlots.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="606">
-              <caret line="1299" column="31" lean-forward="true" selection-start-line="1299" selection-start-column="31" selection-end-line="1299" selection-end-column="31" />
+            <state relative-caret-position="237">
+              <caret line="1305" column="6" lean-forward="false" selection-start-line="1305" selection-start-column="6" selection-end-line="1305" selection-end-column="6" />
               <folding />
             </state>
           </provider>
@@ -550,7 +550,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521708794089</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
+      <created>1521708927208</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1521708927208</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -710,8 +717,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="1299" column="31" lean-forward="true" selection-start-line="1299" selection-start-column="31" selection-end-line="1299" selection-end-column="31" />
+        <state relative-caret-position="237">
+          <caret line="1305" column="6" lean-forward="false" selection-start-line="1305" selection-start-column="6" selection-end-line="1305" selection-end-column="6" />
           <folding />
         </state>
       </provider>

@@ -1,14 +1,13 @@
 # AdvancedPlots.py
-import SynopticAnatomy as sy
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+
 import EventStats as stats
-#import SynopticClassify as sc
-import SynopticPlot as syp
-import RainStats as rs
-import mytools as my
 import MetBlobs as blb
-from time import sleep as sleep
+import SynopticAnatomy as sy
+import SynopticPlot as syp
+import mytools as my
+
 
 ### SUBPLOT FUNCTIONS
 def spatiofreq2_season(s,lat,lon,yrs,eventkeys,figno=1,season='coreseason',\
@@ -1302,8 +1301,8 @@ def gridrainmap_single(mp,s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJF
             hatch = mup.contourf(plon, plat, mask_zeros, levels=[-1.0, 0.0, 1.0], hatches=["", '.'], alpha=0)
 
 
-    mp.drawcountries()
-    mp.drawcoastlines()
+    mup.drawcountries()
+    mup.drawcoastlines()
     f, ax = plt.gcf(), plt.gca()  # get reference and set axes
     axcl=f.add_axes([0.91, 0.15, 0.01, 0.6])
     cbar = plt.colorbar(cs, cax=axcl)
