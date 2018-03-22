@@ -30,7 +30,6 @@ import MetBot.mytools as my
 import MetBot.mynetcdf as mync
 import MetBot.dset_dict as dsetdict
 import dsets_mplot_28 as dset_mp
-import PlotTools as pt
 
 ### Running options
 sub="SA"
@@ -172,14 +171,14 @@ for do in range(len(doms)):
 
 
             # Get the map
-            if cnt == 1:
-                noaadct = dsetdict.dset_deets['noaa']['noaa']
-                yr_noaa = noaadct['yrfname']
-                f_noaa = botdir + \
-                         "noaa/noaa.olr.day.mean." + yr_noaa + ".nc"
-                olrdump, timedump, noaalat, noaalon, dtimedump = mync.openolr(f_noaa, 'olr', subs=sub)
-
-                mp = pt.AfrBasemap(noaalat, noaalon, drawstuff=True, prj='cyl',fno=1, rsltn='l')
+            # if cnt == 1:
+            #     noaadct = dsetdict.dset_deets['noaa']['noaa']
+            #     yr_noaa = noaadct['yrfname']
+            #     f_noaa = botdir + \
+            #              "noaa/noaa.olr.day.mean." + yr_noaa + ".nc"
+            #     olrdump, timedump, noaalat, noaalon, dtimedump = mync.openolr(f_noaa, 'olr', subs=sub)
+            #
+            #     mp = pt.AfrBasemap(noaalat, noaalon, drawstuff=True, prj='cyl',fno=1, rsltn='l')
 
             ### Multi dset?
             # dsets='spec'
