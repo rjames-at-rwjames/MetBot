@@ -345,7 +345,7 @@ for do in range(len(doms)):
                         key='key not needed'
 
 
-                    print 'Plotting for model '+rainname
+                    print 'Plotting for model '+rainmod
                     plt.subplot(yplots,xplots,cnt)
                     allmask=ap.gridrainmap_single(s,keys,rain,rlat,rlon,rdtime,rainmod,\
                                                   season=seas,key=key,ptype=plottype,mmean=monmean,\

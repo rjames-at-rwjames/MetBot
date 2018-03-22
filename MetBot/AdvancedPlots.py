@@ -1133,7 +1133,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     newlat=rlat
 
     # Draw basemap
-    m, f = blb.SAfrBasemap(rlat, rlon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
+    #m, f = blb.SAfrBasemap(rlat, rlon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
 
     #Plot
     plon,plat = np.meshgrid(newlon,newlat)
@@ -1305,7 +1305,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     m.drawcountries()
     m.drawcoastlines()
     f, ax = plt.gcf(), plt.gca()  # get reference and set axes
-    axcl=f.add_axes([0.9, 0.15, 0.02, 0.7])
+    axcl=f.add_axes([0.91, 0.15, 0.01, 0.6])
     cbar = plt.colorbar(cs, cax=axcl)
 
     if savefig:
