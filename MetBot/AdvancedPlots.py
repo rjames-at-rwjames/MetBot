@@ -827,7 +827,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     newdates = rdtime[raindat]
 
     # Select rain for these mons
-    raindat2 = np.where((rdtime[:,1] >= mns[0]) | (rdtime[:,1] <= mns[3]))
+    raindat2 = np.where((newdates[:,1] >= mns[0]) | (newdates[:,1] <= mns[nmn-1]))
     rainseas = np.squeeze(rainperiod[raindat2,:,:])
     dateseas = newdates[raindat2]
 
