@@ -38,9 +38,11 @@
       <file leaf-file-name="AdvancedPlots.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="669">
-              <caret line="859" column="0" lean-forward="true" selection-start-line="859" selection-start-column="0" selection-end-line="859" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="489">
+              <caret line="883" column="30" lean-forward="true" selection-start-line="883" selection-start-column="30" selection-end-line="883" selection-end-column="30" />
+              <folding>
+                <element signature="e#19#28#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -617,7 +619,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521710743269</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
+      <created>1521712546217</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1521712546217</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -700,7 +709,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19425">
           <caret line="1295" column="9" lean-forward="true" selection-start-line="1295" selection-start-column="9" selection-end-line="1295" selection-end-column="9" />
-          <folding />
+          <folding>
+            <element signature="e#19#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -794,9 +805,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="669">
-          <caret line="859" column="0" lean-forward="true" selection-start-line="859" selection-start-column="0" selection-end-line="859" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="489">
+          <caret line="883" column="30" lean-forward="true" selection-start-line="883" selection-start-column="30" selection-end-line="883" selection-end-column="30" />
+          <folding>
+            <element signature="e#19#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

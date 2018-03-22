@@ -855,13 +855,13 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     wetdays_p_seas=wetdaycnt/nys
     wetdays_p_mon=wetdays_p_seas/nmn
     wetdays_p_day=wetdaycnt/len(dateseas)
-    wetdays_mean=np.nanmean(wetdays_p_seas)
+    wetdays_mean=np.nanmean(wetdays_p_mon)
     wetdays_per=(wetdaycnt/ndays_seas)*100.0
 
     wetsum_p_seas=wetdaysum/nys
     wetsum_p_mon=wetsum_p_seas/nmn
     wetsum_p_day=wetdaysum/len(dateseas)
-    wetsum_mean=np.nanmean(wetsum_p_seas)
+    wetsum_mean=np.nanmean(wetsum_p_mon)
     wetsum_per=(wetdaysum/rainsum_all)*100.0
 
     if ptype=='tot_all':
