@@ -1055,18 +1055,13 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
                             for j in range(nlon):
                                 count_p = len(np.where(anoms[:, i, j] > 0)[0])
                                 count_n = len(np.where(anoms[:, i, j] < 0)[0])
-                                #count_z = len(np.where(anoms[:, i, j] == 0)[0])
-
 
                                 perc_p = (float(count_p) / float(nttt_seas)) * 100
                                 perc_n = (float(count_n) / float(nttt_seas)) * 100
-                                #perc_z = (float(count_z) / float(nttt_mon)) * 100
-                                #print perc_z
-
 
                                 pos_pcent[i,j]=perc_p
                                 neg_pcent[i,j]=perc_n
-                                #zero_pcent[i,j]=perc_z
+
 
         elif under_of=='under':
 
@@ -1292,9 +1287,9 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
 
     if labels:
         if ptype=='tot_ttt' or ptype=='comp_anom_ttt' or ptype == 'comp_anom_ag':
-            tit=modname+': '+str(nttt_mon)+' TTT days '+str(int(round(float(nttt_mon)/float(nys))))+'/yr'
+            tit=modname+': '+str(int(round(float(nttt_seas)/float(nys))))+'/yr'
         elif ptype=='per_ttt' or ptype=='tper_wet_sum':
-            tit=modname+': '+str(int(round((float(nttt_mon)/float(ndays_mon))*100.0)))+'% of days have TTTs'
+            tit=modname+': '+str(int(round((float(nttt_seas)/float(ndays_seas))*100.0)))+'%'
         elif ptype=='all_wet_cnt' or ptype=='all_wet_sum':
             tit=modname+': mean = '+str(int(round(titstat)))+' per mon'
         else:
