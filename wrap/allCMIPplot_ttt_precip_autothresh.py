@@ -242,6 +242,12 @@ for do in range(len(doms)):
                         print 'Check number of levels in ncfile'
                     rdtime[:, 3] = 0
 
+                    print 'Checking for duplicate timesteps' # do retain this - IPSL A LR has double tsteps
+                    tmp = np.ascontiguousarray(rdtime).view(np.dtype((np.void, rdtime.dtype.itemsize * rdtime.shape[1])))
+                    _, idx = np.unique(tmp, return_index=True)
+                    rdtime = rdtime[idx]
+                    rain = rain[idx, :, :]
+
                     ### Select data to run
                     start = rmoddct['startdate']
                     ystart = int(start[0:4]);
