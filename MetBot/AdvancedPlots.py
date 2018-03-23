@@ -975,7 +975,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
             if under_of=='under':
                 chs_4rain=np.squeeze(np.asarray(chs_4rain))
         nttt_seas = len(indices)
-        print "Number of TTT days found in rain dataset for seas " + seas + " =  " + str(nttt_seas)
+        print "Number of TTT days found in rain dataset for seas " + season + " =  " + str(nttt_seas)
 
         if under_of == 'dayof':
 

@@ -43,8 +43,8 @@ xplots=4
 yplots=7
 
 ### Plot type
-metatype='all' # 'all' or 'ttt' - is it a plot for all rain or just TTT rain
-plottype='tot_all'
+metatype='ttt' # 'all' or 'ttt' - is it a plot for all rain or just TTT rain
+plottype='tot_ttt'
 heavy=False
 perc_ag=70              # show if this % or more days agree
 print 'Running for plottype '+plottype
@@ -88,7 +88,7 @@ print 'Running for plottype '+plottype
 under_dayof='dayof'     # if "dayof" plots all rain on TTT days
                         #   if "under" plots rain under TTTs (based on blobs)
 
-monmean='day'           # to control the output - is there averaging?
+monmean='mon'           # to control the output - is there averaging?
                         # 'day' is daily mean - note that day is not currently
                         #          set up to work with all opts e.g. wet day counts
                         # 'mon' is monthly mean
@@ -105,7 +105,7 @@ elif metatype=='ttt':
     doms=['All','nCont','nMada','nOcea'] # doms for TTT days selected
 
 if heavy:
-    hvthrs=['10','25','50']
+    hvthrs=['0','10','25','50']
 else:
     hvthrs=['0']
 
