@@ -64,3 +64,9 @@ dim_deets['pres']={
 "ncep": ['time','lat','lon'],
 "era": ['time','latitude','longitude'],
 }
+
+dim_deets['orog']={
+"gtopo30": ['time','lat','lon'],
+"cmip5": ['time','lat','lon'],
+#"cmip5": ['time','lat','lon'],
+}

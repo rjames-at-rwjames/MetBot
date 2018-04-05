@@ -13,6 +13,11 @@ mast_dset_deets['trmm']={
 'prname':"pcp",
 }
 
+# GTOPO30
+mast_dset_deets['gtopo30']={
+'orogname':"orog",
+}
+
 # NCEP
 mast_dset_deets['ncep']={
 'olrname':"ulwrf",'prname':"prate",'omeganame':"omega",'uname':"uwnd",'vname':"vwnd", 'qname':"shum", 'gpthname':"hgt", 'Tname':"air", 'presname':"pres",
@@ -25,6 +30,6 @@ mast_dset_deets['era']={
 
 # CMIP5
 mast_dset_deets['cmip5']={
-'olrname':"rlut", 'prname':"pr", 'omeganame':"wap", 'uname':"ua", 'vname':"va", 'qname':"hus", 'gpthname':"zg", 'Tname':"ta",
+'orogname':"orog", 'olrname':"rlut", 'prname':"pr", 'omeganame':"wap", 'uname':"ua", 'vname':"va", 'qname':"hus", 'gpthname':"zg", 'Tname':"ta",
 }
 

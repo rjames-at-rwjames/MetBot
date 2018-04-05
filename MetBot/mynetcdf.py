@@ -79,6 +79,7 @@ def isubs(sub,lat,lon,*args):
     domains['SASA'] = ((-50.0,0.0),(310.0,75.0))
     domains['CONT_PR'] = ((-35.0,-20.0),(23.0,35.0))
     domains['MADA_PR'] = ((-25.0,-11.0),(35.0,50.0))
+    domains['mada'] = ((-28.0,-8.0),(40.0,56.0))
     if isinstance(sub,str):
         domain=domains[sub]; getisubs=True
     elif isinstance(sub,tuple):
@@ -414,6 +415,11 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
     RETURNS: var, lat, lon, lev'''
 
     dimlist = dim_exdict.dim_deets[globv][dset]
+    print 'dimlist'
+    print dimlist
+    print len(dimlist)
+    print mname
+    newdimlist=dimlist[:]
     timestr = dimlist[0]
     ncf = kh.NetCDFFile(ncfile,'r')
     #vkeys = ncf.variables.keys() # could use something with this?
@@ -422,23 +428,28 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
             exec(i + ' = np.float32(ncf.variables[\''+ i + '\'][:])')
         except:
             print 'Variable \"'+i+ '\" does not exist in '+ncfile
-            dimlist.remove(i);continue
+            newdimlist.remove(i);continue
 
-    # HUMAN TIME CONVERSION
+    #print len(dimlist)
+    #print len(newdimlist)
+
     moddct = dsetdict.dset_deets[dset][mname]
-    cal = moddct['calendar']
     vnamedict = globv+'name'
-    units = moddct[globv+'timeunit']
-    if dset=='cmip5':
-        mastdct=mast_dict.mast_dset_deets[dset]
-        varstr=mastdct[vnamedict]
+    if dset == 'cmip5':
+        mastdct = mast_dict.mast_dset_deets[dset]
+        varstr = mastdct[vnamedict]
     else:
         varstr = moddct[vnamedict]
-    exec('dtime=num2date((' + timestr + '),units="' + units + '",calendar="' + cal + '")')
-    if cal == '360_day':
-        dtime = fix360d(dtime)
 
-    dtarr=dtime2arr(dtime)
+    # HUMAN TIME CONVERSION
+    if globv!='orog':
+        cal = moddct['calendar']
+        units = moddct[globv+'timeunit']
+        exec('dtime=num2date((' + timestr + '),units="' + units + '",calendar="' + cal + '")')
+        if cal == '360_day':
+            dtime = fix360d(dtime)
+
+        dtarr=dtime2arr(dtime)
 
     if not subtime:
         if sub and levselect:
@@ -473,16 +484,19 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
             # Special option for lons spanning 0
             if len(ilons) == 2:
                 iln1, iln2 = str(ilons[0]), str(ilons[1] + 1)
-                if len(dimlist)==3:
+                if len(newdimlist)==3:
                     if varstr=='precipitation':
                         exec('data = ncf.variables[\''+ varstr + '\']\
                                      ['+ilt1+':'+ilt2+','+iln1+':'+iln2+']')
                     else:
                         exec('data = ncf.variables[\''+ varstr + '\']\
                                      [:,'+ilt1+':'+ilt2+','+iln1+':'+iln2+']')
-                elif len(dimlist)==4:
+                elif len(newdimlist)==4:
                     exec('data = ncf.variables[\''+ varstr + '\']\
                                  [:,:,'+ilt1+':'+ilt2+','+iln1+':'+iln2+']')
+                elif len(newdimlist)==2:
+                    exec('data = ncf.variables[\''+ varstr + '\']\
+                                 ['+ilt1+':'+ilt2+','+iln1+':'+iln2+']')
 
                 exec(dimlist[2]+'='+dimlist[2]+'['+iln1+':'+iln2+']')
             elif len(ilons)>2:
@@ -541,10 +555,12 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
     # Silly dataset specific tweaks
     if dset == 'cmip5':
         lat = lat[::-1]
-        if len(dimlist)==3:
+        if len(newdimlist)==3:
             exec (varstr + '=' + varstr + '[:,::-1,:]')
-        elif len(dimlist)==4:
+        elif len(newdimlist)==4:
             exec (varstr + '=' + varstr + '[:,:,::-1,:]')
+        elif len(newdimlist)==2:
+            exec (varstr + '=' + varstr + '[::-1,:]')
     if dset == 'noaa':
         if mname == 'cdr':
             lat = lat[::-1]
@@ -554,7 +570,10 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
         exec (varstr + '=' + varstr + '[:,:,::-1,:]')
 
 
-    exec('out=(np.float32('+varstr+'),'+', '.join(dimlist)+',dtarr)')
+    if globv!='orog':
+        exec('out=(np.float32('+varstr+'),'+', '.join(newdimlist)+',dtarr)')
+    else:
+        exec('out=(np.float32('+varstr+'),'+', '.join(newdimlist)+')')
 
     return out
 
