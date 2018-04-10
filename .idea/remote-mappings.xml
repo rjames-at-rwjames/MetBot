@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteMappingsManager">
+    <list>
+      <list>
+        <remote-mappings server-id="python@ssh://bras2392@linux.ouce.ox.ac.uk:22/soge-home/students/bras2392/.conda_envs/bras2392python/bin/python">
+          <settings>
+            <list>
+              <mapping local-root="$PROJECT_DIR$/../.." remote-root="/ouce-home/students/bras2392" />
+            </list>
+          </settings>
+        </remote-mappings>
+      </list>
+    </list>
+  </component>
+</project>

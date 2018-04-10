@@ -44,8 +44,8 @@ yplots=7
 
 ### Plot type
 metatype='ttt' # 'all' or 'ttt' - is it a plot for all rain or just TTT rain
-plottype='tot_ttt'
-heavy=False
+plottype='per_tttd_wet'
+heavy=True
 perc_ag=70              # show if this % or more days agree
 print 'Running for plottype '+plottype
 
@@ -88,7 +88,7 @@ print 'Running for plottype '+plottype
 under_dayof='dayof'     # if "dayof" plots all rain on TTT days
                         #   if "under" plots rain under TTTs (based on blobs)
 
-monmean='mon'           # to control the output - is there averaging?
+monmean='day'           # to control the output - is there averaging?
                         # 'day' is daily mean - note that day is not currently
                         #          set up to work with all opts e.g. wet day counts
                         # 'mon' is monthly mean
@@ -105,9 +105,9 @@ elif metatype=='ttt':
     doms=['All','nCont','nMada','nOcea'] # doms for TTT days selected
 
 if heavy:
-    hvthrs=['0','10','25','50']
+    hvthrs=['0.5','10','25','50']
 else:
-    hvthrs=['0']
+    hvthrs=['0.5']
 
 
 if subrain=='SA_TRMM':
@@ -167,7 +167,7 @@ for do in range(len(doms)):
                 mapsuf=mapsuf+'_hvthr'+hvthr
 
             if plottype=='comp_anom_ag':
-                mapsuf=mapsuf+'_perc_ag'+perc_ag
+                mapsuf=mapsuf+'_perc_ag'+str(perc_ag)
 
             ### Multi dset?
             # dsets='spec'

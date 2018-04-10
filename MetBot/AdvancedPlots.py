@@ -598,7 +598,7 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
         elif ptype=='all_wet_cnt' or ptype=='ttt_wet_cnt':
             cm = plt.cm.YlGnBu
             cbar_lab = 'days'
-            if hvthr==0:
+            if hvthr==0 or hvthr==0.5:
                 if mmean == 'tot':
                     clevs=np.arange(0,400,40)
                 elif mmean =='mon':
@@ -622,7 +622,7 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
         elif ptype=='all_wet_sum' or ptype=='ttt_wet_sum':
             cm = plt.cm.YlGnBu
             cbar_lab = 'mm'
-            if hvthr==0:
+            if hvthr==0 or hvthr==0.5:
                 if mmean == 'tot':
                     clevs = [0, 800, 1600, 2400, 3200, 4000, 4800, 5600]
                 elif mmean =='mon':
@@ -646,7 +646,7 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
         elif ptype=='aper_wet_cnt':
             cm = plt.cm.gnuplot2
             cbar_lab = '%'
-            if hvthr==0:
+            if hvthr==0 or hvthr==0.5:
                 clevs=np.arange(0,90,10)
             elif hvthr==10:
                 clevs=np.arange(0,45,5)
@@ -658,7 +658,7 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
         elif ptype=='aper_wet_sum':
             cm = plt.cm.gnuplot2
             cbar_lab = '%'
-            if hvthr==0:
+            if hvthr==0 or hvthr==0.5:
                 clevs=np.arange(0,100,10) # this should be 100% everywhere
             elif hvthr==10:
                 clevs=np.arange(50,95,5)
@@ -671,12 +671,12 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
         elif ptype=='tper_wet_cnt':
             cm = plt.cm.gnuplot2
             cbar_lab = '%'
-            clevs = np.arange(0, 100, 10)
+            clevs = np.arange(0, 110, 10)
 
         elif ptype=='tper_wet_sum':
             cm = plt.cm.gnuplot2
             cbar_lab = '%'
-            if hvthr==0:
+            if hvthr==0 or hvthr==0.5:
                 #clevs = [0, 10, 20, 30, 40, 50, 60] # should be the same as per_ttt
                 clevs = np.arange(0, 60, 10)
             else:
@@ -685,7 +685,7 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
         elif ptype=='per_tttd_wet':
             cm = plt.cm.gnuplot2
             cbar_lab = '%'
-            if hvthr==0:
+            if hvthr==0 or hvthr==0.5:
                 clevs = np.arange(0, 100, 10)
             elif hvthr==10:
                 clevs = np.arange(0,50,5)
@@ -706,7 +706,9 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
             cm=plt.cm.YlGnBu
             cbar_lab='mm'
         elif ptype=='per_ttt':
-            clevs=[0,10,20,30,40,50,60]
+            #clevs=[0,10,20,30,40,50,60]
+            #clevs=np.arange(0,110,10)
+            clevs=np.arange(0,50,5)
             cm = plt.cm.gnuplot2
             cbar_lab='%'
         elif ptype=='rain_per_ttt':
@@ -1158,7 +1160,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     elif ptype=='all_wet_cnt' or ptype=='ttt_wet_cnt':
         cm = plt.cm.YlGnBu
         cbar_lab = 'days'
-        if hvthr==0:
+        if hvthr==0 or hvthr==0.5:
             if mmean == 'tot':
                 clevs=np.arange(0,400,40)
             elif mmean =='mon':
@@ -1182,7 +1184,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     elif ptype=='all_wet_sum' or ptype=='ttt_wet_sum':
         cm = plt.cm.YlGnBu
         cbar_lab = 'mm'
-        if hvthr==0:
+        if hvthr==0 or hvthr==0.5:
             if mmean == 'tot':
                 clevs = [0, 800, 1600, 2400, 3200, 4000, 4800, 5600]
             elif mmean =='mon':
@@ -1206,19 +1208,19 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     elif ptype=='aper_wet_cnt':
         cm = plt.cm.gnuplot2
         cbar_lab = '%'
-        if hvthr==0:
-            clevs=np.arange(0,90,10)
+        if hvthr==0 or hvthr==0.5:
+            clevs = np.arange(0, 100, 10)
         elif hvthr==10:
-            clevs=np.arange(0,45,5)
+            clevs = np.arange(0,50,5)
         elif hvthr==25:
-            clevs=np.arange(0,10,1)
+            clevs = np.arange(0,15,1)
         elif hvthr==50:
-            clevs=np.arange(0,4.5,0.5)
+            clevs = np.arange(0,4,0.4)
 
     elif ptype=='aper_wet_sum':
         cm = plt.cm.gnuplot2
         cbar_lab = '%'
-        if hvthr==0:
+        if hvthr==0 or hvthr==0.5:
             clevs=np.arange(0,100,10) # this should be 100% everywhere
         elif hvthr==10:
             clevs=np.arange(50,95,5)
@@ -1231,12 +1233,12 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     elif ptype=='tper_wet_cnt':
         cm = plt.cm.gnuplot2
         cbar_lab = '%'
-        clevs = np.arange(0, 100, 10)
+        clevs = np.arange(0, 110, 10)
 
     elif ptype=='tper_wet_sum':
         cm = plt.cm.gnuplot2
         cbar_lab = '%'
-        if hvthr==0:
+        if hvthr==0 or hvthr==0.5:
             #clevs = [0, 10, 20, 30, 40, 50, 60] # should be the same as per_ttt
             clevs = np.arange(0, 60, 10)
         else:
@@ -1245,14 +1247,14 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     elif ptype=='per_tttd_wet':
         cm = plt.cm.gnuplot2
         cbar_lab = '%'
-        if hvthr==0:
+        if hvthr==0 or hvthr==0.5:
             clevs = np.arange(0, 100, 10)
         elif hvthr==10:
             clevs = np.arange(0,50,5)
         elif hvthr==25:
-            clevs = np.arange(0,30,3)
-        elif hvthr==50:
             clevs = np.arange(0,15,1)
+        elif hvthr==50:
+            clevs = np.arange(0,4,0.4)
 
 
     # ttt cbars
@@ -1262,11 +1264,14 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
         elif mmean=='mon':
             clevs=[0,20,40,60,80,100,120,140]
         elif mmean=='day':
-            clevs=[0,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.2,3.6,4.0]
-        cm=plt.cm.YlGnBu
+            #clevs=[0,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.2,3.6,4.0]
+            clevs=np.arange(0.0,13.5,1.5)
+	cm=plt.cm.YlGnBu
         cbar_lab='mm'
     elif ptype=='per_ttt':
-        clevs=[0,10,20,30,40,50,60]
+        #clevs=[0,10,20,30,40,50,60]
+        #clevs=np.arange(0,110,10)
+        clevs=np.arange(0,50,5)
         cm = plt.cm.gnuplot2
         cbar_lab='%'
     elif ptype=='rain_per_ttt':

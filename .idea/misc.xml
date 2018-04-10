@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.12 (~/miniconda2/bin/python)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Remote Python 2.7.11 (ssh://bras2392@linux.ouce.ox.ac.uk:22/soge-home/students/bras2392/.conda_envs/bras2392python/bin/python)" project-jdk-type="Python SDK" />
 </project>
