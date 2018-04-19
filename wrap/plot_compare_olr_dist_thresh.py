@@ -174,8 +174,10 @@ for d in range(ndset):
         mnames=['cdr']
         nmod=len(mnames)
     elif dset=='cmip5':
-        nmod=len(dsetdict.dset_deets[dset])
-        mnames=list(dsetdict.dset_deets[dset])
+        nmod=2
+        mnames=['inmcm4','FGOALS-g2']
+        #nmod=len(dsetdict.dset_deets[dset])
+        #mnames=list(dsetdict.dset_deets[dset])
     nmstr=str(nmod)
 
     for m in range(nmod):
@@ -283,7 +285,7 @@ if histplot:
     ### Plot legend and axis
     plt.xlim(100, 320)
     plt.yticks(np.arange(0.002, 0.016, 0.004))
-    #plt.legend(modnm, loc='upper left',fontsize='xx-small')
+    plt.legend(modnm, loc='upper left',fontsize='xx-small')
     plt.xlabel('OLR', fontsize=14.0, weight='demibold', color='k')
     plt.ylabel('frequency density', fontsize=14.0, weight='demibold', color='k')
     #if title: plt.title('Histogram of OLR: '+dsetstr,\
@@ -292,6 +294,7 @@ if histplot:
     ### Save figure
     rawfig=bkdir+'/4pres/olr_raw_hist.'+dsetstr+'.png'
     plt.savefig(rawfig)
+    print 'Saving figure as '+rawfig
 
 
 ### Edits to text file

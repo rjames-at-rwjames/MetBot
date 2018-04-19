@@ -79,7 +79,12 @@ def isubs(sub,lat,lon,*args):
     domains['SASA'] = ((-50.0,0.0),(310.0,75.0))
     domains['CONT_PR'] = ((-35.0,-20.0),(23.0,35.0))
     domains['MADA_PR'] = ((-25.0,-11.0),(35.0,50.0))
+    domains['ALL_PR'] = ((-35.0,-15.0), (7.5,100.0))
+    domains['contsub'] = ((-35.0,-15.0), (12.0,40.0))
+    domains['madasub'] = ((-35.0,-15.0), (40.0,70.0))
+    domains['alocsub'] = ((-35.0,-15.0), (40.0,100.0))
     domains['mada'] = ((-28.0,-8.0),(40.0,56.0))
+    domains['smad'] = ((-26.0,-11.0),(42.0,51.0))
     if isinstance(sub,str):
         domain=domains[sub]; getisubs=True
     elif isinstance(sub,tuple):
@@ -415,10 +420,10 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
     RETURNS: var, lat, lon, lev'''
 
     dimlist = dim_exdict.dim_deets[globv][dset]
-    print 'dimlist'
-    print dimlist
-    print len(dimlist)
-    print mname
+    # print 'dimlist'
+    # print dimlist
+    # print len(dimlist)
+    # print mname
     newdimlist=dimlist[:]
     timestr = dimlist[0]
     ncf = kh.NetCDFFile(ncfile,'r')
@@ -450,6 +455,25 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
             dtime = fix360d(dtime)
 
         dtarr=dtime2arr(dtime)
+
+    # If TRMM change lons to 0 to 360
+    if dset=='trmm':
+        if sub=='bigtrop':
+            # print 'Printing raw lon'
+            # print longitude
+            print 'Ammending TRMM longitudes to 0 to 360'
+            for i in range(len(longitude)):
+                if longitude[i] < 0:
+                    longitude[i] = longitude[i] + 360
+
+            # print 'Printing lon after edit'
+            # print longitude
+            ord = np.argsort(longitude)
+            longitude = longitude[ord]
+            # print 'Printing lon after re-order'
+            # print longitude
+
+
 
     if not subtime:
         if sub and levselect:
@@ -488,6 +512,7 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
                     if varstr=='precipitation':
                         exec('data = ncf.variables[\''+ varstr + '\']\
                                      ['+ilt1+':'+ilt2+','+iln1+':'+iln2+']')
+
                     else:
                         exec('data = ncf.variables[\''+ varstr + '\']\
                                      [:,'+ilt1+':'+ilt2+','+iln1+':'+iln2+']')
@@ -499,6 +524,10 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
                                  ['+ilt1+':'+ilt2+','+iln1+':'+iln2+']')
 
                 exec(dimlist[2]+'='+dimlist[2]+'['+iln1+':'+iln2+']')
+                if dset == 'trmm':
+                    if sub=='bigtrop':
+                        data = data[:, :, ord]
+
             elif len(ilons)>2:
                 if len(dimlist)==3:
                     exec('data = ncf.variables[\''+ varstr + '\'][:,'+ilt1+':'+ilt2+',ilons]')

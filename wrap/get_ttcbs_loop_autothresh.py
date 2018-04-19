@@ -40,9 +40,9 @@ import MetBot.find_saddle as fs
 tstart=tmr.time()
 
 ### Running options
-olrall=True      # Get mbs for $dset-olr-0-all
-olrfull=True     # Get mbs for $dset-olr-0-full
-testfile=True    # Uses a test file with short period
+olrall=False      # Get mbs for $dset-olr-0-all
+olrfull=False     # Get mbs for $dset-olr-0-full
+testfile=False    # Uses a test file with short period
 testyear=True    # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
@@ -55,7 +55,7 @@ showdistr=False   # Save a figure showing histogram of OLR values
 threshtest=False  # Option to run on thresholds + and - 5Wm2 as a test
 getmbs=True      # Actually run the MetBot algorithm
 showblb=True    # Show the blobs while running
-intract=True    # Interactive running of showblobs
+intract=False    # Interactive running of showblobs
 refsubset=True   # This is used if noaaolr=True to only look in time window
 hrwindow=49      # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True   # Build tracks of cloud blobs that become TTT cloud bands
@@ -80,7 +80,7 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['noaa']
+    dsetnames=['cmip5']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -96,7 +96,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['noaa']
+        mnames=['FGOALS-g2']
     nmstr=str(nmod)
 
     for m in range(nmod):
