@@ -678,6 +678,23 @@ def plotseasonbox_rj(scycle,descr,picext,savefig=False):
     fname=picext+'_scycle.png'
     if savefig: plt.savefig(fname,dpi=150)
 
+def plotseasonbox_4mp(scycle,descr,ax,bound=False):
+    # Alternative plotseasonbox made by RJ
+    # to put in a multipanel plot of all CMIP5
+    # descr is title of the plot - probably model name
+    monthstr=['A','S','O','N','D','J','F','M','A','M','J','J']
+    plt.boxplot(scycle, notch=0, sym='+', vert=1, whis=1.5) # produces boxplot
+    plt.plot(np.arange(1,13),scycle.mean(0),'k-',lw=1) # produces mean line
+    plt.xticks(np.arange(1,13),monthstr,fontsize=13.0) # month labels
+    # plt.yticks(np.arange(1,14),fontsize=13.0)
+    # plt.ylim(0,8.5)
+    if isinstance(bound,str):
+        for axis in ['top', 'bottom', 'left', 'right']:
+            ax.spines[axis].set_linewidth(3)
+            ax.spines[axis].set_color(bound)
+    plt.title(descr)
+
+
 def plotseasonbox_rain(scycle,descr,ax=False):
     if isinstance(ax,bool):plt.figure()
     else: plt.axes(ax)

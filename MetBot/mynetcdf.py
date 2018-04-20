@@ -448,9 +448,14 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
 
     # HUMAN TIME CONVERSION
     if globv!='orog':
-        cal = moddct['calendar']
-        units = moddct[globv+'timeunit']
-        exec('dtime=num2date((' + timestr + '),units="' + units + '",calendar="' + cal + '")')
+        # cal = moddct['calendar']
+        # units = moddct[globv+'timeunit']
+        # exec('dtime=num2date((' + timestr + '),units="' + units + '",calendar="' + cal + '")')
+
+        cal=ncf.variables[timestr].calendar
+        units=ncf.variables[timestr].units
+        exec('dtime=num2date('+timestr+',units="' + units + '",calendar="' + cal + '")')
+
         if cal == '360_day':
             dtime = fix360d(dtime)
 

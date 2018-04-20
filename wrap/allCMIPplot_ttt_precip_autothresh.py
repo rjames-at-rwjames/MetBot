@@ -41,11 +41,12 @@ seasons=['NDJFM']
 thname='actual'         # Option to run on thresholds + and - 5Wm2 as a test
 xplots=4
 yplots=7
+group=True
 
 ### Plot type
 metatype='ttt' # 'all' or 'ttt' - is it a plot for all rain or just TTT rain
-plottype='per_tttd_wet'
-heavy=True
+plottype='per_ttt'
+heavy=False
 perc_ag=70              # show if this % or more days agree
 print 'Running for plottype '+plottype
 
@@ -117,6 +118,10 @@ elif subrain=='SA_CONT':
 elif subrain=='UM_FOC':
     figdim=[9,11]
 
+if group:
+    grcls=['fuchsia','b','r','blueviolet','springgreen','gold','darkorange']
+
+
 ### Get directories
 bkdir=cwd+"/../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
@@ -169,6 +174,9 @@ for do in range(len(doms)):
             if plottype=='comp_anom_ag':
                 mapsuf=mapsuf+'_perc_ag'+str(perc_ag)
 
+            if group:
+                mapsuf=mapsuf+'_grouped.'
+
             ### Multi dset?
             # dsets='spec'
             # ndset=1
@@ -188,8 +196,23 @@ for do in range(len(doms)):
                 ### Multi model?
                 mods='all'
                 nmod = len(dset_mp.dset_deets[dset])
-                mnames = list(dset_mp.dset_deets[dset])
+                mnames_tmp = list(dset_mp.dset_deets[dset])
                 nmstr = str(nmod)
+
+                if dset == 'cmip5':
+                    if group:
+                        mnames = np.zeros(nmod, dtype=object)
+
+                        for mo in range(nmod):
+                            name = mnames_tmp[mo]
+                            moddct = dset_mp.dset_deets[dset][name]
+                            thisord = int(moddct['ord']) - 2  # minus 2 because cdr already used
+                            mnames[thisord] = name
+
+                    else:
+                        mnames = mnames_tmp
+                else:
+                    mnames = mnames_tmp
 
                 for mo in range(nmod):
                     name=mnames[mo]
@@ -199,6 +222,11 @@ for do in range(len(doms)):
 
                     # Get details
                     moddct=dsetdict.dset_deets[dset][name]
+
+                    if group:
+                        groupdct = dset_mp.dset_deets[dset][name]
+                        thisgroup = int(groupdct['group'])
+                        grcl = grcls[thisgroup - 1]
 
                     ### Location for input & outputs
                     indir=botdir+dset+"/"
@@ -345,7 +373,7 @@ for do in range(len(doms)):
                                                   season=seas,key=key,ptype=plottype,mmean=monmean,\
                                                   under_of=under_dayof, \
                                                   savefig=False, labels=nTTTlab,\
-                                                  agthresh=perc_ag, heavy=hvthr)
+                                                  agthresh=perc_ag, heavy=hvthr,bound=grcl)
 
                     cnt +=1
 

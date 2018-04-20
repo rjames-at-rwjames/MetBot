@@ -775,7 +775,7 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
 
 def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',key='noaa-olr-0-0',\
                        ptype='per_ttt',mmean='mon',under_of='dayof',\
-                       savefig=False, labels=False,agthresh='perc_ag',heavy='0'):
+                       savefig=False, labels=False,agthresh='perc_ag',heavy='0',bound=False):
     '''Produces single plot of ttt rainfall based on keys that are input
     need to open the rain data with lon and lat and also the synop file
     see e.g. allCMIPplot_ttt_precip_autothresh.py
@@ -1270,8 +1270,8 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
         cbar_lab='mm'
     elif ptype=='per_ttt':
         #clevs=[0,10,20,30,40,50,60]
-        #clevs=np.arange(0,110,10)
-        clevs=np.arange(0,50,5)
+        clevs=np.arange(0,110,10)
+        #clevs=np.arange(0,50,5)
         cm = plt.cm.gnuplot2
         cbar_lab='%'
     elif ptype=='rain_per_ttt':
@@ -1310,6 +1310,9 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
 
     mp.drawcountries()
     mp.drawcoastlines()
+    if isinstance(bound,str):
+        mp.drawmapboundary(color=bound, linewidth=3)
+
     f, ax = plt.gcf(), plt.gca()  # get reference and set axes
     axcl=f.add_axes([0.91, 0.15, 0.01, 0.6])
     cbar = plt.colorbar(cs, cax=axcl)
