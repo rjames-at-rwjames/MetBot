@@ -33,19 +33,24 @@ import MetBot.find_saddle as fs
 sub="SA"
 seasopt="coreseason"    # for spatiofreq plots
                         # options: coreseason, dryseason, fullseason
-histplot=True           # to get olr histograms
+histplot=False           # to get olr histograms
 threshplot=False         # to get olr threshold plot
-threshtext=False         # to put olr thresholds in text file
+threshtext=True         # to put olr thresholds in text file
 shiftdist=False          # to plot shifted distributions
 testyear=False           # To use output from a test
 testfile=False           # Uses a test file with short period
                         # (testfile designed to be used together with testyear
                         # ..but testyear can be used seperately)
 title=False      # plot title
+future=True     # get future thresholds
 refdset="noaa"
 refmod="cdr"
 globv='olr'
 bkdir=cwd+"/../../../CTdata/metbot_multi_dset"
+
+if future:
+    fyear1='2065'
+    fyear2='2099'
 
 ### Multi dset?
 dsets='spec'     # "all" or "spec" to choose specific dset(s)
@@ -56,8 +61,8 @@ if dsets=='all':
 elif dsets=='spec': # edit for the dset you want
 #    ndset=6
 #    dsetnames=['noaa','ncep','era','20cr','um','cmip5']
-    ndset=2
-    dsetnames=['noaa','cmip5']
+    ndset=1
+    dsetnames=['cmip5']
     dsetstr = '_'.join(dsetnames)
 ndstr=str(ndset)
 print 'Running on datasets:'
@@ -149,7 +154,11 @@ if threshtext:
     if testyear:
         txtfile = open(bkdir + "/thresholds.fmin." + dsetstr + ".test.txt", "w")
     else:
-        txtfile = open(bkdir + "/thresholds.fmin."+dsetstr+".txt", "w")
+        if future:
+            txtfile = open(bkdir + "/thresholds.fmin.fut_rcp85_"\
+                           +fyear1+"_"+fyear2+"."+dsetstr+".txt", "w")
+        else:
+            txtfile = open(bkdir + "/thresholds.fmin."+dsetstr+".txt", "w")
 if threshplot: plt.figure(num='threshs',figsize=[10,3])
 if shiftdist: plt.figure(num='shift')
 
@@ -174,10 +183,10 @@ for d in range(ndset):
         mnames=['cdr']
         nmod=len(mnames)
     elif dset=='cmip5':
-        nmod=2
-        mnames=['inmcm4','FGOALS-g2']
-        #nmod=len(dsetdict.dset_deets[dset])
-        #mnames=list(dsetdict.dset_deets[dset])
+        # nmod=2
+        # mnames=['inmcm4','FGOALS-g2']
+        nmod=len(dsetdict.dset_deets[dset])
+        mnames=list(dsetdict.dset_deets[dset])
     nmstr=str(nmod)
 
     for m in range(nmod):
@@ -192,7 +201,10 @@ for d in range(ndset):
         if testfile:
             ys=moddct['testfileyr']
         else:
-            ys=moddct['yrfname']
+            if future:
+                ys=moddct['futrun']
+            else:
+                ys=moddct['yrfname']
         if testyear:
             beginatyr=moddct['testyr']
         else:
@@ -200,77 +212,92 @@ for d in range(ndset):
 
         ### Location for olr input & outputs
         indir = bkdir + "/" + dset + "/"
-        infile=indir+name+".olr.day.mean."+ys+".nc"
+        if future:
+            infile=indir+name+".olr.day.mean.rcp85."+ys+".nc"
+        else:
+            infile=indir+name+".olr.day.mean."+ys+".nc"
+
         print infile
 
-        ### Open olr nc file
-        ncout = mync.open_multi(infile,globv,name,\
-                                dataset=dset,subs=sub)
-        ndim = len(ncout)
-        if ndim == 5:
-            olr, time, lat, lon, dtime = ncout
-        elif ndim == 6:
-            olr, time, lat, lon, lev, dtime = ncout
-            olr = np.squeeze(olr)
-        else:
-            print 'Check number of dims in ncfile'
+        if os.path.exists(infile):
 
-        ### Select olr data
-        ### Get time information
-        moddct = dsetdict.dset_deets[dset][name]
-        units = moddct['olrtimeunit']
-        cal = moddct['calendar']
-        ### If testfile run on all days available
-        if testfile:
-            olr = olr[:, :, :];time = time[:];dtime = dtime[:]
-        else:
-            ### Find starting timestep
-            start = moddct['startdate']
-            ystart=int(start[0:4]);mstart=int(start[5:7]);dstart=int(start[8:10])
-            if cal=="360_day":
-                startday=(ystart*360)+((mstart-1)*30)+dstart
-                beginday=((int(beginatyr))*360)+1
-                daysgap=beginday-startday+1
+            ### Open olr nc file
+            ncout = mync.open_multi(infile,globv,name,\
+                                    dataset=dset,subs=sub)
+            ndim = len(ncout)
+            if ndim == 5:
+                olr, time, lat, lon, dtime = ncout
+            elif ndim == 6:
+                olr, time, lat, lon, lev, dtime = ncout
+                olr = np.squeeze(olr)
             else:
-                startd=date(ystart,mstart,dstart)
-                begind=date(int(beginatyr),01,01)
-                daysgap=(begind-startd).days
-            olr=olr[daysgap:,:,:];time=time[daysgap:];dtime=dtime[daysgap:]
+                print 'Check number of dims in ncfile'
 
-        ### Get thresh
-        olrvals = olr
-        olrthresh = fs.find_saddle(olrvals, method='fmin', showplot=False)
+            ### Select olr data
+            ### Get time information
+            moddct = dsetdict.dset_deets[dset][name]
+            units = moddct['olrtimeunit']
+            cal = moddct['calendar']
+            ### If testfile run on all days available
+            if testfile or future:
+                olr = olr[:, :, :];time = time[:];dtime = dtime[:]
+            else:
+                ### Find starting timestep
+                start = moddct['startdate']
+                ystart=int(start[0:4]);mstart=int(start[5:7]);dstart=int(start[8:10])
+                if cal=="360_day":
+                    startday=(ystart*360)+((mstart-1)*30)+dstart
+                    beginday=((int(beginatyr))*360)+1
+                    daysgap=beginday-startday+1
+                else:
+                    startd=date(ystart,mstart,dstart)
+                    begind=date(int(beginatyr),01,01)
+                    daysgap=(begind-startd).days
+                olr=olr[daysgap:,:,:];time=time[daysgap:];dtime=dtime[daysgap:]
+            if future:
+                print 'Selecting years ' + fyear1 + ' to ' + fyear2
+                inds = np.where((dtime[:, 0] >= int(fyear1)) & (dtime[:, 0] <= int(fyear2)))[0]
+                dtime = dtime[inds]
+                time = time[inds]
+                olr = olr[inds, :, :]
 
-        ### Plot histogram with the thresh
-        if histplot:
-            plt.figure(num='raw')
-            olr_flat = np.nan_to_num(olrvals.ravel())
-            y, binEdges = np.histogram(olr_flat, bins=50, density=True)
-            bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
-            plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d])
+            ### Get thresh
+            olrvals = olr
+            olrthresh = fs.find_saddle(olrvals, method='fmin', showplot=False)
 
-        ### Thresh text file
-        if threshtext:
-            txtfile.write(dset+ "\t" +name+ "\t" + str(int(olrthresh)) + "\n")
+            ### Plot histogram with the thresh
+            if histplot:
+                plt.figure(num='raw')
+                olr_flat = np.nan_to_num(olrvals.ravel())
+                y, binEdges = np.histogram(olr_flat, bins=50, density=True)
+                bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
+                plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d])
 
-        ### Plot thresh
-        if threshplot:
-            plt.figure(num='threshs')
-            plt.plot(olrthresh,1,'^',markersize=20)
+            ### Thresh text file
+            if threshtext:
+                txtfile.write(dset+ "\t" +name+ "\t" + str(int(olrthresh)) + "\n")
 
-        if shiftdist:
-            ### Get shifted values
-            threshdiff = refolrthresh - olrthresh
-            shifted_dist = olr_flat + threshdiff
+            ### Plot thresh
+            if threshplot:
+                plt.figure(num='threshs')
+                plt.plot(olrthresh,1,'^',markersize=20)
 
-            ### Plot shifted dist
-            plt.figure(num='shift')
-            y, binEdges = np.histogram(shifted_dist, bins=50, density=True)
-            bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
-            plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d])
+            if shiftdist:
+                ### Get shifted values
+                threshdiff = refolrthresh - olrthresh
+                shifted_dist = olr_flat + threshdiff
 
-        ### Put name into string list
-        modnm[z] = dset + "_" + name
+                ### Plot shifted dist
+                plt.figure(num='shift')
+                y, binEdges = np.histogram(shifted_dist, bins=50, density=True)
+                bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
+                plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d])
+
+            ### Put name into string list
+            modnm[z] = dset + "_" + name
+
+        else:
+            print 'No file for model '+name
 
         z += 1
 

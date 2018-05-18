@@ -26,10 +26,11 @@ from datetime import date
 
 
 ### Running options
-sub="SA"
+sub="SA_TROP"
 thname='actual'         # Option to run on thresholds + and - 5Wm2 as a test
 group=True
 future=True
+plotthresh=False
 threshtest=False
 
 fyear1=2065
@@ -112,19 +113,20 @@ for d in range(ndset):
         indir=botdir+dset+"/"
 
         ### Get threshold
-        threshtxt = botdir + 'thresholds.fmin.all_dset.txt'
-        print 'using metbot output'
-        print threshtxt
-        with open(threshtxt) as f:
-            for line in f:
-                if dset + '\t' + name in line:
-                    thresh = line.split()[2]
-                    print 'thresh=' + str(thresh)
+        if plotthresh:
+            threshtxt = botdir + 'thresholds.fmin.all_dset.txt'
+            print 'using metbot output'
+            print threshtxt
+            with open(threshtxt) as f:
+                for line in f:
+                    if dset + '\t' + name in line:
+                        thresh = line.split()[2]
+                        print 'thresh=' + str(thresh)
 
-        if thname=='actual':
-            thresh = int(thresh)
-            thisthresh = thresh
-            thre_str = str(int(thisthresh))
+            if thname=='actual':
+                thresh = int(thresh)
+                thisthresh = thresh
+                thre_str = str(int(thisthresh))
 
         # Get details
         v = dset + "-olr-0-0"
@@ -196,8 +198,10 @@ for d in range(ndset):
                 fut_dtime=fut_dtime[inds]
                 fut_olr=fut_olr[inds,:,:]
 
-                fut_thresh=fs.find_saddle(fut_olr,method='fmin',addtests=threshtest,\
-                                  showplot=False)
+                if plotthresh:
+
+                    fut_thresh=fs.find_saddle(fut_olr,method='fmin',addtests=threshtest,\
+                                      showplot=False)
 
             else:
 
@@ -212,7 +216,8 @@ for d in range(ndset):
         y, binEdges = np.histogram(olr_flat, bins=50, density=True)
         bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
         plt.plot(bincentres, y, linestyle='solid', linewidth=2, color='k')
-        plt.plot(thresh,0,'^',color='k',markersize=20)
+        if plotthresh:
+            plt.plot(thresh,0,'^',color='k',markersize=20)
 
         # plot future hist
         if future:
@@ -221,9 +226,13 @@ for d in range(ndset):
                 y, binEdges = np.histogram(olr_flat, bins=50, density=True)
                 bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
                 plt.plot(bincentres, y, linestyle='solid', linewidth=2, color='fuchsia', zorder=4)
-                plt.plot(fut_thresh, 0, '^', color='fuchsia', markersize=20)
+                if plotthresh:
+                    plt.plot(fut_thresh, 0, '^', color='fuchsia', markersize=20)
 
-        plt.title(name+' '+thre_str+'_'+str(fut_thresh),fontsize=8,fontweight='demibold')
+        if plotthresh:
+            plt.title(name+' '+thre_str+'_'+str(fut_thresh),fontsize=8,fontweight='demibold')
+        else:
+            plt.title(name,fontsize=8,fontweight='demibold')
         plt.xlim(100, 320)
         plt.yticks(np.arange(0.0, 0.02, 0.01))
         if group:
@@ -246,7 +255,7 @@ if future:
 print 'Finalising plot'
 plt.subplots_adjust(left=0.05, right=0.9, top=0.95, bottom=0.02, wspace=0.3, hspace=0.5)
 
-figname = figdir + 'multi_olrhists.'+figsuf+'.png'
+figname = figdir + 'multi_olrhists.'+figsuf+'.'+sub+'.png'
 print 'saving figure as ' + figname
 plt.savefig(figname, dpi=150)
 plt.close()

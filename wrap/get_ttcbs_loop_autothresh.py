@@ -46,15 +46,16 @@ testfile=False    # Uses a test file with short period
 testyear=False   # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
-calcthresh=False    # If calc thresh true, calculates again
+calcthresh=True    # If calc thresh true, calculates again
                     # if false uses text file already computed
                     #(not test txtfile...
                     # ...so it allows you to use the real threshold on test data)
 showdistr=False   # Save a figure showing histogram of OLR values
                     # Only works if calcthresh is True
-plothist=True       # New option to output histogram even if a new threshold is not calc'd
+plothist=False       # New option to output histogram even if a new threshold is not calc'd
                     # useful for comparing future dist with past
 threshtest=False  # Option to run on thresholds + and - 5Wm2 as a test
+fut_th_test=True # new future threshtest option - for testing sensitivity of change to thresh
 getmbs=True      # Actually run the MetBot algorithm
 showblb=False    # Show the blobs while running
 intract=False    # Interactive running of showblobs
@@ -67,6 +68,10 @@ onlynew=True    # Option to only run if the synop file doesn't exist yet
 addrain=False     # Add event rain - at the moment need to be running synoptics too
 heavythresh=50   # Threshold for heavy precip (if add event rain)
 future=True     # new option to run on future data - only for CMIP5 - currently RCP85
+selyear=True    # to select years for future
+if selyear:
+    fyear1='2065'
+    fyear2='2099'
 
 bkdir=cwd+"/../../../CTdata/metbot_multi_dset/"
 
@@ -139,6 +144,8 @@ for d in range(ndset):
             outsuf=outdir+name+'_'
             if future:
                 outsuf=outsuf+'fut_'
+            if selyear:
+                outsuf=outsuf+fyear1+'_'+fyear2+'_'
 
             ### Open OLR data
             v = dset + "-olr-0-0"
@@ -180,6 +187,12 @@ for d in range(ndset):
                     olr, dtime, time = olr[:360, :, :], dtime[:360], time[:360]
                 else:
                     olr, dtime, time = olr[:365,:,:],dtime[:365],time[:365]
+            if selyear:
+                print 'Selecting years '+fyear1+' to '+fyear2
+                inds=np.where((dtime[:,0] >= int(fyear1)) & (dtime[:,0] <= int(fyear2)))[0]
+                dtime=dtime[inds]
+                time=time[inds]
+                olr=olr[inds,:,:]
 
             print 'Please check dtime'
             print dtime
@@ -206,6 +219,12 @@ for d in range(ndset):
                 lowert = thresh - 5
                 uppert = thresh + 5
                 threshs = [lowert, thresh, uppert]
+            elif fut_th_test:
+                first = thresh - 4
+                second = thresh - 2
+                third = thresh + 2
+                fourth = thresh + 4
+                threshs = [first,second,third,fourth]
             else:
                 threshs = [thresh]
 
