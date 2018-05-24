@@ -1324,6 +1324,328 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
 
     return data4plot
 
+def gridrainmap_change_single(s,s_f,eventkeys,eventkeys_f,rain,futrain,rlat,rlon,rdtime,futdtime,modname,season='NDJFM',key='noaa-olr-0-0',\
+                       ptype='per_ttt',mmean='mon',under_of='dayof',\
+                       savefig=False, labels=False,heavy='0',bound=False):
+    '''Produces single plot of change in ttt rainfall based on keys that are input
+    need to open the rain data with lon and lat and also the synop file
+    see e.g. allCMIPplot_ttt_precip_CHANGE.py
+
+    plot types
+        # 'dTTTrain'        # change in rain from TTTs
+        # 'per_drain_TTT'   # percent of total change in rainfall that is from change in TTT rainfall
+        # 'dpcent_TTTrain'   # change in proportion of rain that is from TTTs
+        # 'drain_per_ttt'   # change in rain per TTT
+
+    under_of -> "dayof" is rain on day of TTTs, "under" is rain under TTTs
+    '''
+
+    print 'Getting date info'
+    yrs = np.unique(rdtime[:,0])
+    mn = np.unique(rdtime[:,1])
+    yrs_f = np.unique(futdtime[:,0])
+    nys=len(yrs)
+    nys_f=len(yrs_f)
+    nmn=len(mn)
+
+    # Get n lat and lon
+    nlon=len(rlon)
+    nlat=len(rlat)
+
+    # Get rain information - hist
+    print 'Getting rain basics'
+    ndays_seas=len(rdtime)
+    rainsum_all=np.nansum(rain,0)
+    rainsum_seas=rainsum_all/nys
+    rainsum_monthly=rainsum_seas/nmn
+    rainsum_daily=rainsum_all/len(rdtime)
+
+    # Get rain information - fut
+    ndays_seas_f=len(futdtime)
+    rainsum_all_f=np.nansum(futrain,0)
+    rainsum_seas_f=rainsum_all_f/nys_f
+    rainsum_monthly_f=rainsum_seas_f/nmn
+    rainsum_daily_f=rainsum_all_f/len(futdtime)
+
+    #TTT rain
+
+    # Get list of dates for these events
+    # and if 'under' a list of chs
+    print 'Getting TTT dates and chs'
+    edts = []
+    if under_of == 'under':
+        chs = []
+    ecnt = 1
+    for k in eventkeys:
+        e = s.events[k]
+        dts = s.blobs[key]['mbt'][e.ixflags]
+        # dts=e.trkdtimes
+        for dt in range(len(dts)):
+            if ecnt == 1:
+                edts.append(dts[dt])
+                if under_of == 'under':
+                    chs.append(e.blobs[key]['ch'][e.trk[dt]])
+            else:
+                tmpdt = np.asarray(edts)
+                # Check if it exists already
+                ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
+                                 [dts[dt][1]], [dts[dt][2]], [0])
+                if len(ix) == 0:
+                    edts.append(dts[dt])
+                    if under_of == 'under':
+                        chs.append(e.blobs[key]['ch'][e.trk[dt]])
+            ecnt += 1
+    edts = np.asarray(edts)
+
+    # Get list of dates for these events - future
+    # and if 'under' a list of chs
+    edts_f = []
+    if under_of == 'under':
+        chs_f = []
+    ecnt = 1
+    for k in eventkeys_f:
+        e = s_f.events[k]
+        dts = s_f.blobs[key]['mbt'][e.ixflags]
+        # dts=e.trkdtimes
+        for dt in range(len(dts)):
+            if ecnt == 1:
+                edts_f.append(dts[dt])
+                if under_of == 'under':
+                    chs_f.append(e.blobs[key]['ch'][e.trk[dt]])
+            else:
+                tmpdt = np.asarray(edts_f)
+                # Check if it exists already
+                ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
+                                 [dts[dt][1]], [dts[dt][2]], [0])
+                if len(ix) == 0:
+                    edts_f.append(dts[dt])
+                    if under_of == 'under':
+                        chs_f.append(e.blobs[key]['ch'][e.trk[dt]])
+            ecnt += 1
+    edts_f = np.asarray(edts_f)
+
+    edts[:, 3] = 0
+    edts_f[:,3] = 0
+    if under_of == 'under':
+        chs = np.asarray(chs)
+        chs_f = np.asarray(chs_f)
+    print "Number of original TTT days found - historical =  " + str(len(edts))
+    print "Number of original TTT days found - future =  " + str(len(edts_f))
+
+    # Get the indices of TTT dates from rain data - historical
+    # and chs for rain
+    print 'Selecting TTTs from rain data'
+    indices = []
+    if under_of == 'under':
+        chs_4rain = []
+    for edt in range(len(edts)):
+        ix = my.ixdtimes(rdtime, [edts[edt][0]], \
+                         [edts[edt][1]], [edts[edt][2]], [0])
+        if len(ix) >= 1:
+            indices.append(ix)
+            if under_of=='under':
+                chs_4rain.append(chs[edt])
+    if len(indices) >= 2:
+        indices = np.squeeze(np.asarray(indices))
+        if under_of=='under':
+            chs_4rain=np.asarray(chs_4rain)
+    else:
+        indices = indices
+        if under_of=='under':
+            chs_4rain=np.squeeze(np.asarray(chs_4rain))
+    nttt_seas = len(indices)
+    print "Number of TTT days found in historical rain dataset for seas " + season + " =  " + str(nttt_seas)
+
+    # Get the indices of TTT dates from rain data - future
+    # and chs for rain
+    indices_f = []
+    if under_of == 'under':
+        chs_4rain_f = []
+    for edt in range(len(edts_f)):
+        ix = my.ixdtimes(futdtime, [edts_f[edt][0]], \
+                         [edts_f[edt][1]], [edts_f[edt][2]], [0])
+        if len(ix) >= 1:
+            indices_f.append(ix)
+            if under_of=='under':
+                chs_4rain_f.append(chs_f[edt])
+    if len(indices_f) >= 2:
+        indices_f = np.squeeze(np.asarray(indices_f))
+        if under_of=='under':
+            chs_4rain_f=np.asarray(chs_4rain_f)
+    else:
+        indices_f = indices_f
+        if under_of=='under':
+            chs_4rain_f=np.squeeze(np.asarray(chs_4rain_f))
+    nttt_seas_f = len(indices_f)
+    print "Number of TTT days found in future rain dataset for seas " + season + " =  " + str(nttt_seas_f)
+
+
+    if under_of == 'dayof':
+
+        # Get rain from TTTs
+        print 'Calculating TTT rain - historical'
+        if nttt_seas == 0:
+            rainsum_ttt = np.zeros((nlat, nlon), dtype=np.float32)
+        else:
+            rainsel = rain[indices, :, :]
+
+            if nttt_seas>=2:
+                rainsum_ttt=np.nansum(rainsel,0)
+            else:
+                rainsum_ttt=np.squeeze(rainsel)
+
+        rainsum_ttt_seas=rainsum_ttt/nys
+        rainsum_ttt_monthly=rainsum_ttt_seas/nmn
+        rainsum_ttt_daily=rainsum_ttt/ndays_seas
+
+        # Get rain from future TTTs
+        print 'Calculating TTT rain - future'
+        if nttt_seas_f == 0:
+            rainsum_ttt_f = np.zeros((nlat, nlon), dtype=np.float32)
+        else:
+            rainsel_f = futrain[indices_f, :, :]
+
+            if nttt_seas_f>=2:
+                rainsum_ttt_f=np.nansum(rainsel_f,0)
+            else:
+                rainsum_ttt_f=np.squeeze(rainsel_f)
+
+        rainsum_ttt_seas_f=rainsum_ttt_f/nys_f
+        rainsum_ttt_monthly_f=rainsum_ttt_seas_f/nmn
+        rainsum_ttt_daily_f=rainsum_ttt_f/ndays_seas_f
+
+
+    elif under_of=='under':
+
+        print 'Getting sel of rain under TTTs - historical'
+        if nttt_seas == 0:
+            rainsum_ttt = np.zeros((nlat, nlon), dtype=np.float32)
+        else:
+            rainsel = rain[indices, :, :]
+            ttt_rain_dates = rdtime[indices]
+            ndt=nttt_seas
+
+            masked_rain=np.ma.zeros((ndt,nlat,nlon),dtype=np.float32)
+            for rdt in range(ndt):
+                chmask = my.poly2mask(rlon,rlat,chs_4rain[rdt])
+                r=np.ma.MaskedArray(rainsel[rdt,:,:],mask=~chmask)
+                masked_rain[rdt,:,:]=r
+
+            if nttt_seas >= 2:
+                rainsum_ttt = np.ma.sum(masked_rain, 0) # maskd elements set to 0
+            else:
+                rainsum_ttt = np.ma.squeeze(masked_rain)
+
+        rainsum_ttt_seas=rainsum_ttt/nys
+        rainsum_ttt_monthly=rainsum_ttt_seas/nmn
+        rainsum_ttt_daily=rainsum_ttt/ndays_seas
+
+
+        print 'Getting sel of rain under TTTs - future'
+        if nttt_seas == 0:
+            rainsum_ttt_f = np.zeros((nlat, nlon), dtype=np.float32)
+        else:
+            rainsel_f = futrain[indices_f, :, :]
+            ttt_rain_dates_f = futdtime[indices_f]
+            ndt_f=nttt_seas_f
+
+            masked_rain_f=np.ma.zeros((ndt_f,nlat,nlon),dtype=np.float32)
+            for rdt in range(ndt_f):
+                chmask = my.poly2mask(rlon,rlat,chs_4rain_f[rdt])
+                r=np.ma.MaskedArray(rainsel_f[rdt,:,:],mask=~chmask)
+                masked_rain_f[rdt,:,:]=r
+
+            if nttt_seas_f >= 2:
+                rainsum_ttt_f = np.ma.sum(masked_rain_f, 0) # maskd elements set to 0
+            else:
+                rainsum_ttt_f = np.ma.squeeze(masked_rain_f)
+
+        rainsum_ttt_seas_f=rainsum_ttt_f/nys_f
+        rainsum_ttt_monthly_f=rainsum_ttt_seas_f/nmn
+        rainsum_ttt_daily_f=rainsum_ttt_f/ndays_seas_f
+
+    rainperttt = rainsum_ttt / nttt_seas
+
+    rainperttt_f = rainsum_ttt_f / nttt_seas_f
+
+    # Now changes
+    print 'Calculating change in TTT rain'
+    tttrain_change_tot = rainsum_ttt_f - rainsum_ttt
+    tttrain_change_seas = tttrain_change_tot / nys
+    tttrain_change_mon = tttrain_change_seas / nmn
+    tttrain_change_daily = tttrain_change_tot / ndays_seas
+
+    print 'Calculating proportion of rain change from TTTs'
+    rainanom = rainsum_daily_f - rainsum_daily
+    tttprop_drain = (tttrain_change_daily / rainanom) * 100.0
+
+    print 'Calculating change in % TTT rain'
+    rainperc_ttt = (rainsum_ttt_daily / rainsum_daily) * 100.0
+    rainperc_ttt_f = (rainsum_ttt_daily_f / rainsum_daily_f) * 100.0
+    change_rainperc = rainperc_ttt_f - rainperc_ttt
+
+    print 'Calculating change in rain per TTT'
+    change_perttt = rainperttt_f - rainperttt
+
+    if ptype=='dTTTrain':
+        if mmean == 'day':
+            data4plot = tttrain_change_daily
+    elif ptype=='per_drain_TTT':
+        if mmean == 'day':
+            data4plot=tttprop_drain
+    elif ptype=='dpcent_TTTrain':
+        data4plot=change_rainperc
+    elif ptype=='drain_per_ttt':
+        data4plot=change_perttt
+
+    newlon=rlon
+    newlat=rlat
+
+    # Draw basemap
+    mp, f = pt.AfrBasemap(rlat, rlon, drawstuff=False, prj='cyl', fno=1, rsltn='l')
+
+    #Plot
+    plon,plat = np.meshgrid(newlon,newlat)
+
+    # all plot cbars
+    if ptype=='dTTTrain':
+        clevs = np.arange(-2.0, 2.2, 0.2)
+        cm = plt.cm.seismic_r
+        cbar_lab = 'mm'
+    elif ptype=='per_drain_TTT':
+        cm = plt.cm.gnuplot2
+        cbar_lab = '%'
+        clevs = np.arange(0, 110, 10)
+    elif ptype=='dpcent_TTTrain':
+        cbar_lab = '%'
+        cm = plt.cm.seismic_r
+        clevs = np.arange(-20.0, 25.0, 5.0)
+    elif ptype=='drain_per_ttt':
+        clevs = np.arange(-2.0, 2.2, 0.2)
+        cm = plt.cm.seismic_r
+        cbar_lab = 'mm'
+
+    cs = mp.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
+
+    tit=modname
+    plt.title(tit, fontsize=8)
+
+    mp.drawcountries()
+    mp.drawcoastlines()
+    if isinstance(bound,str):
+        mp.drawmapboundary(color=bound, linewidth=3)
+
+    f, ax = plt.gcf(), plt.gca()  # get reference and set axes
+    axcl=f.add_axes([0.91, 0.15, 0.01, 0.6])
+    cbar = plt.colorbar(cs, cax=axcl)
+
+    if savefig:
+        figname='Rainmap.png'
+        plt.savefig(figname,dpi=150)
+        print 'Saving figure as '+figname
+
+    return data4plot
+
 
 def gridolrmap_season(s,eventkeys,olr,lat,lon,dtime,cl,season='coreseason',key='noaa-olr-0-0',\
                        ptype='ave_all',mmean='mon',under_of='dayof',figdir='test',file_suffix='test',\

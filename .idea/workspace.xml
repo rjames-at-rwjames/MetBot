@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="da1d8ab4-5a15-4ca9-8222-e7a9193447e1" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wrap/thresh_change_nTTT_fut_th_test.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_CHANGE.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MetBot/mynetcdf.py" afterPath="$PROJECT_DIR$/MetBot/mynetcdf.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrap/allCMIPplot_OLRhist.py" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_OLRhist.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py" afterPath="$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py" afterPath="$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MetBot/AdvancedPlots.py" afterPath="$PROJECT_DIR$/MetBot/AdvancedPlots.py" />
     </list>
     <ignored path="MetBot.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,11 +28,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="get_ttcbs_loop_autothresh.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py">
+      <file leaf-file-name="AdvancedPlots.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2457">
-              <caret line="165" column="49" lean-forward="false" selection-start-line="165" selection-start-column="49" selection-end-line="165" selection-end-column="49" />
+            <state relative-caret-position="24360">
+              <caret line="1624" column="29" lean-forward="false" selection-start-line="1624" selection-start-column="29" selection-end-line="1624" selection-end-column="29" />
+              <folding>
+                <element signature="e#19#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="allCMIPplot_ttt_precip_CHANGE.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_CHANGE.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="67" column="11" lean-forward="false" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
+              <folding>
+                <element signature="e#602#611#0" expanded="true" />
+                <marker date="1527172076000" expanded="true" signature="20733:20912" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dset_dict.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MetBot/dset_dict.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="735">
+              <caret line="49" column="670" lean-forward="false" selection-start-line="49" selection-start-column="662" selection-end-line="49" selection-end-column="670" />
               <folding />
             </state>
           </provider>
@@ -43,36 +67,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>styls</find>
-      <find>thresh</find>
-      <find>title</find>
-      <find>find</find>
-      <find>future</find>
-      <find>globv</find>
-      <find>botdir</find>
-      <find>sub</find>
-      <find>cal</find>
-      <find>data</find>
-      <find>date</find>
-      <find>per</find>
-      <find>rate</find>
-      <find>plt.plot</find>
-      <find>ndset</find>
-      <find>fs</find>
-      <find>fyear1</find>
-      <find>show</find>
-      <find>showblob</find>
-      <find>a.ndim</find>
-      <find>np.where</find>
-      <find>threshtext</find>
-      <find>2065</find>
-      <find>ch</find>
-      <find>year</find>
-      <find>fyear</find>
+      <find>perc_ag</find>
+      <find>rainfile</find>
       <find>selyear</find>
-      <find>ROI</find>
-      <find>threshtest</find>
-      <find>outsuf</find>
+      <find>gridrainmap_single</find>
+      <find>mon1</find>
+      <find>nmn</find>
+      <find>dateseas</find>
+      <find>ndays_seas</find>
+      <find>seas</find>
+      <find>thresh</find>
+      <find>output</find>
+      <find>doms</find>
+      <find>plottype</find>
+      <find>monmean</find>
+      <find>dTTTrain</find>
+      <find>mapsuf</find>
+      <find>under_of</find>
+      <find>under_da</find>
+      <find>futdtime</find>
+      <find>edts_f</find>
+      <find>futprrun</find>
+      <find>print fu</find>
+      <find>found</find>
+      <find>rdtime</find>
+      <find>under</find>
+      <find>unde</find>
+      <find>under_dayof</find>
+      <find>nmod</find>
+      <find>per_drain_TTT</find>
+      <find>dsetdict</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -95,15 +119,18 @@
         <option value="$PROJECT_DIR$/../RTools/PlotTools.py" />
         <option value="$PROJECT_DIR$/wrap/plot_cmip_loopALLdays4anim_olr_pr.py" />
         <option value="$PROJECT_DIR$/wrap/get.anim.olr.pr.cmip5.daily.sh" />
-        <option value="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" />
-        <option value="$PROJECT_DIR$/MetBot/AdvancedPlots.py" />
         <option value="$PROJECT_DIR$/MetBot/dset_dict.py" />
         <option value="$PROJECT_DIR$/MetBot/EventStats.py" />
         <option value="$PROJECT_DIR$/MetBot/find_saddle.py" />
         <option value="$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py" />
-        <option value="$PROJECT_DIR$/MetBot/mynetcdf.py" />
         <option value="$PROJECT_DIR$/wrap/allCMIPplot_OLRhist.py" />
         <option value="$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py" />
+        <option value="$PROJECT_DIR$/wrap/scatter_thresh_nttt.py" />
+        <option value="$PROJECT_DIR$/wrap/thresh_change_nTTT_fut_th_test.py" />
+        <option value="$PROJECT_DIR$/MetBot/mynetcdf.py" />
+        <option value="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" />
+        <option value="$PROJECT_DIR$/MetBot/AdvancedPlots.py" />
+        <option value="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_CHANGE.py" />
       </list>
     </option>
   </component>
@@ -133,7 +160,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -176,6 +202,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -728,7 +755,7 @@
     <editor active="false" />
     <layout>
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3306624" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3429487" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -805,39 +832,11 @@
           <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="12" />
+      <option name="time" value="16" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/wrap/get.anim.olr.cmip5.daily.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4650">
-          <caret line="313" column="4" lean-forward="true" selection-start-line="313" selection-start-column="4" selection-end-line="313" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/mynetcdf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6330">
-          <caret line="422" column="24" lean-forward="true" selection-start-line="422" selection-start-column="24" selection-end-line="422" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1680">
-          <caret line="112" column="22" lean-forward="true" selection-start-line="112" selection-start-column="22" selection-end-line="112" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1001,13 +1000,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/plot_hist_centroids_angles.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-429">
-          <caret line="246" column="33" lean-forward="true" selection-start-line="246" selection-start-column="33" selection-end-line="246" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wrap/plot_cmip_loopALLdays4anim_largerdom.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1461">
@@ -1057,13 +1049,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/plot_sc_allmodels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="849">
-          <caret line="227" column="0" lean-forward="true" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wrap/plot_ttt_ts_sc_sf_loop_autothresh.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="594">
@@ -1071,46 +1056,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/EventStats.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19050">
-          <caret line="1280" column="65" lean-forward="false" selection-start-line="1280" selection-start-column="65" selection-end-line="1280" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/dset_dict.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="876">
-          <caret line="76" column="1" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/MetBot/mytools.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9315">
           <caret line="621" column="21" lean-forward="false" selection-start-line="621" selection-start-column="15" selection-end-line="621" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11475">
-          <caret line="775" column="21" lean-forward="false" selection-start-line="775" selection-start-column="4" selection-end-line="775" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="258" column="57" lean-forward="false" selection-start-line="258" selection-start-column="52" selection-end-line="258" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="37" column="17" lean-forward="false" selection-start-line="37" selection-start-column="17" selection-end-line="37" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -1135,29 +1084,113 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/plot_sc_allmodels.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3360">
+          <caret line="227" column="0" lean-forward="true" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3825">
+          <caret line="258" column="57" lean-forward="false" selection-start-line="258" selection-start-column="52" selection-end-line="258" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/plot_nttt_bar_multi_dset_autothresh.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="139" column="19" lean-forward="false" selection-start-line="139" selection-start-column="15" selection-end-line="139" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/scatter_thresh_nttt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="36" column="14" lean-forward="false" selection-start-line="36" selection-start-column="14" selection-end-line="36" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_OLRhist.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="28" column="12" lean-forward="false" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="12" />
+        <state relative-caret-position="291">
+          <caret line="76" column="6" lean-forward="false" selection-start-line="76" selection-start-column="4" selection-end-line="76" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/plot_hist_centroids_angles.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6375">
+          <caret line="460" column="10" lean-forward="false" selection-start-line="460" selection-start-column="7" selection-end-line="460" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/thresh_change_nTTT_fut_th_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="217" column="23" lean-forward="false" selection-start-line="217" selection-start-column="20" selection-end-line="217" selection-end-column="23" />
           <folding>
-            <element signature="e#177#186#0" expanded="true" />
+            <element signature="e#298#316#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MetBot/mynetcdf.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="84" column="52" lean-forward="true" selection-start-line="84" selection-start-column="52" selection-end-line="84" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
-          <caret line="46" column="29" lean-forward="false" selection-start-line="46" selection-start-column="29" selection-end-line="46" selection-end-column="29" />
+          <caret line="37" column="0" lean-forward="false" selection-start-line="37" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MetBot/EventStats.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="668" column="12" lean-forward="false" selection-start-line="668" selection-start-column="4" selection-end-line="668" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MetBot/dset_dict.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="735">
+          <caret line="49" column="670" lean-forward="false" selection-start-line="49" selection-start-column="662" selection-end-line="49" selection-end-column="670" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="24360">
+          <caret line="1624" column="29" lean-forward="false" selection-start-line="1624" selection-start-column="29" selection-end-line="1624" selection-end-column="29" />
+          <folding>
+            <element signature="e#19#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2457">
-          <caret line="165" column="49" lean-forward="false" selection-start-line="165" selection-start-column="49" selection-end-line="165" selection-end-column="49" />
+        <state relative-caret-position="291">
+          <caret line="37" column="35" lean-forward="false" selection-start-line="37" selection-start-column="27" selection-end-line="37" selection-end-column="35" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_CHANGE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="67" column="11" lean-forward="false" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
+          <folding>
+            <element signature="e#602#611#0" expanded="true" />
+            <marker date="1527172076000" expanded="true" signature="20733:20912" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
