@@ -42,7 +42,7 @@ testfile=False           # Uses a test file with short period
                         # (testfile designed to be used together with testyear
                         # ..but testyear can be used seperately)
 title=False      # plot title
-future=True     # get future thresholds
+future=False     # get future thresholds
 refdset="noaa"
 refmod="cdr"
 globv='olr'
@@ -53,7 +53,7 @@ if future:
     fyear2='2099'
 
 ### Multi dset?
-dsets='spec'     # "all" or "spec" to choose specific dset(s)
+dsets='all'     # "all" or "spec" to choose specific dset(s)
 if dsets=='all':
     ndset=len(dsetdict.dset_deets)
     dsetnames=list(dsetdict.dset_deets)
@@ -171,22 +171,22 @@ for d in range(ndset):
     print 'This is dset '+dcnt+' of '+ndstr+' in list'
 
     ### Multi model?
-    # mods='all'  # "all" or "spec" to choose specific model(s)
-    # if mods=='all':
-    #     nmod=len(dsetdict.dset_deets[dset])
-    #     mnames=list(dsetdict.dset_deets[dset])
+    mods='all'  # "all" or "spec" to choose specific model(s)
+    if mods=='all':
+        nmod=len(dsetdict.dset_deets[dset])
+        mnames=list(dsetdict.dset_deets[dset])
     # if mods=='spec': # edit for the models you want
     #     nmod=1
     #     mnames=['noaa']
     # nmstr=str(nmod)
-    if dset=='noaa':
-        mnames=['cdr']
-        nmod=len(mnames)
-    elif dset=='cmip5':
-        # nmod=2
-        # mnames=['inmcm4','FGOALS-g2']
-        nmod=len(dsetdict.dset_deets[dset])
-        mnames=list(dsetdict.dset_deets[dset])
+    # if dset=='noaa':
+    #     mnames=['cdr']
+    #     nmod=len(mnames)
+    # elif dset=='cmip5':
+    #     # nmod=2
+    #     # mnames=['inmcm4','FGOALS-g2']
+    #     nmod=len(dsetdict.dset_deets[dset])
+    #     mnames=list(dsetdict.dset_deets[dset])
     nmstr=str(nmod)
 
     for m in range(nmod):

@@ -79,32 +79,37 @@ if threshtest:
     thlist.append('fourth')
 
 ### tsteps
-tstep='seas' # seas or mon
-tnames=['NDJFM','DJF'] # NDJFM DJF nov dec jan feb mar
-# tstep='mon'
-# tnames=['nov','dec','jan','feb','mar']
+# tstep='seas' # seas or mon
+# tnames=['all']
+# tlist=tnames
+#tnames=['all','NDJFM','DJF'] # NDJFM DJF - also have option of 'all'
+tstep='mon'
+monnums=[4,5,6,7,8,9,10]
+tlist=monnums
+monstr=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
 
-# Loop tstepsex
-for t in range(len(tnames)):
-    tname=tnames[t]
+# Loop tstep
+print tstep
+for t in range(len(tlist)):
     if tstep=='seas':
+        tname = tnames[t]
+        print tname
         if tname=='NDJFM':
             mon1=11
             mon2=3
         elif tname=='DJF':
             mon1=12
             mon2=2
-    elif tstep=='mon':
-        if tname=='nov':
-            mon1=11
-        elif tname=='dec':
-            mon1=12
-        elif tname=='jan':
-            mon1=1
-        elif tname=='feb':
-            mon1=2
-        elif tname=='mar':
-            mon1=3
+        elif tname == 'all':
+            mons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            mon1 = 12
+            mon2 = 11
+    elif tstep == 'mon':
+        mn=monnums[t]
+        tname=monstr[mn-1]
+        mons=[mn]
+        mon1=mn
+    print tstep
 
     # Loop domains
     doms = ['All', 'nCont', 'nMada', 'nOcea']  # doms for TTT days selected

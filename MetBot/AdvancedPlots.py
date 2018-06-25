@@ -1609,7 +1609,10 @@ def gridrainmap_change_single(s,s_f,eventkeys,eventkeys_f,rain,futrain,rlat,rlon
 
     # all plot cbars
     if ptype=='dTTTrain':
-        clevs = np.arange(-2.0, 2.2, 0.2)
+        if under_of=='dayof':
+            clevs = np.arange(-2.0, 2.2, 0.2)
+        elif under_of=='under':
+            clevs = np.arange(-1.0, 1.1, 0.1)
         cm = plt.cm.seismic_r
         cbar_lab = 'mm'
     elif ptype=='per_drain_TTT':

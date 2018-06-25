@@ -36,13 +36,13 @@ import dsets_mplot_28 as dset_mp
 
 ### Running options
 sub="SA"
-subrain="SA_TRMM"
+subrain="SA_TR"
 #subrain="SA_CONT"
 #subrain="UM_FOC"
 print 'Mapping for domain '+subrain
 xplots=4
 yplots=7
-group=True
+group=False
 threshtest=False
 fyear1='2065'
 fyear2='2099'
@@ -55,18 +55,18 @@ else:
 
 # tsteps
 tstep='seas' # seas or mon
-tnames=['NDJFM']
+tnames=['DJF']
 tlist=tnames
 #tnames=['all','NDJFM','DJF'] # NDJFM DJF - also have option of 'all'
-#tstep='mon'
-#monnums=[11,12,1,2,3]
-#tlist=monnums
-#monstr=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
+# tstep='mon'
+# monnums=[11,12,1,2,3]
+# tlist=monnums
+monstr=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
 
 ### Plot type
 metatype='ttt' # 'all' or 'ttt' - is it a plot for all rain or just TTT rain
 heavy=False
-plottype='per_drain_TTT'
+plottype='drain_per_ttt'
 print 'Running for plottype '+plottype
 
 ### Plot types
@@ -84,8 +84,9 @@ print 'Running for plottype '+plottype
 # options to plot ttt - heavy pr
 # none yet
 
-under_dayof='dayof'     # if "dayof" plots all rain on TTT days
+under_dayof='under'     # if "dayof" plots all rain on TTT days
                         #   if "under" plots rain under TTTs (based on blobs)
+                        # for under better to use "SA_TR" domain
 
 monmean='day'           # to control the output - is there averaging?
                         # 'day' is daily mean - note that day is not currently
@@ -113,6 +114,8 @@ elif subrain=='SA_CONT':
     figdim=[9,11]
 elif subrain=='UM_FOC':
     figdim=[9,11]
+elif subrain=='SA_TR':
+    figdim=[10,7]
 
 if group:
     grcls=['fuchsia','b','r','blueviolet','springgreen','gold','darkorange']
@@ -213,7 +216,7 @@ for do in range(len(doms)):
                     else:
                         mnames = mnames_tmp
 
-                    # nmod=1
+                    #nmod=1
 
                     for mo in range(nmod):
                         name=mnames[mo]
@@ -486,11 +489,25 @@ for do in range(len(doms)):
                         # print 'Keys for future'
                         # print keys_f
 
-                        allmask = ap.gridrainmap_change_single(s,s_f, keys, keys_f, rain,futvardata, rlat, rlon, rdtime,futdtime, rainmod, \
-                                                        season=tname, key=key, ptype=plottype, mmean=monmean, \
-                                                        under_of=under_dayof, \
-                                                        savefig=False, labels=nTTTlab, \
-                                                        heavy=hvthr, bound=grcl)
+                        if len(keys)>=1:
+                            if len(keys_f)>=1:
+
+                                if group:
+                                    allmask = ap.gridrainmap_change_single(s,s_f, keys, keys_f, rain,futvardata, rlat, rlon, rdtime,futdtime, rainmod, \
+                                                            season=tname, key=key, ptype=plottype, mmean=monmean, \
+                                                            under_of=under_dayof, \
+                                                            savefig=False, labels=nTTTlab, \
+                                                            heavy=hvthr, bound=grcl)
+                                else:
+                                    allmask = ap.gridrainmap_change_single(s,s_f, keys, keys_f, rain,futvardata, rlat, rlon, rdtime,futdtime, rainmod, \
+                                                            season=tname, key=key, ptype=plottype, mmean=monmean, \
+                                                            under_of=under_dayof, \
+                                                            savefig=False, labels=nTTTlab, \
+                                                            heavy=hvthr, bound=False)
+                            else:
+                                print 'Zero future TTTs'
+                        else:
+                            print 'Zero historical TTTs'
 
                         cnt +=1
 

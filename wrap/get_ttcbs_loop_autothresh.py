@@ -55,7 +55,7 @@ showdistr=False   # Save a figure showing histogram of OLR values
 plothist=False       # New option to output histogram even if a new threshold is not calc'd
                     # useful for comparing future dist with past
 threshtest=False  # Option to run on thresholds + and - 5Wm2 as a test
-fut_th_test=True # new future threshtest option - for testing sensitivity of change to thresh
+fut_th_test=False # new future threshtest option - for testing sensitivity of change to thresh
 getmbs=True      # Actually run the MetBot algorithm
 showblb=False    # Show the blobs while running
 intract=False    # Interactive running of showblobs
@@ -63,15 +63,15 @@ refsubset=True   # This is used if noaaolr=True to only look in time window
 hrwindow=49      # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True   # Build tracks of cloud blobs that become TTT cloud bands
                  # ... which are then used to build TTT events.
-onlynew=True    # Option to only run if the synop file doesn't exist yet
+onlynew=False    # Option to only run if the synop file doesn't exist yet
 
 addrain=False     # Add event rain - at the moment need to be running synoptics too
 heavythresh=50   # Threshold for heavy precip (if add event rain)
-future=True     # new option to run on future data - only for CMIP5 - currently RCP85
-selyear=True    # to select years for future
+future=False     # new option to run on future data - only for CMIP5 - currently RCP85
+selyear=True    # to select years
 if selyear:
-    fyear1='2065'
-    fyear2='2099'
+    fyear1='1979'
+    fyear2='2013'
 
 bkdir=cwd+"/../../../CTdata/metbot_multi_dset/"
 
@@ -88,7 +88,7 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['cmip5']
+    dsetnames=['um']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -98,13 +98,15 @@ for d in range(ndset):
     print 'This is dset '+dcnt+' of '+ndstr+' in list'
 
     ### Multi model?
-    mods='all'  # "all" or "spec" to choose specific model(s)
+    mods='spec'  # "all" or "spec" to choose specific model(s)
     if mods=='all':
         nmod=len(dsetdict.dset_deets[dset])
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['HadGEM2-ES']
+        mnames=['u-av802']
+        #mnames=['u-au939']
+        #mnames=['HadGEM2-CC']
     nmstr=str(nmod)
 
     for m in range(nmod):
@@ -161,6 +163,9 @@ for d in range(ndset):
             else:
                 print 'Check number of levels in ncfile'
 
+            print 'Check dtime before selection'
+            print dtime
+
             ### Select data to run
             ### Get time information
             moddct = dsetdict.dset_deets[dset][name]
@@ -176,12 +181,18 @@ for d in range(ndset):
                 if cal=="360_day":
                     startday=(ystart*360)+((mstart-1)*30)+dstart
                     beginday=((int(beginatyr))*360)+1
-                    daysgap=beginday-startday+1
+                    daysgap=beginday-startday
+                    print start
+                    print startday
+                    print beginatyr
+                    print beginday
+                    print daysgap
                 else:
                     startd=date(ystart,mstart,dstart)
                     begind=date(int(beginatyr),01,01)
                     daysgap=(begind-startd).days
                 olr=olr[daysgap:,:,:];time=time[daysgap:];dtime=dtime[daysgap:]
+
             if testyear:
                 if cal=="360_day":
                     olr, dtime, time = olr[:360, :, :], dtime[:360], time[:360]

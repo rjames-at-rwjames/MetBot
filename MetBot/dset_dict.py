@@ -19,7 +19,7 @@ dset_deets['trmm']={
 
 # GTOPO30
 dset_deets['gtopo30']={
-'gtopo30_am30': {'name':"gtopo30_am30", 'orogname':"HT"}
+'gtopo30_am30': {'name':"gtopo30_am30",'olrname':"none",'yrfname':"none",'startyr':"none", 'orogname':"HT"}
 }
 
 # NCEP
@@ -43,6 +43,8 @@ dset_deets['um']={
 'antib': {'name': "antib", 'calendar':"360_day", 'olrtimeunit':"days since 1981-09-01 00:00:00", 'prtimeunit':"days since 1981-09-01 00:00:00", 'startdate':"1981-09-01", 'olrname':"olr", 'prname':"precip", 'yrfname':"1981_2008", 'startyr':"1982", 'testfileyr':"1985_1985",'testyr':"1985"},
 'u-ab674': {'name': "u-ab674", 'calendar':"360_day", 'olrtimeunit':"days since 1998-12-1 00:00:00", 'prtimeunit':"days since 1998-12-1 00:00:00", 'startdate':"2079-01-01", 'olrname':"olr", 'prname':"precip", 'yrfname':"2079_2113", 'startyr':"2079", 'testfileyr':"2079_2079",'testyr':"2079"},
 'u-ab680': {'name': "u-ab680", 'calendar':"360_day", 'olrtimeunit':"days since 1981-9-1 00:00:00", 'prtimeunit':"days since 1981-9-1 00:00:00", 'startdate':"1981-09-01", 'olrname':"olr", 'prname':"precip", 'yrfname':"1981_2008", 'startyr':"1982", 'testfileyr':"1985_1985",'testyr':"1985"},
+'u-au939': {'name': "u-au939", 'calendar':"360_day", 'olrtimeunit':"days since 1978-9-1 00:00:00", 'prtimeunit':"days since 1978-9-1 00:00:00", 'startdate':"1978-09-01", 'olrname':"olr", 'prname':"precip", 'yrfname':"1978_2020", 'startyr':"1979", 'testfileyr':"1985_1985",'testyr':"1985"},
+'u-av802': {'name': "u-av802", 'calendar':"360_day", 'olrtimeunit':"days since 1988-9-1 00:00:00", 'prtimeunit':"days since 1988-9-1 00:00:00", 'startdate':"1988-09-01", 'olrname':"olr", 'prname':"precip", 'yrfname':"1988_2009", 'startyr':"1989", 'testfileyr':"1995_1995",'testyr':"1995"},
 }
 
 # CMIP5
