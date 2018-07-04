@@ -16,7 +16,6 @@
 
 import os
 import sys
-from datetime import date
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -27,8 +26,6 @@ sys.path.append(cwd+'/../../RTools')
 sys.path.append(cwd+'/../../quicks')
 import MetBot.SynopticAnatomy as sy
 import MetBot.EventStats as stats
-import MetBot.AdvancedPlots as ap
-import MetBot.MetBlobs as blb
 import MetBot.mytools as my
 import MetBot.mynetcdf as mync
 import MetBot.dset_dict as dsetdict
@@ -328,7 +325,7 @@ for do in range(len(doms)):
                         s = sy.SynopticEvents((), [syfile], COL=False)
 
                         ### Get all events
-                        ks = s.events.keys();
+                        ks = s.events.keys()
                         ks.sort()  # all
                         count_all = str(int(len(ks)))
                         print "Total CB events =" + str(count_all)
@@ -477,7 +474,7 @@ for do in range(len(doms)):
                                 # opening future data
                                 print 'opening future metbot files'
                                 s_f = sy.SynopticEvents((), [futsy], COL=False)
-                                ks_f = s_f.events.keys();
+                                ks_f = s_f.events.keys()
                                 ks_f.sort()  # all
                                 count_all_f = len(ks_f)
                                 print "Total fut CB events =" + str(count_all)
