@@ -51,18 +51,20 @@ else:
     thlist=['fut']
 
 # tsteps
-tstep='seas' # seas or mon
-tnames=['all']
-tlist=tnames
+#tstep='seas' # seas or mon
+#tnames=['NDJFM']
+#tlist=tnames
 #tnames=['all','NDJFM','DJF'] # NDJFM DJF - also have option of 'all'
-# tstep='mon'
-monnums=[11,12,1,2,3]
+tstep='mon'
+monnums=[11]
+#monnums=[11,12,1,2,3]
 tlist=monnums
 monstr=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
 
 ### Plot type
 heavy=False
 plottype='hists_rainperttt'
+plotmean=True # To add mean onto plot
 summean='mean' # sum under CB or mean under CB
 print 'Running for plottype '+plottype
 
@@ -429,6 +431,7 @@ for do in range(len(doms)):
                         print 'Getting stats over whole domain'
                         meanTTTrain=np.nanmean(masked_rain,2)
                         meanTTTrain=np.nanmean(meanTTTrain,1)
+                        meanmean=np.nanmean(meanTTTrain)
 
                         sumTTTrain=np.nansum(masked_rain,2)
                         sumTTTrain=np.nansum(sumTTTrain,1)
@@ -577,6 +580,7 @@ for do in range(len(doms)):
                                 print 'Getting stats over whole domain - future'
                                 meanTTTrain_f = np.nanmean(masked_rain_f, 2)
                                 meanTTTrain_f = np.nanmean(meanTTTrain_f, 1)
+                                meanmean_f=np.nanmean(meanTTTrain_f)
 
                                 sumTTTrain_f = np.nansum(masked_rain_f, 2)
                                 sumTTTrain_f = np.nansum(sumTTTrain_f, 1)
@@ -601,6 +605,9 @@ for do in range(len(doms)):
                             bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
                             plt.plot(bincentres, y, linestyle='solid', linewidth=3, color='mediumaquamarine')
 
+                            if plotmean:
+                                plt.plot(meanmean,0,'^', color='mediumaquamarine', markeredgecolor='mediumaquamarine', markersize=20)
+
                             if dset=='cmip5':
                                 if os.path.exists(futsy):
                                     fut_flat=np.nan_to_num(fut4plot.ravel())
@@ -608,9 +615,14 @@ for do in range(len(doms)):
                                     bincentres_f = 0.5 * (binEdges[1:] + binEdges[:-1])
                                     plt.plot(bincentres_f, y_f, linestyle='solid', linewidth=3, color='k')
 
+                                    if plotmean:
+                                        plt.plot(meanmean_f, 0, '^', color='k', markersize=20)
+
+
                             if summean=='mean':
                                 plt.xlim(0,20)
                                 plt.yticks(np.arange(0.00, 0.20, 0.04))
+                                plt.ylim(0,0.16)
 
                         if group:
                             bound=grcl
