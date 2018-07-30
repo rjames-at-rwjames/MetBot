@@ -29,7 +29,6 @@ sub='CONT_PR' # sub is important
                 # just selecting rain in this domain
                 # even if all TTTs are used
 refkey='0'              # 0 or all
-inorder=True
 
 meansum='mean'
 inorder=True    # to put the bars in order of mean pr
