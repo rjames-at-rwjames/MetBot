@@ -42,7 +42,7 @@ subrain="SA_TR"
 print 'Mapping for domain '+subrain
 xplots=4
 yplots=7
-group=False
+group=True
 threshtest=False
 fyear1='2065'
 fyear2='2099'
@@ -54,19 +54,19 @@ else:
     thlist=['fut']
 
 # tsteps
-tstep='seas' # seas or mon
-tnames=['DJF']
-tlist=tnames
+# tstep='seas' # seas or mon
+# tnames=['DJF']
+#tlist=tnames
 #tnames=['all','NDJFM','DJF'] # NDJFM DJF - also have option of 'all'
-# tstep='mon'
-# monnums=[11,12,1,2,3]
-# tlist=monnums
+tstep='mon'
+monnums=[11,12,1,2,3]
+tlist=monnums
 monstr=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
 
 ### Plot type
 metatype='ttt' # 'all' or 'ttt' - is it a plot for all rain or just TTT rain
 heavy=False
-plottype='drain_per_ttt'
+plottype='dpcent_TTTrain'
 print 'Running for plottype '+plottype
 
 ### Plot types
@@ -101,7 +101,8 @@ refkey='0'              # 0 or all
 if metatype=='all':
     doms=['All']
 elif metatype=='ttt':
-    doms=['All','nCont','nMada','nOcea'] # doms for TTT days selected
+    #doms=['All','nCont','nMada','nOcea'] # doms for TTT days selected
+    doms=['All']
 
 if heavy:
     hvthrs=['0.5','10','25','50']
@@ -408,7 +409,7 @@ for do in range(len(doms)):
                                 # Split by domain
                                 print 'selecting events for this dom group...'
                                 if len(doms) == 1:
-                                    keys = [thesekeys]
+                                    keys = thesekeys
                                 elif len(doms) == 4:
                                     k1, ktmp = stats.spatialsubset(s, thesekeys, cutlon=37.5)
                                     k2, k3 = stats.spatialsubset(s,ktmp,cutlon=67.5)
@@ -458,7 +459,7 @@ for do in range(len(doms)):
                                 # Split by domain
                                 print 'selecting events for this dom group...'
                                 if len(doms) == 1:
-                                    keys_f = [thesekeys_f]
+                                    keys_f = thesekeys_f
                                 elif len(doms) == 4:
                                     k1, ktmp = stats.spatialsubset(s_f, thesekeys_f, cutlon=37.5)
                                     k2, k3 = stats.spatialsubset(s_f,ktmp,cutlon=67.5)
