@@ -33,9 +33,9 @@ import MetBot.find_saddle as fs
 sub="SA"
 seasopt="coreseason"    # for spatiofreq plots
                         # options: coreseason, dryseason, fullseason
-histplot=False           # to get olr histograms
+histplot=True           # to get olr histograms
 threshplot=False         # to get olr threshold plot
-threshtext=True         # to put olr thresholds in text file
+threshtext=False         # to put olr thresholds in text file
 shiftdist=False          # to plot shifted distributions
 testyear=False           # To use output from a test
 testfile=False           # Uses a test file with short period
@@ -53,7 +53,7 @@ if future:
     fyear2='2099'
 
 ### Multi dset?
-dsets='all'     # "all" or "spec" to choose specific dset(s)
+dsets='spec'     # "all" or "spec" to choose specific dset(s)
 if dsets=='all':
     ndset=len(dsetdict.dset_deets)
     dsetnames=list(dsetdict.dset_deets)
@@ -62,7 +62,7 @@ elif dsets=='spec': # edit for the dset you want
 #    ndset=6
 #    dsetnames=['noaa','ncep','era','20cr','um','cmip5']
     ndset=1
-    dsetnames=['cmip5']
+    dsetnames=['um']
     dsetstr = '_'.join(dsetnames)
 ndstr=str(ndset)
 print 'Running on datasets:'
