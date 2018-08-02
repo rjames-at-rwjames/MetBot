@@ -147,7 +147,8 @@ for d in range(ndset):
             if future:
                 outsuf=outsuf+'fut_'
             if selyear:
-                outsuf=outsuf+fyear1+'_'+fyear2+'_'
+                if future:
+                    outsuf=outsuf+fyear1+'_'+fyear2+'_'
 
             ### Open OLR data
             v = dset + "-olr-0-0"
