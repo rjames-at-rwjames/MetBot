@@ -29,7 +29,8 @@ import MetBot.find_saddle as fs
 inorder=True    # to put the bars in order of number of TTTs
 numlab=True     # to include number of TTTs in the yaxis label
 testyear=False  # plot based on 1 year of test data
-threshtest=True # Option to run on thresholds + and - 5Wm2 as a test
+threshtest=False # Option to run on thresholds + and - 5Wm2 as a test
+peryear=True    # to divide by number of years
 
 ### Directory
 indir=cwd+"/../../../CTdata/metbot_multi_dset/"
@@ -50,10 +51,8 @@ for t in range(nthresh):
         dsetnames=list(dsetdict.dset_deets)
         dsetstr='all_dset'+'_'+str(ndset)
     elif dsets=='spec': # edit for the dset you want
-#        ndset=1
-#        dsetnames=['cmip5']
-	ndset=6
-	dsetnames=['noaa','ncep','era','20cr','um','cmip5']
+        ndset=6
+        dsetnames=['noaa','ncep','era','20cr','um','cmip5']
         dsetstr=('_'.join(dsetnames))+'_'+str(ndset)
     print 'Running on datasets:'
     print dsetnames
@@ -112,15 +111,41 @@ for t in range(nthresh):
             ###  Open synop file
             syfile=outsuf+thre_str+'_'+dset+'-OLR.synop'
             s = sy.SynopticEvents((),[syfile],COL=False)
+            refkey = '0'
+            key = dset + '-olr-0-' + refkey
 
             ### Count number of events
             ks = s.events.keys() # all events
             kw, ke = stats.spatialsubset(s,False,cutlon=40.) # splitting tracks west and east of 40E
 
             ### Put n events into array
+            print name
             ttt_count[0,z]=len(ks)
+            print ttt_count[0,z]
             ttt_count[1,z]=len(kw)
             ttt_count[2,z]=len(ke)
+
+            if peryear:
+
+                edts = []
+                for k in ks:
+                    e = s.events[k]
+                    dts = s.blobs[key]['mbt'][e.ixflags]
+                    if len(dts) > 1:
+                        dt = dts[len(dts) / 2]
+                    else:
+                        dt = dts[0]
+                    edts.append(dt)
+                edts = np.asarray(edts)
+                yrs = np.unique(edts[:, 0])
+                nys=float(len(yrs))
+
+                print 'Dividing by number of years'
+                print nys
+
+                ttt_count[:,z]=ttt_count[:,z]/nys
+
+                print ttt_count[0,z]
 
             ### Put name into string list
             modnm[z]=dset+"_"+name
@@ -129,6 +154,11 @@ for t in range(nthresh):
     ### Loop domains
     doms=['All','Continental','Madagascar']
     ndoms=len(doms)
+
+    figsuf=''
+
+    if peryear:
+        figsuf=figsuf+'peryear.'
 
     for r in range(ndoms):
         val=ttt_count[r,:]
@@ -163,6 +193,6 @@ for t in range(nthresh):
         plt.ylim(0,nallmod)
         plt.yticks(pos,modlabels,fontsize=10)
         plt.xlabel('Number of Events')
-        barfig=indir+'/neventsbar.thresh_'+thnames[t]+'.'+dsetstr+'.'+doms[r]+'.png'
+        barfig=indir+'/neventsbar.thresh_'+thnames[t]+'.'+dsetstr+'.'+doms[r]+'.'+figsuf+'png'
         plt.savefig(barfig,dpi=150)
         file.close()

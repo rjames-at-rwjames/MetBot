@@ -1221,6 +1221,8 @@ def spatiofreq4(m,s,modname,lat,lon,yrs,eventkeys,per='year',meanmask=False,\
         std_mask=allmask/len(yrs)
     elif per=='cbs':
         std_mask=allmask/nblobs*100
+        print 'Dividing by number of blobs'
+        print nblobs
     if isinstance(meanmask,np.ndarray):
         std_mask=std_mask-meanmask
         std_mask=np.where(np.abs(std_mask)<.5,np.nan,std_mask)
