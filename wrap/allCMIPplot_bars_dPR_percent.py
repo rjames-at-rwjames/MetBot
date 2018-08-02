@@ -51,15 +51,15 @@ my.mkdir_p(prdir)
 doms=['All']
 
 ## tsteps
-tstep='seas' # seas or mon
-tnames=['all','NDJFM']
-tlist=tnames
+# tstep='seas' # seas or mon
+# tnames=['all','NDJFM']
+# tlist=tnames
 
 #tnames=['all','NDJFM','DJF'] # NDJFM DJF - also have option of 'all'
 
-# tstep='mon'
-# monnums=[11,12,1,2,3]
-# tlist=monnums
+tstep='mon'
+monnums=[11]
+tlist=monnums
 
 #monnums=[11,12,1,2,3]
 
