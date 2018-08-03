@@ -28,6 +28,12 @@ mast_dset_deets['era']={
 'olrname':"olr", 'prname':"tp", 'omeganame':"w", 'uname':"u", 'vname':"v", 'qname':"q", 'gpthname':"z", 'Tname':"t", 'presname':"sp",
 }
 
+# UM
+mast_dset_deets['um']={
+'orogname':"orog", 'olrname':"olr", 'prname':"precip", 'omeganame':"omega", 'uname':"u", 'vname':"v", 'qname':"q", 'gpthname':"ht", 'Tname':"temp",
+}
+
+
 # CMIP5
 mast_dset_deets['cmip5']={
 'orogname':"orog", 'olrname':"rlut", 'prname':"pr", 'omeganame':"wap", 'uname':"ua", 'vname':"va", 'qname':"hus", 'gpthname':"zg", 'Tname':"ta",

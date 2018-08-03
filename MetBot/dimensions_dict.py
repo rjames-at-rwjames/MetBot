@@ -68,5 +68,4 @@ dim_deets['pres']={
 dim_deets['orog']={
 "gtopo30": ['time','lat','lon'],
 "cmip5": ['time','lat','lon'],
-#"cmip5": ['time','lat','lon'],
 }
