@@ -26,7 +26,7 @@ import dsets_mplot_28 as dset_mp
 test_scr2=False # test on first CMIP5 model
 #sub="contsub"
 #sub="ALL_PR"
-sub="rufiji"
+sub="contsub_nh"
 fyear1='2065'
 fyear2='2099'
 

@@ -84,6 +84,8 @@ def isubs(sub,lat,lon,*args):
     domains['MADA_PR'] = ((-25.0,-11.0),(35.0,50.0))
     domains['ALL_PR'] = ((-35.0,-15.0), (7.5,100.0))
     domains['contsub'] = ((-35.0,-15.0), (12.0,40.0))
+    domains['contsub_nh'] = ((-35.0,-20.0),(15.0,40.0)) # domain used for Neil's CP4 paper
+    domains['contsub_cm'] = ((-35.0,-15.0),(15.0,40.0)) # callum suggested
     domains['madasub'] = ((-35.0,-15.0), (40.0,70.0))
     domains['alocsub'] = ((-35.0,-15.0), (40.0,100.0))
     domains['mada'] = ((-28.0,-8.0),(40.0,56.0))

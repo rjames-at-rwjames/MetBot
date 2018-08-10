@@ -1051,7 +1051,7 @@ def spatiofreq3(m,s,lat,lon,yrs,eventkeys,meanmask=False,figno=1,\
                     itrk = np.append(itrk,trkarr[ixt,1,d].squeeze())
         # Get masks for each contour feature of a track
         for ixtrk in itrk:
-            mask = my.poly2mask(lon,lat,e.blobs[countkey]['ch'][ixtrk])
+            mask = my.e(lon,lat,e.blobs[countkey]['ch'][ixtrk])
             allmask=allmask+np.float32(mask)
 
     #cm=plt.cm.PuBu
