@@ -91,6 +91,9 @@ def isubs(sub,lat,lon,*args):
     domains['mada'] = ((-28.0,-8.0),(40.0,56.0))
     domains['smad'] = ((-26.0,-11.0),(42.0,51.0))
     domains['rufiji'] = ((-12.0,-6.0),(33.0,39.0))
+    domains['zoncross'] = ((-50.0,10.0),(10.0,40.0))
+    domains['zonmada'] = ((-50.0,10.0),(40.0,70.0))
+    domains['meridcross'] = ((-10.0,0.0),(7.5,100.0))
     if isinstance(sub,str):
         domain=domains[sub]; getisubs=True
     elif isinstance(sub,tuple):
