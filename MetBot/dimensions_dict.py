@@ -20,7 +20,7 @@ dim_deets['pr']={
 
 dim_deets['omega']={
 "ncep": ['time','lat','lon','level'],
-"era": ['time','latitude','longitude','lev'],
+"era": ['time','latitude','longitude','level'],
 "um": ['t','latitude','longitude','p'],
 "cmip5": ['time','lat','lon','plev'],
 }

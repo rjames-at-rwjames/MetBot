@@ -94,6 +94,8 @@ def isubs(sub,lat,lon,*args):
     domains['zoncross'] = ((-50.0,10.0),(10.0,40.0))
     domains['zonmada'] = ((-50.0,10.0),(40.0,70.0))
     domains['meridcross'] = ((-10.0,0.0),(7.5,100.0))
+    domains['scongo'] = ((-10.0,0.0),(10.0,30.0))
+    domains['WEIO'] = ((-10.0,0.0),(50.0,70.0)) # west equatorial Indian Ocean
     if isinstance(sub,str):
         domain=domains[sub]; getisubs=True
     elif isinstance(sub,tuple):
