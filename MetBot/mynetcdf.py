@@ -92,10 +92,15 @@ def isubs(sub,lat,lon,*args):
     domains['smad'] = ((-26.0,-11.0),(42.0,51.0))
     domains['rufiji'] = ((-12.0,-6.0),(33.0,39.0))
     domains['zoncross'] = ((-50.0,10.0),(10.0,40.0))
+    domains['zonall'] = ((-50.0,50.0),(7.5,100.0))
     domains['zonmada'] = ((-50.0,10.0),(40.0,70.0))
     domains['meridcross'] = ((-10.0,0.0),(7.5,100.0))
     domains['scongo'] = ((-10.0,0.0),(10.0,30.0))
     domains['WEIO'] = ((-10.0,0.0),(50.0,70.0)) # west equatorial Indian Ocean
+    domains['trop'] = ((-15.0,0.0),(7.5,100.0))
+    domains['trop2'] = ((-10.0,10.0),(7.5,100.0))
+    domains['subt'] = ((-35.0,-20.0),(7.5,100.0))
+    domains['subt2'] = ((-35.0,-25.0,),(7.5,100.0))
     if isinstance(sub,str):
         domain=domains[sub]; getisubs=True
     elif isinstance(sub,tuple):
@@ -451,7 +456,7 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
 
     moddct = dsetdict.dset_deets[dset][mname]
     vnamedict = globv+'name'
-    if dset == 'cmip5':
+    if dset == 'cmip5' or dset=='um':
         mastdct = mast_dict.mast_dset_deets[dset]
         varstr = mastdct[vnamedict]
     else:
@@ -459,7 +464,7 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
 
     # HUMAN TIME CONVERSION
     if globv!='orog':
-        if dset!='cmip5':
+        if dset!='cmip5' and dset!='um':
             cal = moddct['calendar']
             units = moddct[globv+'timeunit']
             exec('dtime=num2date((' + timestr + '),units="' + units + '",calendar="' + cal + '")')
