@@ -92,6 +92,7 @@ def isubs(sub,lat,lon,*args):
     domains['smad'] = ((-26.0,-11.0),(42.0,51.0))
     domains['rufiji'] = ((-12.0,-6.0),(33.0,39.0))
     domains['zoncross'] = ((-50.0,10.0),(10.0,40.0))
+    domains['zonnew'] = ((-50.0,50.0),(10.0,40.0))
     domains['zonall'] = ((-50.0,50.0),(7.5,100.0))
     domains['zonmada'] = ((-50.0,10.0),(40.0,70.0))
     domains['meridcross'] = ((-10.0,0.0),(7.5,100.0))
