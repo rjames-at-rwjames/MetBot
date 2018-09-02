@@ -616,7 +616,7 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
         elif len(newdimlist)==2:
             exec (varstr + '=' + varstr + '[::-1,:]')
     if dset == 'noaa':
-        if mname == 'cdr':
+        if mname == 'cdr' or mname=='cdr2':
             lat = lat[::-1]
             exec (varstr + '=' + varstr + '[:,::-1,:]')
     if dset == 'um':
