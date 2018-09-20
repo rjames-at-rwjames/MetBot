@@ -49,7 +49,7 @@ testfile=False           # Uses a test file with short period
                         # ..but testyear can be used seperately)
 res='noaa'            # Option to plot at 'noaa' res or 'native' res
 nos4cbar=(1,7,1)        # choose the intervals for spatiofreq cbar
-threshtest=True         # Option to run on thresholds + and - 5Wm2 as a test
+threshtest=False        # Option to run on thresholds + and - 5Wm2 as a test
 
 ### Multi dset?
 dsets='spec'     # "all" or "spec" to choose specific dset(s)
@@ -58,7 +58,7 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['cmip5']
+    dsetnames=['noaa']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -74,7 +74,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['CanESM2']
+        mnames=['cdr2']
     nmstr=str(nmod)
 
     for m in range(nmod):
@@ -140,6 +140,7 @@ for d in range(ndset):
                 begind=date(int(beginatyr),01,01)
                 daysgap=(begind-startd).days
             olr=olr[daysgap:,:,:];time=time[daysgap:];dtime=dtime[daysgap:]
+        dtime[:, 3] = 0
 
         ### Option to open noaa file for res
         if res=='native':
@@ -161,7 +162,7 @@ for d in range(ndset):
             uppert = thresh + 5
             threshs = [lowert, thresh, uppert]
         else:
-            threshs = thresh
+            threshs = [thresh]
         ### Loop threshes
         nthresh=len(threshs)
         for t in range(nthresh):

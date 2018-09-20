@@ -54,7 +54,7 @@ showdistr=True   # Save a figure showing histogram of OLR values
                     # Only works if calcthresh is True
 plothist=False       # New option to output histogram even if a new threshold is not calc'd
                     # useful for comparing future dist with past
-threshtest=True  # Option to run on thresholds + and - 5Wm2 as a test
+threshtest=False  # Option to run on thresholds + and - 5Wm2 as a test
 fut_th_test=False # new future threshtest option - for testing sensitivity of change to thresh
 getmbs=True      # Actually run the MetBot algorithm
 showblb=False    # Show the blobs while running
@@ -206,9 +206,13 @@ for d in range(ndset):
                 time=time[inds]
                 olr=olr[inds,:,:]
             dtime[:,3]=0
+            time=time-0.5
 
             print 'Please check dtime'
             print dtime
+
+            print 'Please check time'
+            print time
 
             ### Get OLR threshold - and plot if showdistr
             if calcthresh:

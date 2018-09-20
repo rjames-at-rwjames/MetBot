@@ -10,7 +10,7 @@ dset_deets={}
 dset_deets['noaa']={
 'noaa': {'name': "noaa", 'calendar':"gregorian", 'olrtimeunit':"hours since 1800-01-01 00:00:0.0", 'prtimeunit':"hours since 1800-01-01 00:00:0.0", 'startdate':"1974-06-01", 'olrname':"olr", 'prname':"none", 'yrfname':"1974_2013", 'startyr':"1979", 'testfileyr':"1979_1979",'testyr':"1979"},
 'cdr': {'name': "cdr", 'calendar':"gregorian", 'olrtimeunit':"days since 1800-01-01 00:00:0.0", 'prtimeunit':"days since 1800-01-01 00:00:0.0", 'startdate':"1979-01-01", 'olrname':"olr", 'prname':"none", 'yrfname':"1979_2012",'futrun':"none", 'futprrun':"none",  'startyr':"1979", 'testfileyr':"1979_1979",'testyr':"1979"},
-'cdr2': {'name': "cdr2", 'calendar':"gregorian", 'olrtimeunit':"days since 1970-1-1 00:00:0.0",'prtimeunit':"none", 'startdate':"1979-01-01", 'olrname':"olr", 'prname':"none", 'yrfname':"1979_2013",'futrun':"none", 'futprrun':"none",  'startyr':"1979", 'testfileyr':"1979_1979",'testyr':"1979"},
+#'cdr2': {'name': "cdr2", 'calendar':"gregorian", 'olrtimeunit':"days since 1970-1-1 00:00:0.0",'prtimeunit':"none", 'startdate':"1979-01-01", 'olrname':"olr", 'prname':"none", 'yrfname':"1979_2013",'futrun':"none", 'futprrun':"none",  'startyr':"1979", 'testfileyr':"1979_1979",'testyr':"1979"},
 }
 
 # TRMM

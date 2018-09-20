@@ -227,6 +227,7 @@ def seasonalcycle(s,eventkeys,years=False,season=[8,9,10,11,12,1,2,3,4,5,6,7]):
     edts = np.asarray(edts)
     # BUILD SEASONAL CYCLES OF EACH YEAR
     yrs = np.unique(edts[:-1,0])[:-1];dirtyfix=False
+    # this gets rid of the last year - not sure why!
     ###### WHAT IS THIS DIRTYFIX ABOUT??? ##################
     if len(yrs)==0:yrs = np.unique(edts[:-1,0]);dirtyfix=True
     ############## HUH? ##############################
@@ -1290,16 +1291,16 @@ def spatiofreq4(m,s,modname,lat,lon,yrs,eventkeys,per='year',meanmask=False,\
             f, ax = plt.gcf(), plt.gca() # get reference and set axes
             axcol = f.add_axes([0.91, 0.15, 0.01, 0.6])
             plt.colorbar(cax=axcol, boundaries=bounds)
-            my.ytickfonts(fontweight='normal',fontsize=10)
+            my.ytickfonts(fontsize=10,fontweight='demibold')
             if isinstance(meanmask, np.ndarray):
-                plt.ylabel('anomaly grid-point count / year', fontsize=10)
+                plt.ylabel('anomaly grid-point count / year', fontsize=10,fontweight='demibold')
             else:
                 if per=='year':
                     plt.ylabel('grid-point count / year', fontsize=10)
                 elif per=='cbs':
                     plt.ylabel('% of cbs covering gridbox', fontsize=10)
             plt.axes(ax)
-            plt.title(modname,fontsize=8)
+            plt.title(modname,fontsize=8, fontweight='demibold')
     elif month:
         f,ax=plt.gcf(),plt.gca()
         axcol=f.add_axes([0.93,0.2,0.02,0.6])

@@ -1301,7 +1301,9 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
             tit = modname
     else:
         tit=modname
-    plt.title(tit, fontsize=8)
+    if modname=='trmm_3b42v7':
+        tit='cdr/'+modname
+    plt.title(tit, fontsize=8, fontweight='demibold')
 
     if ptype == 'comp_anom_ag':
         if nttt_seas >= 1:
@@ -1316,6 +1318,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
     f, ax = plt.gcf(), plt.gca()  # get reference and set axes
     axcl=f.add_axes([0.91, 0.15, 0.01, 0.6])
     cbar = plt.colorbar(cs, cax=axcl)
+    my.ytickfonts(fontsize=12.)
 
     if savefig:
         figname='Rainmap.png'

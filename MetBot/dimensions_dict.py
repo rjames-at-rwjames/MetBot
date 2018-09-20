@@ -27,14 +27,14 @@ dim_deets['omega']={
 
 dim_deets['u']={
 "ncep": ['time','lat','lon','level'],
-"era": ['time','latitude','longitude','lev'],
+"era": ['time','latitude','longitude','level'],
 "um": ['t','latitude','longitude','p'],
 "cmip5": ['time','lat','lon','plev'],
 }
 
 dim_deets['v']={
 "ncep": ['time','lat','lon','level'],
-"era": ['time','latitude','longitude','lev'],
+"era": ['time','latitude','longitude','level'],
 "um": ['t','latitude','longitude','p'],
 "cmip5": ['time','lat','lon','plev'],
 }
