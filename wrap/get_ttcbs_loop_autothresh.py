@@ -42,8 +42,8 @@ tstart=tmr.time()
 ### Running options
 olrall=True      # Get mbs for $dset-olr-0-all
 olrfull=True     # Get mbs for $dset-olr-0-full
-testfile=False    # Uses a test file with short period
-testyear=False   # Only uses first 365 days of olr data
+testfile=True    # Uses a test file with short period
+testyear=True   # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 calcthresh=True    # If calc thresh true, calculates again
@@ -57,8 +57,8 @@ plothist=False       # New option to output histogram even if a new threshold is
 threshtest=False  # Option to run on thresholds + and - 5Wm2 as a test
 fut_th_test=False # new future threshtest option - for testing sensitivity of change to thresh
 getmbs=True      # Actually run the MetBot algorithm
-showblb=False    # Show the blobs while running
-intract=False   # Interactive running of showblobs
+showblb=True    # Show the blobs while running
+intract=True   # Interactive running of showblobs
 refsubset=False   # This is used if noaaolr=True to only look in time window
 hrwindow=49      # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True   # Build tracks of cloud blobs that become TTT cloud bands
@@ -104,7 +104,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['cdr2']
+        mnames=['cdr']
         #mnames=['u-au939']
         #mnames=['HadGEM2-CC']
     nmstr=str(nmod)
