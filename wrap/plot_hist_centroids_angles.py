@@ -33,13 +33,13 @@ monplot=False
 
 scatter_lon_angle=True
 scatter_lat_angle=False
-scatter_lon_lat=False
+scatter_lon_lat=True
 
 scatter_lon_mon=False
 scatter_lat_mon=False
 scatter_ang_mon=False
 
-show_sample=True
+show_sample=False
 sample='rw50'
 
 title=True

@@ -33,7 +33,7 @@ fyear2='2099'
 refkey='0'              # 0 or all
 inorder=True    # in order of precip change anomaly
 
-threshtest=True
+threshtest=False
 ### threshs
 if threshtest:
     #thlist=['orig','fut','first','fourth']
@@ -58,7 +58,7 @@ doms=['All']
 #tnames=['all','NDJFM','DJF'] # NDJFM DJF - also have option of 'all'
 
 tstep='mon'
-monnums=[11]
+monnums=[10]
 tlist=monnums
 
 #monnums=[11,12,1,2,3]

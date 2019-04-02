@@ -23,8 +23,8 @@ import dsets_mplot_28 as dset_mp
 
 ### Running options
 test_scr2=False # test on first CMIP5 model
-sub="SA_TR"
-#sub="contsub"
+#sub="SA_TR"
+sub="contsub"
 #sub='CONT_PR' # sub is important
                 # just selecting rain in this domain
                 # even if all TTTs are used
@@ -54,15 +54,15 @@ my.mkdir_p(prdir)
 doms=['All']
 
 ## tsteps
-tstep='seas' # seas or mon
-tnames=['all','NDJFM']
-tlist=tnames
+#tstep='seas' # seas or mon
+#tnames=['all','NDJFM']
+#tlist=tnames
 
 #tnames=['all','NDJFM','DJF'] # NDJFM DJF - also have option of 'all'
 
-# tstep='mon'
-# monnums=[11]
-# tlist=monnums
+tstep='mon'
+monnums=[10]
+tlist=monnums
 
 #monnums=[11,12,1,2,3]
 

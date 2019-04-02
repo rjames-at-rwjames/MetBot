@@ -59,14 +59,15 @@ else:
 #tlist=tnames
 #tnames=['all','NDJFM','DJF'] # NDJFM DJF - also have option of 'all'
 tstep='mon'
-monnums=[11,12,1,2,3]
+monnums=[10]
+#monnums=[11,12,1,2,3]
 tlist=monnums
 monstr=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
 
 ### Plot type
 metatype='ttt' # 'all' or 'ttt' - is it a plot for all rain or just TTT rain
 heavy=False
-plottype='dpcent_TTTrain'
+plottype='dTTTrain'
 print 'Running for plottype '+plottype
 
 ### Plot types

@@ -253,7 +253,7 @@ def gridrainmap_season(s,eventkeys,rain,rlat,rlon,rdtime,units,cl,season='corese
                 tmpdt=np.asarray(edts)
                 # Check if it exists already
                 ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
-                     [dts[dt][1]], [dts[dt][2]], [0])
+                     [dts[dt][1]], [dts[dt][2]], [dts[dt][3]])
                 if len(ix)==0:
                     edts.append(dts[dt])
                     if under_of == 'under':
@@ -942,7 +942,7 @@ def gridrainmap_single(s,eventkeys,rain,rlat,rlon,rdtime,modname,season='NDJFM',
                     tmpdt = np.asarray(edts)
                     # Check if it exists already
                     ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
-                                     [dts[dt][1]], [dts[dt][2]], [0])
+                                     [dts[dt][1]], [dts[dt][2]], [dts[dt][3]])
                     if len(ix) == 0:
                         edts.append(dts[dt])
                         if under_of == 'under':
@@ -1392,7 +1392,7 @@ def gridrainmap_change_single(s,s_f,eventkeys,eventkeys_f,rain,futrain,rlat,rlon
                 tmpdt = np.asarray(edts)
                 # Check if it exists already
                 ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
-                                 [dts[dt][1]], [dts[dt][2]], [0])
+                                 [dts[dt][1]], [dts[dt][2]], [dts[dt][3]])
                 if len(ix) == 0:
                     edts.append(dts[dt])
                     if under_of == 'under':
@@ -1419,7 +1419,7 @@ def gridrainmap_change_single(s,s_f,eventkeys,eventkeys_f,rain,futrain,rlat,rlon
                 tmpdt = np.asarray(edts_f)
                 # Check if it exists already
                 ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
-                                 [dts[dt][1]], [dts[dt][2]], [0])
+                                 [dts[dt][1]], [dts[dt][2]], [dts[dt][3]])
                 if len(ix) == 0:
                     edts_f.append(dts[dt])
                     if under_of == 'under':
@@ -1690,7 +1690,7 @@ def gridolrmap_season(s,eventkeys,olr,lat,lon,dtime,cl,season='coreseason',key='
                 tmpdt=np.asarray(edts)
                 # Check if it exists already
                 ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
-                     [dts[dt][1]], [dts[dt][2]], [0])
+                     [dts[dt][1]], [dts[dt][2]], [dts[dt][3]])
                 if len(ix)==0:
                     edts.append(dts[dt])
             ecnt+=1
@@ -1954,7 +1954,7 @@ def gridvarmap_season(s,eventkeys,varstr,vardata,varlat,varlon,vardtime,olrunits
                 tmpdt=np.asarray(edts)
                 # Check if it exists already
                 ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
-                     [dts[dt][1]], [dts[dt][2]], [0])
+                     [dts[dt][1]], [dts[dt][2]], [dts[dt][3]])
                 if len(ix)==0:
                     edts.append(dts[dt])
             ecnt+=1
@@ -2188,7 +2188,7 @@ def gridvectmap_season(s,eventkeys,varstr,vardata_u,vardata_v,varlat,varlon,vard
                 tmpdt=np.asarray(edts)
                 # Check if it exists already
                 ix = my.ixdtimes(tmpdt, [dts[dt][0]], \
-                     [dts[dt][1]], [dts[dt][2]], [0])
+                     [dts[dt][1]], [dts[dt][2]], [dts[dt][3]])
                 if len(ix)==0:
                     edts.append(dts[dt])
             ecnt+=1
