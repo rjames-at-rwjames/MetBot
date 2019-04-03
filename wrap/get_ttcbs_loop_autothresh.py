@@ -268,7 +268,7 @@ for d in range(ndset):
                     v = dset + "-olr-0-0"
                     daset, globv, lev, drv = v.split('-')
                     mbs, mbt, chull = blb.MetBlobs_th(olr,dtime,time,lat,lon,v,thisthresh,\
-                                                   sub=sub,showblobs=showblb,interact=intract)
+                                                   sub=sub,showblobs=showblb,interact=intract,debugplots=True)
                     blb.mbsave(outsuf+thre_str+'_'+v+".mbs",mbs,mbt,chull)
                     del mbs,mbt,chull
 
