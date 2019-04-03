@@ -12,23 +12,21 @@
 # Option to run on other OLR thresholds a test - currently + and - 5Wm2
 #
 # Option for testfile but will only work if all the files are available
-# (use spec to run on certain models only)
+# (use 'spec' to run on certain models only)
 #
-# Format to follow for all variables
-# DSET-VAR-LEV-DERIVE
-# DSET-VAR-LEV-DERIVE-{EXP}{ENS} (for flavours experiments [maybe ccam ouput too])
-# When time subsets of dsets are used, this should be denoted
-# DSET-VAR-LEV-DERIVE-{subsetdescription}
+# Now can also be run on future data
+# ... if use calc thresh it will generate new thresh for future
+# ... this also has a threshold test option for + or - from this thresh
+# ... if do not use calc thresh it will currently use historical threshs from text file
+
 import numpy as np
-import datetime
 from datetime import date
 import matplotlib.pyplot as plt
-import cPickle
 import time as tmr
-import gc
 import sys,os
 import os.path
 cwd=os.getcwd()
+
 ### Add path to MetBot modules and import
 sys.path.append(cwd+'/..')
 import MetBot.mynetcdf as mync
@@ -42,33 +40,36 @@ tstart=tmr.time()
 ### Running options
 olrall=True      # Get mbs for $dset-olr-0-all
 olrfull=True     # Get mbs for $dset-olr-0-full
-testfile=True    # Uses a test file with short period
-testyear=True   # Only uses first 365 days of olr data
+testfile=False    # Uses a test file with short period
+testyear=False   # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 calcthresh=True    # If calc thresh true, calculates again
                     # if false uses text file already computed
-                    #(not test txtfile...
+                    # (not test txtfile...
                     # ...so it allows you to use the real threshold on test data)
 showdistr=True   # Save a figure showing histogram of OLR values
+                    # (separately for each dataset)
                     # Only works if calcthresh is True
-plothist=False       # New option to output histogram even if a new threshold is not calc'd
+plothist=False       # Option to output histogram even if a new threshold is not calc'd
                     # useful for comparing future dist with past
 threshtest=False  # Option to run on thresholds + and - 5Wm2 as a test
-fut_th_test=False # new future threshtest option - for testing sensitivity of change to thresh
-getmbs=True      # Actually run the MetBot algorithm
-showblb=True    # Show the blobs while running
-intract=True   # Interactive running of showblobs
-refsubset=False   # This is used if noaaolr=True to only look in time window
-hrwindow=49      # ... close (49 hours/ 2days) to flagged cloud band days
-synoptics=True   # Build tracks of cloud blobs that become TTT cloud bands
-                 # ... which are then used to build TTT events.
-onlynew=False    # Option to only run if the synop file doesn't exist yet
+getmbs=True         # Actually run the MetBot algorithm
+showblb=True        # Show the blobs while running
+intract=True        # Interactive running of showblobs
+refsubset=False     # This is used if noaaolr=True to only look in time window
+hrwindow=49         # ... close (49 hours/ 2days) to flagged cloud band days
+synoptics=True      # Build tracks of cloud blobs that become TTT cloud bands
+                    # ... which are then used to build TTT events.
+onlynew=False       # Option to only run if the synop file doesn't exist yet
+                    # ... useful for looping through models
+addrain=False       # Add event rain - at the moment need to be running synoptics too
+heavythresh=50      # Threshold for heavy precip (if add event rain)
 
-addrain=False     # Add event rain - at the moment need to be running synoptics too
-heavythresh=50   # Threshold for heavy precip (if add event rain)
-future=False     # new option to run on future data - only for CMIP5 - currently RCP85
-selyear=False    # to select years
+future=False        # new option to run on future data - only for CMIP5 - currently RCP85
+fut_th_test=False # Future threshtest option - for testing sensitivity of change to thresh
+
+selyear=False       # to select years - useful for future
 if selyear:
     fyear1='1979'
     fyear2='2013'
@@ -79,8 +80,6 @@ bkdir=cwd+"/../../../CTdata/metbot_multi_dset/"
 sub="SA"
 subrain="SA_TR"
 
-bkdir=cwd+"/../../../CTdata/metbot_multi_dset/"
-
 ### Multi dset?
 dsets='spec'     # "all" or "spec" to choose specific dset(s)
 if dsets=='all':
@@ -88,7 +87,7 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['noaa']
+    dsetnames=['cmip5']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -104,7 +103,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['cdr2']
+        mnames=['ACCESS1-0']
         #mnames=['u-au939']
         #mnames=['HadGEM2-CC']
     nmstr=str(nmod)
@@ -205,14 +204,6 @@ for d in range(ndset):
                 dtime=dtime[inds]
                 time=time[inds]
                 olr=olr[inds,:,:]
-#            dtime[:,3]=0
-#            time=time-0.5
-
-            print 'Please check dtime'
-            print dtime
-
-            print 'Please check time'
-            print time
 
             ### Get OLR threshold - and plot if showdistr
             if calcthresh:
@@ -396,4 +387,4 @@ for d in range(ndset):
         print 'Finished running on ' + name
         print 'This is model '+mcnt+' of '+nmstr+' in list'
 
-print 'TOTAL TIME TAKEN FOR get_ttcbs_loop_autothresh.py is:',(tmr.time()-tstart)/60,'mins'
+print 'TOTAL TIME TAKEN FOR generate_TTT_eventset.py is:',(tmr.time()-tstart)/60,'mins'
