@@ -257,7 +257,7 @@ def DistVector(p1,p2):
     return (dx,dy),(mag,dir)
 
 #def BlobAngles(dct,blobs,img,gpx,thrs):
-def BlobAngles(dct,blobs,img,gpx):
+def BlobAngles(dct,blobs,img,gpx,plot_angleROI=False):
     if 'angleROI' in dct.keys():   # Use an angle from blobs in subdomain of one used to get blobs passed to FilterByAngle
         angledomain = dct['angleROI']
         #bigsubdomain = gpx.subdomain
@@ -265,15 +265,15 @@ def BlobAngles(dct,blobs,img,gpx):
         #smallsubdomain = gpx.subdomain
         #angblbim, angblobs, anggrey = GetBlobs(img4blob,(thrs,255))
         angblbim, angblobs, anggrey = GetBlobs(img4blob)
-        #if plt.fignum_exists(3):
-        #    lat, lon = gpx.lat, gpx.lon
-        #    dlat=lat[1]-lat[0];dlon=lon[1]-lon[0]
-        #    latplot = np.hstack((lat[0]-dlat/2.,lat+dlat/2.))
-        #    lonplot = np.hstack((lon[0]-dlon/2.,lon+dlon/2.))
-        #    plt.figure(num=3)
-        #    plt.pcolormesh(lonplot,latplot,angblbim);plt.grid()
-        #    plt.xlim(lonplot[0],lonplot[-1]);plt.ylim(latplot[-1],latplot[0])
-        #    plt.draw()
+        if plot_angleROI:
+            lat, lon = gpx.lat, gpx.lon
+            dlat=lat[1]-lat[0];dlon=lon[1]-lon[0]
+            latplot = np.hstack((lat[0]-dlat/2.,lat+dlat/2.))
+            lonplot = np.hstack((lon[0]-dlon/2.,lon+dlon/2.))
+            plt.figure(num=3)
+            plt.pcolormesh(lonplot,latplot,angblbim);plt.grid()
+            plt.xlim(lonplot[0],lonplot[-1]);plt.ylim(latplot[-1],latplot[0])
+            plt.draw()
         dstold = 100000 # Big irrelevant starting dst
         for i in blobs.keys():
             #gpx.subdomain=bigsubdomain
@@ -289,8 +289,9 @@ def BlobAngles(dct,blobs,img,gpx):
                 # should be distance on a sphere but isn't
                 dst = np.sqrt((xab-xb)**2 + (yab-yb)**2)
                 ### Test to get angleblob centroid closest to blob centroid
-                if dst < dstold: ijmatch = j
-            degs=(blobs[i].orientation*360)/(2*np.pi)
+                if dst < dstold:
+                    ijmatch = j
+                    dstold = dst            degs=(blobs[i].orientation*360)/(2*np.pi)
             angdegs=(angblobs[ijmatch].orientation*360)/(2*np.pi)
             blobs[i].degs = degs
             blobs[i].angdegs = angdegs
@@ -353,7 +354,7 @@ def FilterBlobs(dct,blobs,img,gpx):
         FilterByLatextent(dct,blobs,gpx)
     # Angle Filter
     #BlobAngles(dct,blobs,img,gpx,thrs)
-    BlobAngles(dct,blobs,img,gpx)
+    BlobAngles(dct,blobs,img,gpx,plot_angleROI=debugplots)
     if dct['angle']:
         FilterByAngle(dct,blobs)
 
@@ -550,9 +551,9 @@ def GetBlobs(img,subrect=False):
 
 
 def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
-             interact=False):
+             interact=False, debugplots=False):
     '''mbs, blbim = MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',
-                             showblobs=True)
+                             showblobs=True,interact=False,debugplots=False)
     Main blobbing loop
     USAGE: vrb (array, dim: time x lat x lon) NOTE: use plt.cm.gray_r
     therefore, whitest values are lowest, sometimes need to times vrb by (-1)'''
@@ -579,10 +580,10 @@ def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
     blobtime = np.zeros((len(time)*10,4),dtype=np.int)
 
     if showblobs:
-        bfig=plt.figure(num='Blobs')
-        #bafig=plt.figure(num='BlobsAngles')
+        if debugplots:
+            bfig=plt.figure(num='Blobs')
+            bafig=plt.figure(num='BlobsAngles')
         plt.show();plt.ion()
-        plt.pause(0.05)
         keyin=raw_input("Position windows as desired then press any key,\n \
         Press [Esc] at any time to quit...\
         #[Backspace] to go back one image...")
@@ -617,7 +618,7 @@ def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
             print humandate,": No Blobs detected"
             if showblobs:
                 plt.figure(num=mfig.number);plt.clf()
-                plt.figure(num=bfig.number);plt.clf()
+                if debugplots: plt.figure(num=bfig.number);plt.clf()
                 if interact:
                     plt.pause(0.05)
                     d=raw_input('Press: x to stop; b to go backwards')
@@ -631,9 +632,8 @@ def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
                 t=t+1
                 continue
 
-        #FilterBlobs(dct,blobs,img,gpx,thrs)
-        #if showblobs: plt.figure(num=3);plt.clf()
-        FilterBlobs(dct,blobs,img,gpx)
+        if showblobs & debugplots: plt.figure(num=3);plt.clf()
+        FilterBlobs(dct,blobs,img,gpx, debugplots=debugplots)
         if len(blobs) > 0:
             #blobslist.append(blobs);blobimages.append(blbim)
             print "%s: %d CANDIDATE %s IN %s"\
@@ -669,7 +669,7 @@ def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
 
         if showblobs:
             plt.figure(num=mfig.number);plt.clf()
-            plt.figure(num=bfig.number);plt.clf()
+            if debugplots: plt.figure(num=bfig.number);plt.clf()
             pt1=(pixss[0],pixss[2]);pt3=(pixss[1],pixss[3])
             pt2=(pixss[0],pixss[3]);pt4=(pixss[1],pixss[2])
             pt5=pt1
@@ -689,12 +689,13 @@ def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
             DrawContourAngles(blobs,gpx,m=plt)
             plt.xlim(lonplot[0],lonplot[-1]);plt.ylim(latplot[-1],latplot[0])
             plt.draw()
-            plt.figure(num=bfig.number)
-            plt.pcolormesh(lonplot,latplot,blbim);plt.grid()
-            plt.xlim(lonplot[0],lonplot[-1]);plt.ylim(latplot[-1],latplot[0])
-            plt.draw()
+            if debugplots:
+                plt.figure(num=bfig.number)
+                plt.pcolormesh(lonplot,latplot,blbim);plt.grid()
+                plt.xlim(lonplot[0],lonplot[-1])
+                plt.ylim(latplot[-1],latplot[0])
+                plt.draw()
             if interact:
-                plt.pause(0.05)
                 d=raw_input('Press: x to stop; b to go backwards')
             else:
                 d='nada'
@@ -719,9 +720,9 @@ def MetBlobs(vrb,time,hrtime,lat,lon,varstr,sub='SA',showblobs=True,\
     return metblobs[ikeep,:], blobtime[ikeep,:], chlist
 
 def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
-                interact=False):
+                interact=False, debugplots=False):
     '''mbs, blbim = MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,sub='SA',
-                             showblobs=True)
+                             showblobs=True,interact=False, debugplots=False)
     Main blobbing loop - but edited to be able to set threshold from wrapper
     USAGE: vrb (array, dim: time x lat x lon) NOTE: use plt.cm.gray_r
     therefore, whitest values are lowest, sometimes need to times vrb by (-1)'''
@@ -751,9 +752,10 @@ def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
 
     if showblobs:
         bfig=plt.figure(num='Blobs')
-        #bafig=plt.figure(num='BlobsAngles')
+        if debugplots:
+            bfig=plt.figure(num='Blobs')
+            bafig=plt.figure(num='BlobsAngles')
         plt.show();plt.ion()
-        plt.pause(0.05)
         keyin=raw_input("Position windows as desired then press any key,\n \
         Press [Esc] at any time to quit...\
         #[Backspace] to go back one image...")
@@ -788,7 +790,7 @@ def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
             print humandate,": No Blobs detected"
             if showblobs:
                 plt.figure(num=mfig.number);plt.clf()
-                plt.figure(num=bfig.number);plt.clf()
+                if debugplots: plt.figure(num=bfig.number);plt.clf()
                 if interact:
                     plt.pause(0.05)
                     d=raw_input('Press: x to stop; b to go backwards')
@@ -802,9 +804,8 @@ def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
                 t=t+1
                 continue
 
-        #FilterBlobs(dct,blobs,img,gpx,thrs)
-        #if showblobs: plt.figure(num=3);plt.clf()
-        FilterBlobs(dct,blobs,img,gpx)
+        if showblobs & debugplots: plt.figure(num=3);plt.clf()
+        FilterBlobs(dct,blobs,img,gpx,debugplots=debugplots)
         if len(blobs) > 0:
             #blobslist.append(blobs);blobimages.append(blbim)
             print "%s: %d CANDIDATE %s IN %s"\
@@ -840,7 +841,7 @@ def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
 
         if showblobs:
             plt.figure(num=mfig.number);plt.clf()
-            plt.figure(num=bfig.number);plt.clf()
+            if debugplots: plt.figure(num=bfig.number);plt.clf()
             pt1=(pixss[0],pixss[2]);pt3=(pixss[1],pixss[3])
             pt2=(pixss[0],pixss[3]);pt4=(pixss[1],pixss[2])
             pt5=pt1
@@ -860,12 +861,13 @@ def MetBlobs_th(vrb,time,hrtime,lat,lon,varstr,thresh,sub='SA',showblobs=True,\
             DrawContourAngles(blobs,gpx,m=plt)
             plt.xlim(lonplot[0],lonplot[-1]);plt.ylim(latplot[-1],latplot[0])
             plt.draw()
-            plt.figure(num=bfig.number)
-            plt.pcolormesh(lonplot,latplot,blbim);plt.grid()
-            plt.xlim(lonplot[0],lonplot[-1]);plt.ylim(latplot[-1],latplot[0])
-            plt.draw()
+            if debugplots:
+                plt.figure(num=bfig.number)
+                plt.pcolormesh(lonplot,latplot,blbim);plt.grid()
+                plt.xlim(lonplot[0],lonplot[-1])
+                plt.ylim(latplot[-1],latplot[0])
+                plt.draw()
             if interact:
-                plt.pause(0.05)
                 d=raw_input('Press: x to stop; b to go backwards')
             else:
                 d='nada'
