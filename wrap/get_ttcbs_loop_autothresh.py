@@ -59,6 +59,7 @@ fut_th_test=False # new future threshtest option - for testing sensitivity of ch
 getmbs=True      # Actually run the MetBot algorithm
 showblb=True    # Show the blobs while running
 intract=True   # Interactive running of showblobs
+debugplots=False    # To show 2 x other blob windows in showblobs
 refsubset=False   # This is used if noaaolr=True to only look in time window
 hrwindow=49      # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True   # Build tracks of cloud blobs that become TTT cloud bands
@@ -205,14 +206,6 @@ for d in range(ndset):
                 dtime=dtime[inds]
                 time=time[inds]
                 olr=olr[inds,:,:]
-#            dtime[:,3]=0
-#            time=time-0.5
-
-            print 'Please check dtime'
-            print dtime
-
-            print 'Please check time'
-            print time
 
             ### Get OLR threshold - and plot if showdistr
             if calcthresh:
@@ -268,7 +261,7 @@ for d in range(ndset):
                     v = dset + "-olr-0-0"
                     daset, globv, lev, drv = v.split('-')
                     mbs, mbt, chull = blb.MetBlobs_th(olr,dtime,time,lat,lon,v,thisthresh,\
-                                                   sub=sub,showblobs=showblb,interact=intract,debugplots=True)
+                                                   sub=sub,showblobs=showblb,interact=intract,debugplots=debugplots)
                     blb.mbsave(outsuf+thre_str+'_'+v+".mbs",mbs,mbt,chull)
                     del mbs,mbt,chull
 

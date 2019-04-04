@@ -53,10 +53,11 @@ showdistr=True   # Save a figure showing histogram of OLR values
                     # Only works if calcthresh is True
 plothist=False       # Option to output histogram even if a new threshold is not calc'd
                     # useful for comparing future dist with past
-threshtest=False  # Option to run on thresholds + and - 5Wm2 as a test
+threshtest=True  # Option to run on thresholds + and - 5Wm2 as a test
 getmbs=True         # Actually run the MetBot algorithm
-showblb=True        # Show the blobs while running
-intract=True        # Interactive running of showblobs
+showblb=False        # Show the blobs while running
+debugplots=False     # Show 2 additional blob windows in showblobs
+intract=False        # Interactive running of showblobs
 refsubset=False     # This is used if noaaolr=True to only look in time window
 hrwindow=49         # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True      # Build tracks of cloud blobs that become TTT cloud bands
@@ -87,7 +88,8 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['cmip5']
+    dsetnames=['noaa']
+    #dsetnames=['cmip5']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -102,9 +104,10 @@ for d in range(ndset):
         nmod=len(dsetdict.dset_deets[dset])
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
-        nmod=1
-        mnames=['ACCESS1-0']
+        nmod=2
+        mnames=['cdr','cdr2']
         #mnames=['u-au939']
+        #mnames=['ACCESS1-0']
         #mnames=['HadGEM2-CC']
     nmstr=str(nmod)
 
@@ -163,8 +166,18 @@ for d in range(ndset):
             else:
                 print 'Check number of levels in ncfile'
 
-            print 'Check dtime before selection'
+            # if name=='cdr2':
+            #     dtimeO = mync.kh.num2date(time, "days since 1970-01-01 00:00")
+            #     time = mync.kh.date2num(dtimeO, "hours since 1800-01-01 00:00")
+
+            print 'Please check dtime'
             print dtime
+
+            print 'Please check time'
+            print time
+
+            print 'Please check latitude order - North to South?'
+            print lat
 
             ### Select data to run
             ### Get time information
@@ -259,7 +272,7 @@ for d in range(ndset):
                     v = dset + "-olr-0-0"
                     daset, globv, lev, drv = v.split('-')
                     mbs, mbt, chull = blb.MetBlobs_th(olr,dtime,time,lat,lon,v,thisthresh,\
-                                                   sub=sub,showblobs=showblb,interact=intract)
+                                                   sub=sub,showblobs=showblb,interact=intract,debugplots=debugplots)
                     blb.mbsave(outsuf+thre_str+'_'+v+".mbs",mbs,mbt,chull)
                     del mbs,mbt,chull
 

@@ -3,6 +3,7 @@
 # and now ncep, era, 20cr
 # Structure $dset $model
 # start date is the first date in the file as saved
+# 'cdr2' is same data as cdr but downloaded direct, and has different timestamps and different grid (and extends to 2013)
 
 dset_deets={}
 
