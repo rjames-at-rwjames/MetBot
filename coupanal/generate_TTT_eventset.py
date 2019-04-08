@@ -104,8 +104,8 @@ for d in range(ndset):
         nmod=len(dsetdict.dset_deets[dset])
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
-        nmod=2
-        mnames=['cdr','cdr2']
+        nmod=1
+        mnames=['cdr']
         #mnames=['u-au939']
         #mnames=['ACCESS1-0']
         #mnames=['HadGEM2-CC']
@@ -151,6 +151,7 @@ for d in range(ndset):
             if selyear:
                 if future:
                     outsuf=outsuf+fyear1+'_'+fyear2+'_'
+
 
             ### Open OLR data
             v = dset + "-olr-0-0"
@@ -283,10 +284,10 @@ for d in range(ndset):
                         reftime=refmbs[:,0]
                         v=dset+"-olr-0-all"
                         daset,varstr, lev, drv = v.split('-')
-                        exec("ixt,[time,%s,dtime]=\
-                              my.ixtwindow(reftime,time,hrwindow,time,%s,dtime)"\
-                               %(varstr,varstr) )
-                        mbs, mbt, chull = blb.MetBlobs_th(olr,dtime,time,lat,lon,v,thisthresh,\
+
+                        # Get data subset for days before and after CBs
+                        ixt, [time4all,olr4all,dtime4all] = my.ixtwindow(reftime,time,hrwindow,time,olr,dtime)
+                        mbs, mbt, chull = blb.MetBlobs_th(olr4all,dtime4all,time4all,lat,lon,v,thisthresh,\
                                                   sub=sub,showblobs=showblb,interact=False)
                         blb.mbsave(outsuf+thre_str+'_'+v+".mbs",mbs,mbt,chull)
                         del mbs,mbt,chull
@@ -295,7 +296,7 @@ for d in range(ndset):
                     if olrfull:
                         v=dset+"-olr-0-full"
                         daset,varstr, lev, drv = v.split('-')
-                        mbs, mbt, chull = blb.MetBlobs_th(olr,dtime,time,lat,lon,v,thisthresh,\
+                        mbs, mbt, chull = blb.MetBlobs_th(olr4all,dtime4all,time4all,lat,lon,v,thisthresh,\
                                                   sub=sub,showblobs=showblb,interact=False)
                         blb.mbsave(outsuf+thre_str+'_'+v+".mbs",mbs,mbt,chull)
                         del mbs,mbt,chull

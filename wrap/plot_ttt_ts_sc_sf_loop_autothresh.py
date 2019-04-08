@@ -49,7 +49,7 @@ testfile=False           # Uses a test file with short period
                         # ..but testyear can be used seperately)
 res='noaa'            # Option to plot at 'noaa' res or 'native' res
 nos4cbar=(1,7,1)        # choose the intervals for spatiofreq cbar
-threshtest=False        # Option to run on thresholds + and - 5Wm2 as a test
+threshtest=True        # Option to run on thresholds + and - 5Wm2 as a test
 
 ### Multi dset?
 dsets='spec'     # "all" or "spec" to choose specific dset(s)
@@ -74,7 +74,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['cdr']
+        mnames=['cdr2']
     nmstr=str(nmod)
 
     for m in range(nmod):
@@ -104,6 +104,8 @@ for d in range(ndset):
         else: outdir=outdir
         my.mkdir_p(outdir)
         outsuf=outdir+name+'_'
+        if not threshtest:
+            outsuf = outsuf + 'nothtest_'
 
         ### Open olr nc file
         v = dset + "-olr-0-0"
@@ -163,6 +165,7 @@ for d in range(ndset):
             threshs = [lowert, thresh, uppert]
         else:
             threshs = [thresh]
+
         ### Loop threshes
         nthresh=len(threshs)
         for t in range(nthresh):

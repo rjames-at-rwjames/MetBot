@@ -619,10 +619,13 @@ def opennc2(ncfile,globv,mname,dset,sub=False,levselect=False,subtime=False):
         if mname == 'cdr' or mname=='cdr2':
             lat = lat[::-1]
             exec (varstr + '=' + varstr + '[:,::-1,:]')
+        if mname == 'cdr2':
+            dtimeO = kh.num2date(time, "days since 1970-01-01 00:00")
+            time = kh.date2num(dtimeO, "hours since 1800-01-01 00:00")
+
     if dset == 'um':
         latitude=latitude[::-1]
         exec (varstr + '=' + varstr + '[:,:,::-1,:]')
-
 
     if globv!='orog':
         exec('out=(np.float32('+varstr+'),'+', '.join(newdimlist)+',dtarr)')

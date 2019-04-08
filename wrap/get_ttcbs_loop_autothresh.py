@@ -19,6 +19,11 @@
 # DSET-VAR-LEV-DERIVE-{EXP}{ENS} (for flavours experiments [maybe ccam ouput too])
 # When time subsets of dsets are used, this should be denoted
 # DSET-VAR-LEV-DERIVE-{subsetdescription}
+
+
+# THRESHTEST has an ERROR because "exec" command subsets the OLR data in the loop,
+# This means later thresholds will not receive full dataset
+
 import numpy as np
 import datetime
 from datetime import date
@@ -272,6 +277,8 @@ for d in range(ndset):
                         reftime=refmbs[:,0]
                         v=dset+"-olr-0-all"
                         daset,varstr, lev, drv = v.split('-')
+
+                        # Subsetting data - important command because looping is inappropriate above
                         exec("ixt,[time,%s,dtime]=\
                               my.ixtwindow(reftime,time,hrwindow,time,%s,dtime)"\
                                %(varstr,varstr) )
