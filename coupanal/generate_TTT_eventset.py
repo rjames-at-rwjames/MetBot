@@ -40,8 +40,8 @@ tstart=tmr.time()
 ### Running options
 olrall=True      # Get mbs for $dset-olr-0-all
 olrfull=True     # Get mbs for $dset-olr-0-full
-testfile=False    # Uses a test file with short period
-testyear=False   # Only uses first 365 days of olr data
+testfile=True    # Uses a test file with short period
+testyear=True   # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 calcthresh=True    # If calc thresh true, calculates again
@@ -55,9 +55,9 @@ plothist=False       # Option to output histogram even if a new threshold is not
                     # useful for comparing future dist with past
 threshtest=True  # Option to run on thresholds + and - 5Wm2 as a test
 getmbs=True         # Actually run the MetBot algorithm
-showblb=False        # Show the blobs while running
+showblb=True        # Show the blobs while running
 debugplots=False     # Show 2 additional blob windows in showblobs
-intract=False        # Interactive running of showblobs
+intract=True        # Interactive running of showblobs
 refsubset=False     # This is used if noaaolr=True to only look in time window
 hrwindow=49         # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True      # Build tracks of cloud blobs that become TTT cloud bands
