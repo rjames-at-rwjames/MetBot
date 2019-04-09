@@ -105,7 +105,7 @@ for d in range(ndset):
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['cdr']
+        mnames=['cdr2']
         #mnames=['u-au939']
         #mnames=['ACCESS1-0']
         #mnames=['HadGEM2-CC']
