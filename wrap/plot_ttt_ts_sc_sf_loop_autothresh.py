@@ -58,7 +58,8 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    dsetnames=['noaa']
+    #dsetnames=['noaa']
+    dsetnames=['cmip5']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -68,13 +69,14 @@ for d in range(ndset):
     print 'This is dset '+dcnt+' of '+ndstr+' in list'
 
     ### Multi model?
-    mods='spec'  # "all" or "spec" to choose specific model(s)
+    mods='all'  # "all" or "spec" to choose specific model(s)
     if mods=='all':
         nmod=len(dsetdict.dset_deets[dset])
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         nmod=1
-        mnames=['cdr2']
+        #mnames=['cdr2']
+        mnames=['CanESM2']
     nmstr=str(nmod)
 
     for m in range(nmod):
