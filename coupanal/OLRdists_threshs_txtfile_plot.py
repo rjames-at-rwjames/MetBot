@@ -2,6 +2,8 @@
 #  can generate textfiles with thresholds
 #  or generate plots with distributions or thresholds
 #
+#  **Essential for paperfigs: textfile with thresholds**
+#  **A figure: OLR histograms**
 #
 # options for output
 # .... olr histograms (as lines) for multimodels
@@ -29,28 +31,36 @@ from datetime import date
 import sys,os
 cwd=os.getcwd()
 sys.path.append(cwd+'/..')
+import MetBot.mytools as my
 import MetBot.mynetcdf as mync
 import MetBot.dset_dict as dsetdict
 import MetBot.find_saddle as fs
 
 ### Running options
 sub="SA"
-seasopt="coreseason"    # for spatiofreq plots
-                        # options: coreseason, dryseason, fullseason
-histplot=True           # to get olr histograms
+threshtext=False         # to put olr thresholds in text file - needed for paperfigs
+histplot=True           # to get olr histograms - figure in paper
+
 threshplot=False         # to get olr threshold plot
-threshtext=False         # to put olr thresholds in text file
 shiftdist=False          # to plot shifted distributions
+
 testyear=False           # To use output from a test
 testfile=False           # Uses a test file with short period
                         # (testfile designed to be used together with testyear
                         # ..but testyear can be used seperately)
-title=False      # plot title
+
+title=False      # plot title - for figures
 future=False     # get future thresholds
 refdset="noaa"
-refmod="cdr"
+refmod="cdr2"
 globv='olr'
 bkdir=cwd+"/../../../CTdata/metbot_multi_dset"
+
+txtdir=bkdir+"/histpaper_txt"
+my.mkdir_p(txtdir)
+
+figdir=bkdir+"/histpaper_figs"
+my.mkdir_p(figdir)
 
 if future:
     fyear1='2065'
@@ -63,10 +73,9 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
     dsetstr = 'all_dset'
 elif dsets=='spec': # edit for the dset you want
-#    ndset=6
 #    dsetnames=['noaa','ncep','era','20cr','um','cmip5']
-    ndset=1
-    dsetnames=['um']
+    dsetnames=['noaa','cmip5']
+    ndset=len(dsetnames)
     dsetstr = '_'.join(dsetnames)
 ndstr=str(ndset)
 print 'Running on datasets:'
@@ -144,16 +153,18 @@ nallmod=np.sum(nm_dset)
 nallmod=int(nallmod)
 print 'Total number of models = '+str(nallmod)
 
-### Open array for names for cbar
+### Open array for names for key
 modnm=["" for x in range(nallmod)] # creates a list of strings for modnames
 
 ### Display options for plot
 styls=['solid','dashed','dotted','dashed','solid']
-lws=[3,2,2,2,1]
+lws=[5,2,2,2,1]
 zorders=[3,2,2,2,1]
 
 ### Open figures
-if histplot: plt.figure(num='raw',figsize=[12,10])
+if histplot:
+    plt.figure(num='raw',figsize=[10,6])
+    ax=plt.subplot(111)
 if threshtext:
     if testyear:
         txtfile = open(bkdir + "/thresholds.fmin." + dsetstr + ".test.txt", "w")
@@ -162,7 +173,7 @@ if threshtext:
             txtfile = open(bkdir + "/thresholds.fmin.fut_rcp85_"\
                            +fyear1+"_"+fyear2+"."+dsetstr+".txt", "w")
         else:
-            txtfile = open(bkdir + "/thresholds.fmin."+dsetstr+".txt", "w")
+            txtfile = open(txtdir + "/thresholds.fmin."+dsetstr+".txt", "w")
 if threshplot: plt.figure(num='threshs',figsize=[10,3])
 if shiftdist: plt.figure(num='shift')
 
@@ -175,22 +186,17 @@ for d in range(ndset):
     print 'This is dset '+dcnt+' of '+ndstr+' in list'
 
     ### Multi model?
-    mods='all'  # "all" or "spec" to choose specific model(s)
+    mods='spec'  # "all" or "spec" to choose specific model(s)
     if mods=='all':
         nmod=len(dsetdict.dset_deets[dset])
         mnames=list(dsetdict.dset_deets[dset])
-    # if mods=='spec': # edit for the models you want
-    #     nmod=1
-    #     mnames=['noaa']
-    # nmstr=str(nmod)
-    # if dset=='noaa':
-    #     mnames=['cdr']
-    #     nmod=len(mnames)
-    # elif dset=='cmip5':
-    #     # nmod=2
-    #     # mnames=['inmcm4','FGOALS-g2']
-    #     nmod=len(dsetdict.dset_deets[dset])
-    #     mnames=list(dsetdict.dset_deets[dset])
+    if mods=='spec': # edit for the models you want
+        if dset=='noaa':
+            mnames=['cdr2']
+            nmod=len(mnames)
+        elif dset=='cmip5':
+            nmod=len(dsetdict.dset_deets[dset])
+            mnames=list(dsetdict.dset_deets[dset])
     nmstr=str(nmod)
 
     for m in range(nmod):
@@ -275,7 +281,10 @@ for d in range(ndset):
                 olr_flat = np.nan_to_num(olrvals.ravel())
                 y, binEdges = np.histogram(olr_flat, bins=50, density=True)
                 bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
-                plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d])
+                if name=='cdr2':
+                    plt.plot(bincentres, y,c='k',linestyle=styls[d], linewidth=lws[d], zorder=zorders[d], label=name)
+                else:
+                    plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d], label=name)
 
             ### Thresh text file
             if threshtext:
@@ -314,16 +323,19 @@ if histplot:
     plt.figure(num='raw')
 
     ### Plot legend and axis
-    plt.xlim(100, 320)
+    plt.xlim(100, 340)
     plt.yticks(np.arange(0.002, 0.016, 0.004))
-    plt.legend(modnm, loc='upper left',fontsize='xx-small')
-    plt.xlabel('OLR', fontsize=14.0, weight='demibold', color='k')
-    plt.ylabel('frequency density', fontsize=14.0, weight='demibold', color='k')
+    plt.xlabel('OLR', fontsize=10.0, weight='demibold', color='k')
+    plt.ylabel('frequency density', fontsize=10.0, weight='demibold', color='k')
     #if title: plt.title('Histogram of OLR: '+dsetstr,\
     #                    fontsize=13.0, weight='demibold', color='k')
 
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    ax.legend(loc='center left', bbox_to_anchor=[1, 0.5], fontsize='xx-small')
+
     ### Save figure
-    rawfig=bkdir+'/4pres/olr_raw_hist.'+dsetstr+'.png'
+    rawfig=figdir+'/olr_raw_hist.'+dsetstr+'.png'
     plt.savefig(rawfig)
     print 'Saving figure as '+rawfig
 
