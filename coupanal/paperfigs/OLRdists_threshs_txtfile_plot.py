@@ -30,7 +30,7 @@ import matplotlib.pyplot as plt
 from datetime import date
 import sys,os
 cwd=os.getcwd()
-sys.path.append(cwd+'/..')
+sys.path.append(cwd+'/../..')
 import MetBot.mytools as my
 import MetBot.mynetcdf as mync
 import MetBot.dset_dict as dsetdict
@@ -54,7 +54,7 @@ future=False     # get future thresholds
 refdset="noaa"
 refmod="cdr2"
 globv='olr'
-bkdir=cwd+"/../../../CTdata/metbot_multi_dset"
+bkdir=cwd+"/../../../../CTdata/metbot_multi_dset"
 
 txtdir=bkdir+"/histpaper_txt"
 my.mkdir_p(txtdir)
@@ -157,9 +157,23 @@ print 'Total number of models = '+str(nallmod)
 modnm=["" for x in range(nallmod)] # creates a list of strings for modnames
 
 ### Display options for plot
-styls=['solid','dashed','dotted','dashed','solid']
-lws=[5,2,2,2,1]
-zorders=[3,2,2,2,1]
+if ndset>2:
+    styls=['solid','dashed','dotted','dashed','solid']
+    lws=[5,2,2,2,1]
+    zorders=[3,2,2,2,1]
+elif ndset==2:
+    cols=['k','g','r','c','m','gold','b',\
+            'g','r','c','m','gold','b','indigo',\
+            'g','r','c','m','gold','b','indigo',\
+            'g','r','c','m','gold','b','indigo']
+    styls = ["solid", "solid", "solid", "solid", "solid", "solid", "solid", \
+             "dashed", "dashed", "dashed", "dashed", "dashed", "dashed", "dashed", \
+             "dotted", "dotted", "dotted", "dotted", "dotted", "dotted", "dotted", \
+             "-.", "-.", "-.", "-.", "-.", "-.", "-."]
+    lws = np.full((28), 2)
+    lws[0]=5
+    zorders = np.full((28), 2)
+    zorders[0]=3
 
 ### Open figures
 if histplot:
@@ -207,6 +221,7 @@ for d in range(ndset):
 
         # Get details
         moddct=dsetdict.dset_deets[dset][name]
+        labname=moddct['labname']
         vname=moddct['olrname']
         if testfile:
             ys=moddct['testfileyr']
@@ -281,10 +296,10 @@ for d in range(ndset):
                 olr_flat = np.nan_to_num(olrvals.ravel())
                 y, binEdges = np.histogram(olr_flat, bins=50, density=True)
                 bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
-                if name=='cdr2':
-                    plt.plot(bincentres, y,c='k',linestyle=styls[d], linewidth=lws[d], zorder=zorders[d], label=name)
-                else:
-                    plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d], label=name)
+                if ndset==2:
+                    plt.plot(bincentres, y, c=cols[z],linestyle=styls[z], linewidth=lws[z], zorder=zorders[z], label=labname)
+                elif ndset>2:
+                    plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d], label=labname)
 
             ### Thresh text file
             if threshtext:
@@ -325,6 +340,8 @@ if histplot:
     ### Plot legend and axis
     plt.xlim(100, 340)
     plt.yticks(np.arange(0.002, 0.016, 0.004))
+    my.xtickfonts(fontsize=10.0)
+    my.ytickfonts(fontsize=10.0)
     plt.xlabel('OLR', fontsize=10.0, weight='demibold', color='k')
     plt.ylabel('frequency density', fontsize=10.0, weight='demibold', color='k')
     #if title: plt.title('Histogram of OLR: '+dsetstr,\

@@ -409,6 +409,42 @@ def SAfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1,rsltn='c',\
 
     return m, f1
 
+def AfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1,rsltn='l'):
+    '''m, f = AfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1)
+
+    Adapted from N Hart MetBlobs SAfBasemap
+
+    This creates a basemap instance from lat's and lon's provided.
+    USAGE: lat, lon
+    RETURNS: m, basemap object pointer (handle in matlab language)
+             f, pointer figure'''
+    xy=(lat.min(),lat.max(),lon.min(),lon.max())
+    nx = len(lon); ny = len(lat)
+
+    if prj=='cyl':
+        m = bm.Basemap(llcrnrlon=xy[2],llcrnrlat=xy[0],urcrnrlon=xy[3],\
+                       urcrnrlat=xy[1],resolution=rsltn,area_thresh=10000.,\
+                       projection='cyl')
+    if prj=='aea':
+        m = bm.Basemap(llcrnrlon=xy[2]-5.,llcrnrlat=xy[0],urcrnrlon=xy[3],\
+                       urcrnrlat=xy[1]+5,resolution=rsltn,projection='aea',\
+                        lat_1=-45.,lat_2=0.,lon_0=40.)
+
+    ### SET UP FIGURE AND MERIDIANS
+    delon = 10.
+    meridians = np.arange(0.,360.,delon)
+    delat = 10.
+    parallels = np.arange(-90.,90.,delat)
+    f1 = plt.figure(fno,figsize=[12.0, 8.0])
+
+    if drawstuff:
+        m.drawcoastlines()
+        m.drawcountries()
+        m.drawparallels(parallels,linewidth='0.1',labels=[1,0,0,0])
+        m.drawmeridians(meridians,linewidth='0.1',labels=[0,0,0,1])
+
+    return m, f1
+
 def SAfrBasemap2(lat,lon,drawstuff=False,prj='cyl', rsltn='c',\
     fontdict=False):
     '''m, f = SAfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1)
