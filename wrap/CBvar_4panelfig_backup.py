@@ -130,53 +130,82 @@ for t in range(nthresh):
     ks.sort()  # all
     refkey = s.mbskeys[0]
 
-    mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
-    refmbs, refmbt, refch = blb.mbopen(mbsfile)
 
-    # Get lots of info about event set
-    dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
-
-
-
-    if from_event=='first':
-        subinds1=np.where(daynos==1)[0]
-
-
-    if rm_samedates:
-        subinds2=[]
-        origdates=[]
-        dcnt=0
-        for dno in range(len(refmbt)):
-            thisdate=refmbt[dno]
-            if dcnt==0:
-                subinds2.append(dno)
-                origdates.append(thisdate)
-            else:
-                tmpdts=np.asarray(origdates)
-                ix = my.ixdtimes(tmpdts,[thisdate[0]],[thisdate[1]], [thisdate[2]], [thisdate[3]])
-                if len(ix) == 0:
-                    subinds2.append(dno)
-                    origdates.append(thisdate)
-            dcnt+=1
-        subinds2=np.asarray(subinds2)
-        origdates=np.asarray(origdates)
-
-    if seas_sub:
-        scnt=0
-        for mn in months:
-            print mn
-            inds=np.where(refmbt[:,1]==mn)[0]
-            print len(inds)
-            if scnt==0:
-                subinds3=inds[:]
-            else:
-                subinds3=np.concatenate((subinds3,inds),axis=None)
-            scnt+=1
-        sortinds=np.argsort(subinds3)
-        subinds3=subinds3[sortinds]
-
-
-
+    print 'get subset of TTT keys, dates, chs, centroids'
+    edts = []
+    thesekeys = []
+    chs=[]
+    cXs=[]
+    cYs=[]
+    ecnt=0
+    for k in ks:
+        e = s.events[k]
+        dts = s.blobs[refkey]['mbt'][e.ixflags]
+        firstdate=dts[0]
+        # Restrict by season - using first day of event
+        if (int(firstdate[1]) >= f_mon) or (int(firstdate[1]) <= l_mon):
+            thesekeys.append(k)
+            if from_event=='first':
+                # If from first select the first date
+                if rm_samedates:
+                    #first check if already in list
+                    if ecnt==0:
+                        edts.append(firstdate)
+                        chs.append(e.blobs[refkey]['ch'][e.trk[0]])
+                        x, y = e.trkcX[0], e.trkcY[0]
+                        cXs.append(x)
+                        cYs.append(y)
+                    else:
+                        tmpedts=np.asarray(edts)
+                        ix = my.ixdtimes(tmpedts, [firstdate[0]], [firstdate[1]], [firstdate[2]], [firstdate[3]])
+                        if len(ix)==0:
+                            edts.append(firstdate)
+                            chs.append(e.blobs[refkey]['ch'][e.trk[0]])
+                            x, y = e.trkcX[0], e.trkcY[0]
+                            cXs.append(x)
+                            cYs.append(y)
+                else:
+                    edts.append(firstdate)
+                    chs.append(e.blobs[refkey]['ch'][e.trk[0]])
+                    x, y = e.trkcX[0], e.trkcY[0]
+                    cXs.append(x)
+                    cYs.append(y)
+            elif from_event=='all':
+                # if not from first loop all dates in event
+                for dt in range(len(dts)):
+                    thisdate=dts[dt]
+                    if rm_samedates:
+                        # first check if it is already in the list
+                        if ecnt == 0:
+                            edts.append(thisdate)
+                            chs.append(e.blobs[refkey]['ch'][e.trk[dt]])  # I think this selects first day
+                            x, y = e.trkcX[dt], e.trkcY[dt]
+                            cXs.append(x)
+                            cYs.append(y)
+                        else:
+                            tmpedts = np.asarray(edts)
+                            ix = my.ixdtimes(tmpedts, [thisdate[0]], [thisdate[1]], [thisdate[2]], [thisdate[3]])
+                            if len(ix) == 0:
+                                edts.append(thisdate)
+                                chs.append(e.blobs[refkey]['ch'][e.trk[dt]])  # I think this selects first day
+                                x, y = e.trkcX[dt], e.trkcY[dt]
+                                cXs.append(x)
+                                cYs.append(y)
+                    else:
+                        edts.append(thisdate)
+                        chs.append(e.blobs[refkey]['ch'][e.trk[dt]])  # I think this selects first day
+                        x, y = e.trkcX[dt], e.trkcY[dt]
+                        cXs.append(x)
+                        cYs.append(y)
+        ecnt+=1
+    edts = np.asarray(edts)
+    # change hrtime to zero
+    edts[:, 3] = 0
+    yrs = np.unique(edts[:, 0])
+    chs = np.asarray(chs)
+    n_chs=len(chs)
+    cXs=np.asarray(cXs)
+    cYs=np.asarray(cYs)
 
     # Open plot
     g, ax = plt.subplots(figsize=[10, 8])

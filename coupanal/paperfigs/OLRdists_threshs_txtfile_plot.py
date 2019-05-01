@@ -59,7 +59,7 @@ bkdir=cwd+"/../../../../CTdata/metbot_multi_dset"
 txtdir=bkdir+"/histpaper_txt"
 my.mkdir_p(txtdir)
 
-figdir=bkdir+"/histpaper_figs"
+figdir=bkdir+"/histpaper_figs/OLRdists"
 my.mkdir_p(figdir)
 
 if future:

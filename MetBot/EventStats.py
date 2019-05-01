@@ -1430,7 +1430,7 @@ def spatiofreq5(m,s,modname,lat,lon,yrs,eventkeys,per='year',\
         plt.axes(ax)
         plt.title(title,fontsize=8, fontweight='demibold')
 
-    return std_mask
+    return std_mask, img
 
 
 def wetlandevents(s, eventkeys, land_datasets=['wrc']):
