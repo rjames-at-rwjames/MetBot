@@ -125,101 +125,123 @@ def evset_info(s,refmbs,refmbt):
     return dates, cXs, cYs, degs, chs, keys, daynos, tworecdt
 
 
+def sel_firstday(dates,cXs, cYs, degs, chs, keys, daynos, tworecdt):
+    '''A function to subset event set to pull out first day of each event
+    
+    read in and out dates, centroids, angles, cb outlines, and keys etc.
+    run evset_info first!
 
-def subset_ttt(s,eventkeys,):
-    '''A function designed to subset eventset of TTTs
+    dates_d,cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d =
+        sel_firstday(dates,cXs, cYs, degs, chs, keys, daynos, tworecdt)
 
-    = subset_ttt(s,eventkeys,
+    '''
 
-    s - is obtained by first opening syfile
-    eventkeys - are read in or can be opened from here if all events
+    # First get indices for the first days
+    inds=np.where(daynos==1)[0]
+
+    # Then use these inds to subset all inputs
+    dates_d=dates[inds]
+    cXs_d=cXs[inds]
+    cYs_d=cYs[inds]
+    degs_d=degs[inds]
+    chs_d=chs[inds]
+    keys_d=keys[inds]
+    daynos_d=daynos[inds]
+    tworecdt_d=tworecdt[inds]
+
+    return dates_d,cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d
 
 
-     '''
+def rm_dupl_dates(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt):
+    '''A function to subset event set to remove duplicate dates
 
-    # if not eventkeys:
-    #     ks = s.events.keys();
-    #     ks.sort()  # all
-    # else:
-    #     ks=eventkeys
-    #
-    # refkey = s.mbskeys[0]
+    read in and out dates, centroids, angles, cb outlines, and keys etc.
+    run evset_info first!
+
+    dates_d,cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d =
+        rm_dupl_dates(dates,cXs, cYs, degs, chs, keys, daynos, tworecdt)
+
+    '''
+
+    # First find indices for dates as they appear for the first time only
+    inds = []
+    origdates = []
+    dcnt = 0
+    for dno in range(len(dates)):
+        thisdate = dates[dno]
+        if dcnt == 0:
+            inds.append(dno)
+            origdates.append(thisdate)
+        else:
+            tmpdts = np.asarray(origdates)
+            ix = my.ixdtimes(tmpdts, [thisdate[0]], [thisdate[1]], [thisdate[2]], [thisdate[3]])
+            if len(ix) == 0:
+                inds.append(dno)
+                origdates.append(thisdate)
+        dcnt += 1
+    inds = np.asarray(inds)
+    origdates = np.asarray(origdates)
+
+    # Then use these inds to subset all inputs
+    dates_d = dates[inds]
+    cXs_d = cXs[inds]
+    cYs_d = cYs[inds]
+    degs_d = degs[inds]
+    chs_d = chs[inds]
+    keys_d = keys[inds]
+    daynos_d = daynos[inds]
+    tworecdt_d = tworecdt[inds]
+
+    # Remember that tworecdt just highlights the dates which have more than 1 entry
+    # so the subset sample will still have entries which have a "2" for tworecdt
+    # this just means that the original dataset has another entry for that day
+    # but it should have been removed for the subset
+
+    return dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d
 
 
-    # print 'get subset of TTT keys, dates, chs, centroids'
-    # edts = []
-    # thesekeys = []
-    # chs=[]
-    # cXs=[]
-    # cYs=[]
-    # ecnt=0
-    # for k in ks:
-    #     e = s.events[k]
-    #     dts = s.blobs[refkey]['mbt'][e.ixflags]
-    #     firstdate=dts[0]
-    #     # Restrict by season - using first day of event
-    #     if (int(firstdate[1]) >= f_mon) or (int(firstdate[1]) <= l_mon):
-    #         thesekeys.append(k)
-    #         if from_event=='first':
-    #             # If from first select the first date
-    #             if rm_samedates:
-    #                 #first check if already in list
-    #                 if ecnt==0:
-    #                     edts.append(firstdate)
-    #                     chs.append(e.blobs[refkey]['ch'][e.trk[0]])
-    #                     x, y = e.trkcX[0], e.trkcY[0]
-    #                     cXs.append(x)
-    #                     cYs.append(y)
-    #                 else:
-    #                     tmpedts=np.asarray(edts)
-    #                     ix = my.ixdtimes(tmpedts, [firstdate[0]], [firstdate[1]], [firstdate[2]], [firstdate[3]])
-    #                     if len(ix)==0:
-    #                         edts.append(firstdate)
-    #                         chs.append(e.blobs[refkey]['ch'][e.trk[0]])
-    #                         x, y = e.trkcX[0], e.trkcY[0]
-    #                         cXs.append(x)
-    #                         cYs.append(y)
-    #             else:
-    #                 edts.append(firstdate)
-    #                 chs.append(e.blobs[refkey]['ch'][e.trk[0]])
-    #                 x, y = e.trkcX[0], e.trkcY[0]
-    #                 cXs.append(x)
-    #                 cYs.append(y)
-    #         elif from_event=='all':
-    #             # if not from first loop all dates in event
-    #             for dt in range(len(dts)):
-    #                 thisdate=dts[dt]
-    #                 if rm_samedates:
-    #                     # first check if it is already in the list
-    #                     if ecnt == 0:
-    #                         edts.append(thisdate)
-    #                         chs.append(e.blobs[refkey]['ch'][e.trk[dt]])  # I think this selects first day
-    #                         x, y = e.trkcX[dt], e.trkcY[dt]
-    #                         cXs.append(x)
-    #                         cYs.append(y)
-    #                     else:
-    #                         tmpedts = np.asarray(edts)
-    #                         ix = my.ixdtimes(tmpedts, [thisdate[0]], [thisdate[1]], [thisdate[2]], [thisdate[3]])
-    #                         if len(ix) == 0:
-    #                             edts.append(thisdate)
-    #                             chs.append(e.blobs[refkey]['ch'][e.trk[dt]])  # I think this selects first day
-    #                             x, y = e.trkcX[dt], e.trkcY[dt]
-    #                             cXs.append(x)
-    #                             cYs.append(y)
-    #                 else:
-    #                     edts.append(thisdate)
-    #                     chs.append(e.blobs[refkey]['ch'][e.trk[dt]])  # I think this selects first day
-    #                     x, y = e.trkcX[dt], e.trkcY[dt]
-    #                     cXs.append(x)
-    #                     cYs.append(y)
-    #     ecnt+=1
-    # edts = np.asarray(edts)
-    # # change hrtime to zero
-    # edts[:, 3] = 0
-    # yrs = np.unique(edts[:, 0])
-    # chs = np.asarray(chs)
-    # n_chs=len(chs)
-    # cXs=np.asarray(cXs)
-    # cYs=np.asarray(cYs)
+def sel_seas(mons, dates, cXs, cYs, degs, chs, keys, daynos, tworecdt):
+    '''A function to subset event set to select certain months
+
+    mons must be the list of months required as integers
+    e.g. mons[11,12,1,2,3]
+    or can be just one month
+    e.g. mons[1]
+
+    read in and out dates, centroids, angles, cb outlines, and keys etc.
+    run evset_info first!
+
+    dates_d,cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d =
+        sel_seas(dates,cXs, cYs, degs, chs, keys, daynos, tworecdt)
+
+    '''
+
+    # First find indices for entries with these months
+    scnt = 0
+    for mn in mons:
+        print mn
+        tmpinds = np.where(dates[:, 1] == mn)[0]
+        if scnt == 0:
+            inds = tmpinds[:]
+        else:
+            inds = np.concatenate((inds, tmpinds), axis=None)
+        scnt += 1
+
+    # Sort inds so that they are still in date order
+    sortinds = np.argsort(inds)
+    inds = inds[sortinds]
+
+    # Then use these inds to subset all inputs
+    dates_d = dates[inds]
+    cXs_d = cXs[inds]
+    cYs_d = cYs[inds]
+    degs_d = degs[inds]
+    chs_d = chs[inds]
+    keys_d = keys[inds]
+    daynos_d = daynos[inds]
+    tworecdt_d = tworecdt[inds]
+
+    return dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d
+
 
 

@@ -31,7 +31,13 @@ import coupanal.Subset_Events as sset
 testingoutput=False
 threshtest=True
 sub='SA'    # domain
-seas='NDJFM'
+seas_sub=True
+if seas_sub:
+    months=[11,12,1,2,3]
+    seas='NDJFM'
+else:
+    months=[1,2,3,4,5,6,7,8,9,10,11,12]
+    seas='annual'
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 labels=['a','b','c','d']
@@ -80,10 +86,6 @@ globv='olr'
 dset='noaa'
 name='cdr2'
 botpath = bkdir + dset + '/' + name + '/'
-
-if seas == 'NDJFM':
-    f_mon = 11
-    l_mon = 3
 
 # Open OLR data
 moddct = dsetdict.dset_deets[dset][name]
@@ -134,47 +136,45 @@ for t in range(nthresh):
     refmbs, refmbt, refch = blb.mbopen(mbsfile)
 
     # Get lots of info about event set
+    print 'Getting more info about each cloud band...'
     dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
 
-
-
+    # If wanting first day of event only, subset
+    print 'Subset by first day?...'
     if from_event=='first':
-        subinds1=np.where(daynos==1)[0]
+        print 'Selecting first day of event only'
+        dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d =\
+            sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+    else:
+        print 'Retaining all days from each event'
+        dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+            dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
 
 
+    # If you want to remove duplicate dates, subset
+    print 'Removing duplicate dates?'
     if rm_samedates:
-        subinds2=[]
-        origdates=[]
-        dcnt=0
-        for dno in range(len(refmbt)):
-            thisdate=refmbt[dno]
-            if dcnt==0:
-                subinds2.append(dno)
-                origdates.append(thisdate)
-            else:
-                tmpdts=np.asarray(origdates)
-                ix = my.ixdtimes(tmpdts,[thisdate[0]],[thisdate[1]], [thisdate[2]], [thisdate[3]])
-                if len(ix) == 0:
-                    subinds2.append(dno)
-                    origdates.append(thisdate)
-            dcnt+=1
-        subinds2=np.asarray(subinds2)
-        origdates=np.asarray(origdates)
+        print 'Removing duplicate dates...'
+        dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+            sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
 
+    else:
+        print 'Retaining potential duplicate dates... note they may have 2 CBs'
+        dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+            dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
+
+
+    # If selecting a specific season, subset
+    print 'Subsetting by season?'
     if seas_sub:
-        scnt=0
-        for mn in months:
-            print mn
-            inds=np.where(refmbt[:,1]==mn)[0]
-            print len(inds)
-            if scnt==0:
-                subinds3=inds[:]
-            else:
-                subinds3=np.concatenate((subinds3,inds),axis=None)
-            scnt+=1
-        sortinds=np.argsort(subinds3)
-        subinds3=subinds3[sortinds]
+        print 'Selecting months for : '+seas
+        dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
+            sset.sel_seas(months,dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd)
 
+    else:
+        print 'Retaining all months...'
+        dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
+            dates_dd[:], cXs_dd[:], cYs_dd[:], degs_dd[:], chs_dd[:], keys_dd[:], daynos_dd[:], tworecdt_dd[:]
 
 
 
