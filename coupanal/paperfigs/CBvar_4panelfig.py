@@ -23,9 +23,9 @@ import MetBot.mytools as my
 import MetBot.mynetcdf as mync
 import MetBot.SynopticAnatomy as sy
 import MetBot.MetBlobs as blb
-import MetBot.EventStats as stats
+import MetBot as stats
 import coupanal.Subset_Events as sset
-
+import coupanal.Plotting_Blobs as plbl
 
 # Running options
 testingoutput=False
@@ -98,6 +98,7 @@ ncout = mync.open_multi(allfile, globv, name, \
 print '...file opened'
 alldata, time, lat, lon, dtime = ncout
 dtime[:, 3] = 0
+yrs = np.unique(dtime[:, 0])
 
 # Get threshold
 print 'getting threshold....'
@@ -176,7 +177,9 @@ for t in range(nthresh):
         dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
             dates_dd[:], cXs_dd[:], cYs_dd[:], degs_dd[:], chs_dd[:], keys_dd[:], daynos_dd[:], tworecdt_dd[:]
 
-
+    # Count number of blobs
+    n_chs=len(dates_ddm)
+    print 'Working with '+str(n_chs)+' cloud bands'
 
     # Open plot
     g, ax = plt.subplots(figsize=[10, 8])
@@ -197,9 +200,9 @@ for t in range(nthresh):
 
     m = blb.AfrBasemap2(lat4sf, lon4sf, drawstuff=True, prj='cyl',
                          rsltn='l')
-    allmask, img = stats.spatiofreq5(m, s, name, lat4sf, lon4sf, yrs, thesekeys, per=rate, clim=nos4cbar, \
-                                savefig=False, flagonly=True, \
-                                col='bw', frm_event=from_event,cbar='none',title='')
+    allmask, img = plbl.spatiofreq6(m, chs_ddm, name, lat4sf, lon4sf, yrs, per=rate, clim=nos4cbar, \
+                                savefig=False, \
+                                col='bw', cbar='none',title='')
     m.drawcountries(color='k')
     m.drawcoastlines(color='k')
     if testingoutput:
@@ -222,7 +225,7 @@ for t in range(nthresh):
             nsel=jl+messr
         elif choose_cb=='random':
             nsel=rannum[jl]
-        cb = chs[nsel]
+        cb = chs_ddm[nsel]
         if plotshow == 'greyall':
             cl = 'darkgray'
         else:
@@ -240,7 +243,7 @@ for t in range(nthresh):
     plt.subplot(yplots,xplots,3)
     m = blb.AfrBasemap2(lat, lon, drawstuff=True, prj='cyl',
                          rsltn='l')
-    m.scatter(cXs, cYs, c='k', marker="o", s=0.1, edgecolors='face')
+    m.scatter(cXs_ddm, cYs_ddm, c='k', marker="o", s=0.1, edgecolors='face')
     if testingoutput:
         plt.savefig('tmpfig_c.png', dpi=150)
 
@@ -253,8 +256,8 @@ for t in range(nthresh):
     if whichdays=='cbonly':
 
         indices_m1=[]
-        for dt in range(len(edts)):
-            date=edts[dt]
+        for dt in range(len(dates_ddm)):
+            date=dates_ddm[dt]
 
             ix = my.ixdtimes(dtime, [date[0]], [date[1]], [date[2]], [0])
             if len(ix) >= 1:
@@ -311,8 +314,14 @@ for t in range(nthresh):
     plt.colorbar(img, cax=axcol1,orientation='horizontal',boundaries=bounds,extend='both')
     my.ytickfonts(fontsize=12.,fontweight='normal')
 
+
+    addname=''
+
+    if rm_samedates:
+        addname=addname+'noduplicatedates'
+
     figname = figdir + '/CBvar_4panelfig.' + seas + '.' + res + '.' + sub + '.per_' + rate + '.' + \
-              thnames[t] + '.png'
+              thnames[t] + '.frmevnt_'+from_event+'.'+addname+'.png'
     print 'saving figure as ' + figname
     plt.savefig(figname, dpi=150)
     plt.close()
