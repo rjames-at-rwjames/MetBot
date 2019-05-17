@@ -75,6 +75,8 @@ whichstat='cvper' # 'std' - standard deviation
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
 figdir=bkdir+"/histpaper_figs/CBvar"
 my.mkdir_p(figdir)
+tmpdir=bkdir+"/tmp_dump/"
+my.mkdir_p(tmpdir)
 threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 
@@ -210,7 +212,7 @@ for t in range(nthresh):
     m.drawcountries(color='k')
     m.drawcoastlines(color='k')
     if testingoutput:
-        plt.savefig('tmpfig_a.png', dpi=150)
+        plt.savefig(tmpdir+'tmpfig_a.png', dpi=150)
 
     print 'Plotting part (b): CB outlines'
     plt.subplot(yplots,xplots,2)
@@ -240,7 +242,7 @@ for t in range(nthresh):
     m.drawcountries()
     m.drawcoastlines()
     if testingoutput:
-        plt.savefig('tmpfig_b.png', dpi=150)
+        plt.savefig(tmpdir+'tmpfig_b.png', dpi=150)
 
 
     print 'Plotting part (c): lat / lon scatter'
@@ -249,7 +251,7 @@ for t in range(nthresh):
                          rsltn='l')
     m.scatter(cXs_ddm, cYs_ddm, c='k', marker="o", s=0.1, edgecolors='face')
     if testingoutput:
-        plt.savefig('tmpfig_c.png', dpi=150)
+        plt.savefig(tmpdir+'tmpfig_c.png', dpi=150)
 
 
     print 'Plotting part (d): CV OLR'
@@ -293,7 +295,7 @@ for t in range(nthresh):
     m.drawcountries()
     m.drawcoastlines()
     if testingoutput:
-        plt.savefig('tmpfig_d.png', dpi=150)
+        plt.savefig(tmpdir+'tmpfig_d.png', dpi=150)
 
 
     # Finalising plot

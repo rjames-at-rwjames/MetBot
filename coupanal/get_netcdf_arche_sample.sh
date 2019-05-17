@@ -10,6 +10,11 @@ rm foo*.lst
 # Find input and output directories
 alldir=../../../CTdata
 mbdir=$alldir/metbot_multi_dset
+tmpdir=$mbdir/tmp_foo/
+
+mkdir -p $tmpdir
+rm $tmpdir/foo*
+
 dset_dict=./dicts4CDO/dset_info_4CDO.28models.txt
 onlynew=True
 
@@ -88,14 +93,14 @@ for thname in lower actual upper;do
 		                echo $year
 		                if [ "$year" -gt "1997" ]; then
 
-                            cdo -seldate,$date $infile foo_${date}.nc
+                            cdo -seldate,$date $infile $tmpdir/foo_${date}.nc
 
-                            echo foo_${date}.nc > foo.lst
-                            cat foo.lst >> foo2.lst
+                            echo $tmpdir/foo_${date}.nc > $tmpdir/foo.lst
+                            cat $tmpdir/foo.lst >> $tmpdir/foo2.lst
 
                         fi
 
-                        rm foo.lst
+                        rm $tmpdir/foo.lst
 
                     done
 
@@ -105,26 +110,26 @@ for thname in lower actual upper;do
                     for date in $(more $txtfile);do
 
                         echo $date
-                        cdo -seldate,$date $infile foo_${date}.nc
+                        cdo -seldate,$date $infile $tmpdir/foo_${date}.nc
 
-                        echo foo_${date}.nc > foo.lst
-                        cat foo.lst >> foo2.lst
+                        echo $tmpdir/foo_${date}.nc > $tmpdir/foo.lst
+                        cat $tmpdir/foo.lst >> $tmpdir/foo2.lst
 
-                        rm foo.lst
+                        rm $tmpdir/foo.lst
 
                     done
 
                 fi
 
-                files=$(more foo2.lst)
+                files=$(more $tmpdir/foo2.lst)
 
-                rm foo2.lst
+                rm $tmpdir/foo2.lst
 
                 rm $outfile2 # deletes previous file if it exists
 
                 cdo -b 32 -mergetime ${files[@]} $outfile2
 
-                rm foo_*.nc
+                rm $tmpdir/foo_*.nc
 
             done # variable
         done # model
