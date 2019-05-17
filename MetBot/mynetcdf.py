@@ -80,6 +80,7 @@ def isubs(sub,lat,lon,*args):
     domains['ECONT'] = ((-40.0, -15.0), (25.0, 40.0))
     domains['bigtrop'] = ((-60.0,60.0), (0,360))
     domains['SASA'] = ((-50.0,0.0),(310.0,75.0))
+    domains['SAwide'] = ((-60.0,0.0),(330.0,90.0))
     domains['CONT_PR'] = ((-35.0,-20.0),(23.0,35.0))
     domains['MADA_PR'] = ((-25.0,-11.0),(35.0,50.0))
     domains['ALL_PR'] = ((-35.0,-15.0), (7.5,100.0))

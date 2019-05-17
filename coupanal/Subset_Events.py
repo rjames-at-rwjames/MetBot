@@ -378,28 +378,40 @@ def sample_arche_cbs(sample_name,sample_reg,dates, cXs, cYs, degs, chs, keys, da
     print 'Subsetting angle by '
     print angles
 
+    numleft=len(dates)
+    print 'Starting with '+str(numleft)+' dates'
+
     # Then do the subsets
     print 'OK lets go...'
     if frm_evnt=='first':
         print 'Selecting first day of event only'
         dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = \
             sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+    numleft=len(dates)
+    print 'Now with '+str(numleft)+' dates'
 
     print 'Selecting months'
     dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = \
         sel_seas(months, dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+    numleft=len(dates)
+    print 'Now with '+str(numleft)+' dates'
 
     print 'Subsetting latitude '
     dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = \
         sel_cen_lat(scen, ncen, dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+    numleft=len(dates)
+    print 'Now with '+str(numleft)+' dates'
 
     print 'Subsetting angle '
     dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = \
         sel_by_ang(tang, bang, dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+    numleft=len(dates)
+    print 'Now with '+str(numleft)+' dates'
 
     print 'Finally, selecting the ones closest to best lon'
     dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = \
         sel_closest_lons(bestlon, ndays, dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
-
+    numleft=len(dates)
+    print 'Now with '+str(numleft)+' dates'
 
     return dates, cXs, cYs, degs, chs, keys, daynos, tworecdt

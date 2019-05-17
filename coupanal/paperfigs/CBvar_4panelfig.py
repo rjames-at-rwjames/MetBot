@@ -83,6 +83,10 @@ xplots=2
 yplots=2
 globv='olr'
 
+# Lon and lat spacing
+latsp=15.
+lonsp=20.
+
 dset='noaa'
 name='cdr2'
 botpath = bkdir + dset + '/' + name + '/'
@@ -198,7 +202,7 @@ for t in range(nthresh):
         lat4sf = lat4sf[::-1] # latitude has to be made the other way because of the negative numbers
         lon4sf = np.arange(ln1, ln2 + extent, gsize)
 
-    m = blb.AfrBasemap2(lat4sf, lon4sf, drawstuff=True, prj='cyl',
+    m = blb.AfrBasemap2(lat4sf, lon4sf, latsp,lonsp, drawstuff=True, prj='cyl',
                          rsltn='l')
     allmask, img = plbl.spatiofreq6(m, chs_ddm, name, lat4sf, lon4sf, yrs, per=rate, clim=nos4cbar, \
                                 savefig=False, \
@@ -210,7 +214,7 @@ for t in range(nthresh):
 
     print 'Plotting part (b): CB outlines'
     plt.subplot(yplots,xplots,2)
-    m = blb.AfrBasemap2(lat, lon, drawstuff=True, prj='cyl',
+    m = blb.AfrBasemap2(lat, lon,latsp,lonsp, drawstuff=True, prj='cyl',
                          rsltn='l')
     if plotshow == 'col5':
         nch = 5
@@ -241,7 +245,7 @@ for t in range(nthresh):
 
     print 'Plotting part (c): lat / lon scatter'
     plt.subplot(yplots,xplots,3)
-    m = blb.AfrBasemap2(lat, lon, drawstuff=True, prj='cyl',
+    m = blb.AfrBasemap2(lat, lon, latsp,lonsp, drawstuff=True, prj='cyl',
                          rsltn='l')
     m.scatter(cXs_ddm, cYs_ddm, c='k', marker="o", s=0.1, edgecolors='face')
     if testingoutput:
@@ -250,7 +254,7 @@ for t in range(nthresh):
 
     print 'Plotting part (d): CV OLR'
     plt.subplot(yplots,xplots,4)
-    m = blb.AfrBasemap2(lat, lon, drawstuff=True, prj='cyl',
+    m = blb.AfrBasemap2(lat, lon, latsp,lonsp, drawstuff=True, prj='cyl',
                          rsltn='l')
 
     if whichdays=='cbonly':

@@ -5,14 +5,11 @@
 import os
 import sys
 
-import numpy as np
-
 cwd=os.getcwd()
 sys.path.append(cwd)
 sys.path.append(cwd+'/..')
 import MetBot.dset_dict as dsetdict
 import MetBot.mytools as my
-import MetBot.mynetcdf as mync
 import MetBot.SynopticAnatomy as sy
 import MetBot.MetBlobs as blb
 import coupanal.Subset_Events as sset

@@ -47,12 +47,12 @@ for name in $(more $dset_dict | gawk '{print $1}');do
             fi
         fi
 
-        outfile=$outdir/$name.$name2.$var.mon.mean.${year1}_${year2}.nc
+        outfile=$outdir/$name2.$var.mon.mean.${year1}_${year2}.nc
 
         if [ "$onlynew" == "True" ] ; then
             echo "Checking if file already exists"
 
-            if [ -f $outfile2 ]; then
+            if [ -f $outfile ]; then
                 echo "File already exists"
                 continue
             else

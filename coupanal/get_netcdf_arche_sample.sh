@@ -32,14 +32,16 @@ for thname in lower actual upper;do
         # Loop datasets - by name because they are original
         echo 'Looping datasets and models'
 
-        for name in $(more $dset_dict | gawk '{print $1}');do
+	for name in cdr2;do
+        #for name in $(more $dset_dict | gawk '{print $1}');do
             echo $name
             dset=$(grep -w $name $dset_dict  | gawk '{print $2}' | head -1)
             echo $dset
 
             #Loop variables
             echo 'Looping variables'
-            for var in olr pr omega gpth u v q T;do
+            for var in pr omega gpth u v q T;do
+            #for var in olr pr omega gpth u v q T;do
 
                 echo "Running on"
                 echo $var
@@ -48,14 +50,16 @@ for thname in lower actual upper;do
                 dset2=$(grep -w $name $dict | gawk '{print $4}' | head -1)
                 ysname=$(grep -w $name $dict | gawk '{print $5}' | head -1)
 
-                indir=$mbdir/$dset2
-                smpdir=$indir/$name2/samples/
+		indir=$mbdir/$dset
+                indir2=$mbdir/$dset2
+                smpdir=$indir/$name/samples/
+		smpdir2=$indir2/$name2/samples
                 txtdir=$smpdir/txtfiles
-                outdir=$smpdir/ncfiles
+                outdir=$smpdir2/ncfiles
 
                 mkdir -p $outdir
 
-                infile=$indir/$name2.$var.day.mean.$ysname.nc
+                infile=$indir2/$name2.$var.day.mean.$ysname.nc
 
                 outfile2=$outdir/$name.$name2.$var.sampled_days.$sample.$wcb.$thname.day_0.nc
 

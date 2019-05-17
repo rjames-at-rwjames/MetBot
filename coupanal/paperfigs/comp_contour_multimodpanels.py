@@ -33,21 +33,24 @@ import MetBot.mynetcdf as mync
 import MetBot.MetBlobs as blb
 
 ### Running options
-test_scr=False  # if True will just run on first panel
+test_scr=False  # if True will just run on first panel for each dataset
 xplots = 4
 yplots = 7
 alphord=True    # models in alphabetical order
 sample='blon'
-ctyps=['anom_seas'] #abs is absolute,  anom_mon is rt monthly mean, anom_seas is rt seasonal mean
+ctyps=['abs'] #abs is absolute,  anom_mon is rt monthly mean, anom_seas is rt seasonal mean
 wcb=['cont','mada'] # which cloud band composite? Options: cont, mada
 spec_col=True   # if False, will allow automatic colour intervals
-varlist=['olr']
 threshtest=True
+
+globv='olr'
 levsel=False
 if levsel:
-    choosel=['500'] # can add a list
+    choosel='500'
 else:
-    choosel=['1']
+    choosel='1'
+print "Running on "+globv+" at pressure level "+choosel
+
 domain='swio'
 if domain=='swio':
     sub='SA'
@@ -55,13 +58,27 @@ if domain=='swio':
 elif domain=='mac_wave':
     sub='SASA'
     figdim=[9,9]
+
 agtest=False # do a test on the proportion of days in comp that agree in dir change
             # if ctyp=abs then need to choose False
 perc_ag=70   # show if this % or more days agree
 
-manntest=True
+latsp = 25. # lat spacing
+lonsp = 25. # lon spacing
+wplotdraw='edges' # which plot to draw latitude and longitude
+                    # 'first' for first only
+                    # 'all' for all
+                    # 'edges' for just the sides
+
+manntest=False
 fdr=True    # use False Discovery Rate adjustment (following Wilks et al.)
 alphaFDR=0.05
+
+seas='NDJFM'
+if seas == 'NDJFM':
+    mon1 = 11
+    mon2 = 3
+
 
 lag=False
 if lag:
@@ -71,52 +88,32 @@ else:
 
 drawnest=False
 if drawnest:
-nestbox_cont=[23,35,-35,-20] # WESN
-nestbox_mada=[35,50,-25,-11] # WESN
+    nestbox_cont=[23,35,-35,-20] # WESN
+    nestbox_mada=[35,50,-25,-11] # WESN
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-figdir=bkdir+"/histpaper_figs/comp_contour/"
+figdir=botdir+"/histpaper_figs/comp_contour/"
 my.mkdir_p(figdir)
-threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
-# EDITED UP TO HERE 
 
-# variable
-v=0
-globv = varlist[v]
-print "Running on "+globv
+# Loop threshs
+if threshtest:
+    thnames=['lower','actual','upper']
+else:
+    thnames=['actual']
 
-# levels - if levsel is false this will just be 1 level
-l=0
-print "Running on "+globv+" at pressure level "+choosel[l]
-
-if seas == 'NDJFM':
-    mons=[1,2,3,11,12]
-    mon1 = 11
-    mon2 = 3
-    nmon = 5
-
-# Loop sampling options
-for r in range(len(runs)):
-
-    if runs[r]=='opt1':
-        sample='blon'
-        from_event='first'
-    elif runs[r]=='opt2':
-        sample='blon2'
-        from_event='all'
-    elif runs[r]=='opt3':
-        sample='blon2'
-        from_event='first'
+nthresh = len(thnames)
+for t in range(nthresh):
+    thname=thnames[t]
 
     # Loop abs and anom
     for a in range(len(ctyps)):
         ctyp=ctyps[a]
         print "Running on "+ctyp
 
-        # Loop sample type
+        # Loop sample domain
         for o in range(len(wcb)):
             type = wcb[o]
 
@@ -131,32 +128,34 @@ for r in range(len(runs)):
                 cnt = 1
 
                 ### Dsets
-                # dsets='spec'
-                # ndset=1
-                # dsetnames=['noaa']
-                dsets='all'
-                ndset=len(dset_mp.dset_deets)
-                #dsetnames=list(dset_mp.dset_deets)
-                dsetnames=['noaa','cmip5']
-                ndstr=str(ndset)
-
-                if test_scr:
-                    ndset=1
+                dsets = 'spec'
+                if dsets == 'all':
+                    dsetnames = list(dsetdict.dset_deets)
+                elif dsets == 'spec':
+                    dsetnames = ['noaa', 'cmip5']
+                ndset = len(dsetnames)
+                ndstr = str(ndset)
 
                 print "Looping datasets"
                 for d in range(ndset):
-                    dset=dsetnames[d]
-                    dcnt=str(d+1)
-                    print 'Running on '+dset
-                    print 'This is dset '+dcnt+' of '+ndstr+' in list'
+                    dset = dsetnames[d]
+                    dcnt = str(d + 1)
+                    print 'Running on ' + dset
+                    print 'This is dset ' + dcnt + ' of ' + ndstr + ' in list'
 
-                    if dset != 'cmip5': levc = int(choosel[l])
-                    else: levc = int(choosel[l]) * 100
+                    if dset != 'cmip5': levc = int(choosel)
+                    else: levc = int(choosel) * 100
 
                     ### Models
-                    mods = 'all'
-                    nmod = len(dset_mp.dset_deets[dset])
-                    mnames_tmp = list(dset_mp.dset_deets[dset])
+                    mods = 'spec'  # "all" or "spec" to choose specific model(s)
+                    if mods == 'all':
+                        mnames_tmp = list(dsetdict.dset_deets[dset])
+                    if mods == 'spec':  # edit for the models you want
+                        if dset == 'noaa':
+                            mnames_tmp = ['cdr2']
+                        elif dset == 'cmip5':
+                            mnames_tmp = list(dsetdict.dset_deets[dset])
+                    nmod = len(mnames_tmp)
                     nmstr = str(nmod)
 
                     if dset == 'cmip5':
@@ -182,8 +181,8 @@ for r in range(len(runs)):
                                 ds4noaa = 'trmm'
                                 mod4noaa = 'trmm_3b42v7'
                             else:
-                                ds4noaa = 'ncep'
-                                mod4noaa = 'ncep2'
+                                ds4noaa = 'era'
+                                mod4noaa = 'erai'
                             dset2 = ds4noaa
                             name2 = mod4noaa
                         else:
@@ -193,50 +192,41 @@ for r in range(len(runs)):
                         # Get info
                         moddct = dsetdict.dset_deets[dset2][name2]
                         vnamedict = globv + 'name'
+                        labname = moddct['labname']
                         mastdct = mast_dict.mast_dset_deets[dset2]
                         varstr = mastdct[vnamedict]
                         dimdict = dim_exdict.dim_deets[globv][dset2]
                         latname = dimdict[1]
                         lonname = dimdict[2]
-                        if globv != 'omega' and globv != 'q' and globv != 'gpth':
-                            ys = moddct['yrfname']
-                        else:
-                            if name2 == "MIROC5":
-                                if globv == 'q':
-                                    ys = moddct['fullrun']
-                                elif globv == 'omega' or globv == 'gpth':
-                                    ys = '1950_2009'
-                                else:
-                                    print 'variable ' + globv + ' has unclear yearname for ' + name2
-                            else:
-                                ys = moddct['fullrun']
+                        ysclim = moddct['yrfname']
 
-                        # Years for clim and manntest
-                        if climyr == 'spec':
-                            ysclim = moddct['yrfname']
-                        else:
-                            ysclim = ys
+                        # Get years for manntest
                         year1 = float(ysclim[0:4])
                         year2 = float(ysclim[5:9])
 
-
-
                         # Open sample file
-                        if lag:
-                            smpfile = bkdir + 'metbot_multi_dset/' + dset2 + '/' + name2 + '/lag_samples/' \
-                                  + name + '.' + name2 + '.' + globv + '.sampled_days.' \
-                                  + sample + '.' + from_event + '.' + type + '.' + thname + '.lag_'+str(edays[lo])+'.nc'
-                        else:
-                            smpfile=bkdir+'metbot_multi_dset/'+dset2+'/'+name2+'/'\
-                                +name+'.'+name2+'.'+globv+'.sampled_days.'\
-                                +sample+'.'+from_event+'.'+type+'.'+thname+'.nc'
+                        botpath=botdir + dset2 + '/' + name2
 
+                        smpfile=botpath+'/samples/ncfiles/'+ name + '.' + name2 + '.' + globv + '.sampled_days.' \
+                                  + sample + '.' + type + '.' + thname + '.day_'+str(edays[lo])+'.nc'
 
                         if manntest:
                             # Open all file
-                            allfile = bkdir + 'metbot_multi_dset/' + dset2 + '/' + name2 + \
-                                          '.' + globv + '.day.mean.' + ys + '.nc'
+                            # First get years
+                            if globv != 'omega' and globv != 'q' and globv != 'gpth':
+                                ys = moddct['yrfname']
+                            else:
+                                if name2 == "MIROC5":
+                                    if globv == 'q':
+                                        ys = moddct['fullrun']
+                                    elif globv == 'omega' or globv == 'gpth':
+                                        ys = '1950_2009'
+                                    else:
+                                        print 'variable ' + globv + ' has unclear yearname for ' + name2
+                                else:
+                                    ys = moddct['fullrun']
 
+                            allfile = botpath+ '.' + globv + '.day.mean.' + ys + '.nc'
 
                         print 'Opening '+smpfile
                         if manntest:
@@ -262,7 +252,7 @@ for r in range(len(runs)):
                             smpdtime[:, 3] = 0
 
                             # Fix lat and lons if it spans 0
-                            if domain == 'mac_wave' or domain == 'bigtrop':
+                            if domain == 'mac_wave':
                                 print "Ammending lons around 0"
                                 for i in range(len(lon)):
                                     if lon[i] > 180:
@@ -351,17 +341,6 @@ for r in range(len(runs)):
                                 for i in range(nlat):
                                     for j in range(nlon):
 
-                                        ## I made one method here where you rank data
-                                        ## but not necessary because the code actually ranks it for you (despite instructions)
-                                        # allbox=alldata[:,i,j]
-                                        # rankbox=scipy.stats.rankdata(allbox,method='average')
-                                        #
-                                        # smpranks=rankbox[sinds]
-                                        # otherranks=rankbox[oinds]
-                                        #
-                                        # ustat, pvalue = scipy.stats.mannwhitneyu(smpranks, otherranks,
-                                        #                                          alternative='two-sided')
-
                                         smpbox=smpdata[:,i,j]
                                         otherbox=otherdata[:,i,j]
                                         ustat, pvalue = scipy.stats.mannwhitneyu(smpbox,otherbox,alternative='two-sided')
@@ -416,8 +395,7 @@ for r in range(len(runs)):
                             if ctyp == 'anom_mon' or ctyp == 'anom_seas':
 
                                 # Open ltmonmean file
-                                meanfile = bkdir + 'metbot_multi_dset/' + dset2 + '/' + name2 + '/' \
-                                           + name2 + '.' + globv + '.mon.mean.' + ysclim + '.nc'
+                                meanfile = botpath + '/'+ name2 + '.' + globv + '.mon.mean.' + ysclim + '.nc'
 
                                 if os.path.exists(meanfile):
 
@@ -463,9 +441,6 @@ for r in range(len(runs)):
                                     print 'Setting mean to zero'
                                     meandata=np.zeros((12,nlat,nlon), dtype=np.float32)
 
-                            if cnt == 1:
-                            	m, f = pt.AfrBasemap(lat, lon, drawstuff=True, prj='cyl', fno=1, rsltn='l')
-
                             # Get lon lat grid
                             plon, plat = np.meshgrid(lon, lat)
 
@@ -473,7 +448,6 @@ for r in range(len(runs)):
                             print "Calculating composite..."
                             comp=np.nanmean(smpdata,0) # Check this is the right dimension to average ??
                             compdata = np.squeeze(comp)
-
 
                             if ctyp=='abs':
 
@@ -528,12 +502,32 @@ for r in range(len(runs)):
                             # Plot
                             print "Plotting for model "+name2
                             plt.subplot(yplots,xplots,cnt)
+                            if wplotdraw=='all':
+                                m = blb.AfrBasemap2(lat, lon, latsp,lonsp, drawstuff=True, prj='cyl', rsltn='l',\
+                                                fontdict={'fontsize':8,'fontweight':'normal'})
+                            elif wplotdraw=='first':
+                                if cnt==1:
+                                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                                        fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+                                else:
+                                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=False, prj='cyl', rsltn='l', \
+                                                        fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+                            elif wplotdraw=='edges':
+                                x_remain= cnt % xplots
+                                if x_remain==1:
+                                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                                        fontdict={'fontsize': 8, 'fontweight': 'normal'})
+                                else:
+                                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                                        fontdict={'fontsize': 8, 'fontweight': 'normal'},onlyedge='lon')
+
+
                             if spec_col:
                                 if globv == 'olr':
                                     if ctyp=='abs':
                                         clevs = np.arange(200, 280, 10)
-                                        #cm = plt.cm.gray_r
-                                        cm = plt.cm.Wistia_r
+                                        cm = plt.cm.gray_r
+                                        #cm = plt.cm.Wistia_r
                                     elif ctyp=='anom_mon' or ctyp=='anom_seas':
                                         #clevs = np.arange(-75,90,15)
                                         clevs= np.arange(-40,50,10)
@@ -564,7 +558,7 @@ for r in range(len(runs)):
                             if manntest:
                                 hatch = m.contourf(plon,plat,mask_pvals,levels=[-1.0, 0.0, 1.0], hatches=["", '.'], alpha=0)
 
-                            plt.title(name2,fontsize=8,fontweight='demibold')
+                            plt.title(labname,fontsize=8,fontweight='demibold')
 
                             # Redraw map
                             m.drawcountries()
@@ -590,10 +584,12 @@ for r in range(len(runs)):
                             cnt += 1
 
                 print "Finalising plot..."
-                plt.subplots_adjust(left=0.05,right=0.9,top=0.95,bottom=0.02,wspace=0.1,hspace=0.2)
+                plt.subplots_adjust(left=0.05,right=0.9,top=0.95,bottom=0.02,wspace=0.2,hspace=0.2)
+#                plt.subplots_adjust(left=0.05,right=0.9,top=0.95,bottom=0.02,wspace=0.1,hspace=0.2)
+
 
                 # Plot cbar
-                axcl = g.add_axes([0.91, 0.15, 0.01, 0.6])
+                axcl = g.add_axes([0.94, 0.15, 0.01, 0.6])
                 cbar = plt.colorbar(cs, cax=axcl)
                 my.ytickfonts(fontsize=12.)
 
@@ -609,15 +605,8 @@ for r in range(len(runs)):
                 if manntest:
                     cstr=cstr+'manntest_'+str(alphaFDR)
 
-                if climyr:
-                    cstr=cstr+'_35years_'
-
-                if lag:
-                    compname = compdir + 'multi_comp_' + cstr + '.' + sample + '.' + type + '.' + globv + \
-                               '.' + choosel[l] + '.' + sub + '.from_event' + from_event + '.lag_'+str(edays[lo])+'.png'
-                else:
-                    compname = compdir + 'multi_comp_'+cstr+'.'+sample+'.' + type + '.' + globv + \
-                          '.'+choosel[l]+'.'+sub+'.from_event'+from_event+'.png'
+                compname = figdir + 'multi_comp_' + cstr + '.' + sample + '.' + type + '.' + globv + \
+                           '.' + choosel + '.' + sub + '.day_'+str(edays[lo])+'.'+thname+'.png'
                 print 'saving figure as '+compname
                 plt.savefig(compname, dpi=150)
                 plt.close()

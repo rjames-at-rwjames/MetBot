@@ -486,8 +486,8 @@ def SAfrBasemap2(lat,lon,drawstuff=False,prj='cyl', rsltn='c',\
 
     return m
 
-def AfrBasemap2(lat,lon,drawstuff=False,prj='cyl', rsltn='c',\
-    fontdict=False):
+def AfrBasemap2(lat,lon,latsp,lonsp,drawstuff=False,prj='cyl', rsltn='c',\
+    fontdict=False,onlyedge=False):
     '''m = SAfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1)
 
     Adapted from N Hart MetBlobs SAfBasemap
@@ -497,8 +497,7 @@ def AfrBasemap2(lat,lon,drawstuff=False,prj='cyl', rsltn='c',\
     Specific for this application of metblobs, so currently using proj='cyl',
     however Albers equal area is here uncommented.
     USAGE: lat, lon
-    RETURNS: m, basemap object pointer (handle in matlab language)
-             f, pointer figure'''
+    RETURNS: m, basemap object pointer (handle in matlab language)'''
     xy=(lat.min(),lat.max(),lon.min(),lon.max())
     nx = len(lon); ny = len(lat)
     if not fontdict: fontdict = {'fontsize':10,'fontweight':'normal'}
@@ -512,19 +511,27 @@ def AfrBasemap2(lat,lon,drawstuff=False,prj='cyl', rsltn='c',\
                         lat_1=-45.,lat_2=0.,lon_0=40.)
 
     ### SET UP FIGURE AND MERIDIANS
-    delon = 20.
+    delon = lonsp
     meridians = np.arange(0.,360.,delon)
-    delat = 15.
+    delat = latsp
     circles = np.arange(0.,90.+delat,delat).tolist()+\
               np.arange(-delat,-90.-delat,-delat).tolist()
 
     if drawstuff:
         m.drawcoastlines()
         m.drawcountries()
-        m.drawparallels(circles,linewidth='0.1',labels=[1,0,0,0],\
+        if not onlyedge:
+            m.drawparallels(circles,linewidth='0.1',labels=[1,0,0,0],\
                         fontdict=fontdict)
-        m.drawmeridians(meridians,linewidth='0.1',labels=[0,0,0,1],\
+            m.drawmeridians(meridians,linewidth='0.1',labels=[0,0,0,1],\
                         fontdict=fontdict)
+        elif onlyedge=='lat':
+            m.drawparallels(circles,linewidth='0.1',labels=[1,0,0,0],\
+                        fontdict=fontdict)
+        elif onlyedge=='lon':
+            m.drawmeridians(meridians,linewidth='0.1',labels=[0,0,0,1],\
+                        fontdict=fontdict)
+
 
     return m
 
