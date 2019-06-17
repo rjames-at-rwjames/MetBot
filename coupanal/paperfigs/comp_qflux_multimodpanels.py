@@ -1,7 +1,7 @@
 # To plot composites of archetypal cloudbands
-# This one is designed to show wave associated with cloud band
-# wind at 200 and omega 500
-# only 24 mods because of missing data
+# This one is designed to show qflux associated with cloud band
+# qflux at 850 and q at 850
+# only 27 mods because of missing data
 #
 # Reads in netcdf files to speed things up
 # with option to add stippling if many days in composite agree
@@ -38,39 +38,41 @@ import MetBot.dimensions_dict as dim_exdict
 import MetBot.mytools as my
 import MetBot.mynetcdf as mync
 import MetBot.MetBlobs as blb
-import dicts4p.dsets_wave as wave_dict
+import dicts4p.dsets_qflux as qflux_dict
 
 
 ### Running options
 test_scr=False  # if True will just run on first panel for each dataset
 xplots = 4
-yplots = 6
+yplots = 7
 alphord=True
 sample='blon'
-#ctyps=['abs']
-ctyps=['abs','anom_seas'] #abs is absolute,  anom_mon is rt monthly mean, anom_seas is rt seasonal mean
-wcb=['cont','mada'] # which cloud band composite? Options: cont, mada
+ctyps=['anom_seas']
+#ctyps=['abs','anom_seas'] #abs is absolute,  anom_mon is rt monthly mean, anom_seas is rt seasonal mean
+#wcb=['cont','mada'] # which cloud band composite? Options: cont, mada
+wcb=['cont']
 spec_col=True
+#spec_col=False
 threshtest=True
 
 
-variable='wind'
-choosel='200'
+variable='qflux'
+choosel='850'
 
-domain='wider'
+domain='swio'
 if domain=='wider':
     sub='SAwide'
-    figdim = [9, 8]
+    figdim = [9, 9]
 elif domain=='swio':
     sub='SA'
-    figdim=[9,9]
+    figdim=[9,11]
 
 agtest=False # do a test on the proportion of days in comp that agree in dir change
             # if ctyp=abs then need to choose False
 perc_ag=70   # show if this % or more days agree
 
 latsp = 25. # lat spacing
-lonsp = 40. # lon spacing
+lonsp = 30. # lon spacing
 wplotdraw='edges' # which plot to draw latitude and longitude
                     # 'first' for first only
                     # 'all' for all
@@ -101,14 +103,14 @@ skip=2 # to skip over some vectors in plotting. If want to skip none use 1
 
 # Info for contour
 pluscon=True
-convar='omega'
+convar='q'
 same_ctyp=True
 if not same_ctyp:
     ctyp_choice='anom_seas'
 
 levcon=True
 if levcon:
-    chooselc='500'
+    chooselc='850'
 else:
     chooselc='1'
 agtest_con=False
@@ -117,7 +119,7 @@ perc_ag_con=75
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-figdir=botdir+"/histpaper_figs/comp_wave/"
+figdir=botdir+"/histpaper_figs/comp_qflux/"
 my.mkdir_p(figdir)
 
 
@@ -140,8 +142,6 @@ if threshtest:
 else:
     thnames = ['actual']
 
-thnames=['upper']
-
 nthresh = len(thnames)
 for t in range(nthresh):
     thname = thnames[t]
@@ -150,7 +150,7 @@ for t in range(nthresh):
     for a in range(len(ctyps)):
         ctyp=ctyps[a]
         print "Running on "+ctyp
-
+        
         if same_ctyp:
             ctyp_con=ctyp
         else:
@@ -204,7 +204,7 @@ for t in range(nthresh):
                         if dset == 'noaa':
                             mnames_tmp = ['cdr2']
                         elif dset == 'cmip5':
-                            mnames_tmp = list(wave_dict.dset_deets[dset])
+                            mnames_tmp = list(qflux_dict.dset_deets[dset])
                     nmod = len(mnames_tmp)
                     nmstr = str(nmod)
 
@@ -938,8 +938,8 @@ for t in range(nthresh):
                                                 mask_pvals_c[i, j] = 1
                                             else:
                                                 mask_pvals_c[i, j] = 0
-                                    if setto == 'mask':
-                                        mask_c = np.ma.masked_where(mask_pvals_c < 1, mask_pvals_c)
+                                    if setto=='mask':
+                                        mask_c=np.ma.masked_where(mask_pvals_c<1,mask_pvals_c)
 
                             else:
 
@@ -1010,9 +1010,9 @@ for t in range(nthresh):
                                                 mask_pvals_c[i, j] = 1
                                             else:
                                                 mask_pvals_c[i, j] = 0
-
                                     if setto=='mask':
                                         mask_c=np.ma.masked_where(mask_pvals_c<1,mask_pvals_c)
+
 
 
                         # Get lon lat grid
@@ -1034,8 +1034,8 @@ for t in range(nthresh):
 
                         if ctyp=='abs':
 
-                            data4plot_u = compdata_u
-                            data4plot_v = compdata_v
+                            data4plot_u = compdata_u[:]
+                            data4plot_v = compdata_v[:]
 
                             if manntest:
                                 if setto=='zero':
@@ -1050,6 +1050,7 @@ for t in range(nthresh):
 
                                     data4plot_u = mwmask_comp_u[:]
                                     data4plot_v = mwmask_comp_v[:]
+
 
                         elif ctyp=='anom_mon':
                             print "Calculating anomaly from long term MONTHLY means..."
@@ -1154,13 +1155,14 @@ for t in range(nthresh):
                                 if manntest:
                                     if setto == 'zero':
 
-                                        data4plot_c = data4plot_c * mask_pvals_c
+                                        data4plot_c=data4plot_c*mask_pvals_c
 
-                                    elif setto == 'mask':
+                                    elif setto=='mask':
 
                                         mwmask_comp_c = np.ma.masked_where(np.ma.getmask(mask_c), compdata_c)
 
-                                        data4plot_c = mwmask_comp_c[:]
+                                        data4plot_c=mwmask_comp_c[:]
+
 
                             elif ctyp_con=='anom_mon':
 
@@ -1252,16 +1254,27 @@ for t in range(nthresh):
 
                         # Plot contours if pluscon
                         if pluscon:
-                            if globv_c == 'olr':
-                                clevs = np.arange(200, 280, 10)
-                                cm = plt.cm.Wistia_r
-                            elif globv_c == 'omega':
-                                clevs = np.arange(-0.12, 0.14, 0.02)
-                                cm = plt.cm.bwr
-                            else:
-                                print "Need to specify cbar for this variable"
+                            if spec_col:
+                                if globv_c == 'olr':
+                                    clevs = np.arange(200, 280, 10)
+                                    cm = plt.cm.Wistia_r
+                                elif globv_c == 'omega':
+                                    clevs = np.arange(-0.12, 0.14, 0.02)
+                                    cm = plt.cm.bwr
+                                elif globv_c == 'q':
+                                    #clevs = np.arange(-0.002, 0.00225, 0.00025)
+                                    # cm = plt.cm.bwr_r
+                                    #clevs = np.arange(-0.004,0.0045,0.0005)
+				    #cm = plt.cm.BrBG
+				    clevs = np.arange(-0.003,0.0035,0.0005)
+				    cm = plt.cm.RdYlGn
+                                else:
+                                    print "Need to specify cbar for this variable"
 
-                            cs = m.contourf(plon, plat, data4plot_c, clevs, cmap=cm, extend='both')
+                                cs = m.contourf(plon, plat, data4plot_c, clevs, cmap=cm, extend='both')
+                            else:
+                                cs = m.contourf(plon, plat, data4plot_c, extend='both')
+
 
 
                         # Plot vectors
@@ -1297,7 +1310,7 @@ for t in range(nthresh):
                         elif ctyp=='abs':
                             q = plt.quiver(newlon, newlat, data4plot_u, data4plot_v, scale=wind_sc, width=0.005)
                         if cnt==1:
-                            plt.quiverkey(q, X=1.2, Y=1.2, U=usc, label=lab, labelpos='W', fontproperties={'size': 'xx-small'})
+                            plt.quiverkey(q, X=1.3, Y=1.25, U=usc, label=lab, labelpos='W', fontproperties={'size': 'xx-small'})
 
                         if dset=='noaa':
                             pltname=name+'/'+name2
@@ -1320,7 +1333,7 @@ for t in range(nthresh):
 
                 if pluscon:
                     # Plot cbar
-                    axcl = g.add_axes([0.93, 0.15, 0.01, 0.6])
+                    axcl = g.add_axes([0.92, 0.15, 0.01, 0.6])
                     cbar = plt.colorbar(cs, cax=axcl)
                     my.ytickfonts(fontsize=8.)
 

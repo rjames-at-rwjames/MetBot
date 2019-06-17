@@ -273,6 +273,36 @@ def sel_cen_lat(scen,ncen,dates, cXs, cYs, degs, chs, keys, daynos, tworecdt):
 
     return dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d
 
+def sel_cen_lon(wcen,ecen,dates, cXs, cYs, degs, chs, keys, daynos, tworecdt):
+    '''A function to subset event set to select blobs with certain longitudes
+    based on centroids
+
+    wcen - western-most longitude
+    ecen - eastern-most longitude
+
+    read in and out dates, centroids, angles, cb outlines, and keys etc.
+    run evset_info first!
+
+    dates_d,cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d =
+        sel_cen_lon(wcen,ecen, dates,cXs, cYs, degs, chs, keys, daynos, tworecdt)
+
+    '''
+
+    # First find indices for entries with these latitudes
+    inds=np.where((cXs > wcen) & (cXs < ecen))[0]
+
+    # Then use these inds to subset all inputs
+    dates_d = dates[inds]
+    cXs_d = cXs[inds]
+    cYs_d = cYs[inds]
+    degs_d = degs[inds]
+    chs_d = chs[inds]
+    keys_d = keys[inds]
+    daynos_d = daynos[inds]
+    tworecdt_d = tworecdt[inds]
+
+    return dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d
+
 def sel_by_ang(tang,bang,dates, cXs, cYs, degs, chs, keys, daynos, tworecdt):
     '''A function to subset event set to select blobs with certain angles
 
@@ -415,3 +445,35 @@ def sample_arche_cbs(sample_name,sample_reg,dates, cXs, cYs, degs, chs, keys, da
     print 'Now with '+str(numleft)+' dates'
 
     return dates, cXs, cYs, degs, chs, keys, daynos, tworecdt
+
+def split_by_lon(cutlon,dates, cXs):
+    '''A function to subset event set to select blobs with certain longitudes
+    based on centroids
+
+    This time splitting by "cutlon"
+
+    Similar to EventStats.spatialsubset but allows to read in dates and cXs/cYs
+    rather than using events
+
+    read in and out dates, centroids
+    run evset_info first!
+
+    dates_west,dates_east =
+        split_by_lon(cutlon, dates,cXs)
+
+    '''
+
+    dates_west =[]
+    dates_east =[]
+    for tt in range(len(dates)):
+        cX=cXs[tt]
+
+        if cX < cutlon:
+            dates_west.append(dates[tt])
+        elif cX >= cutlon:
+            dates_east.append(dates[tt])
+    dates_west=np.asarray(dates_west)
+    dates_east=np.asarray(dates_east)
+
+
+    return dates_west, dates_east

@@ -4,9 +4,6 @@
 #    based on textfile input of dates calculated in python
 #    uses dictionaries in "dicts4CDO" - recently edited to use CDR2 and ERAI
 
-rm foo*.nc
-rm foo*.lst
-
 # Find input and output directories
 alldir=../../../CTdata
 mbdir=$alldir/metbot_multi_dset
@@ -24,20 +21,22 @@ lag=False
 
 # Loop thresh
 echo "Looping thresholds"
-for thname in lower actual upper;do
+for thname in actual;do
+#for thname in lower actual upper;do
     echo "Running on thresh"
     echo $thname
 
     # Loop continental and madagascan samples
     echo 'Looping continental and magascan'
-    for wcb in cont mada;do
+    for wcb in cont;do
+    #for wcb in cont mada;do
         echo "Running on"
         echo $wcb
 
         # Loop datasets - by name because they are original
         echo 'Looping datasets and models'
 
-	for name in cdr2;do
+	    for name in GFDL-CM3;do
         #for name in $(more $dset_dict | gawk '{print $1}');do
             echo $name
             dset=$(grep -w $name $dset_dict  | gawk '{print $2}' | head -1)
@@ -45,7 +44,7 @@ for thname in lower actual upper;do
 
             #Loop variables
             echo 'Looping variables'
-            for var in pr omega gpth u v q T;do
+            for var in q;do
             #for var in olr pr omega gpth u v q T;do
 
                 echo "Running on"
