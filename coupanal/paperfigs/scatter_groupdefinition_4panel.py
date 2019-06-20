@@ -19,6 +19,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 
+# small change to test git
+
 cwd=os.getcwd()
 sys.path.append(cwd)
 sys.path.append(cwd+'/..')
