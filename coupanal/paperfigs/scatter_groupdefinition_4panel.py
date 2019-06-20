@@ -1,7 +1,11 @@
-# To create a 2 panel figure of scatter plots
+# To create a 4 panel figure of scatter plots
 # showing the group characteristics
-#   part a - number of TTTs, versus precip bias, with size of dot showing precip intensity
-#   part b - location of TTTs, versus precip bias, with size of dot showing intensity
+#   part a - number of TTTs, versus precip bias
+#   part b - location of TTTs, versus precip bias
+#   part c - intensity of TTTs, versus precip bias
+#   part d - number of TTTs, versus location of TTTs, with size of dot intensity (grouping criteria)
+#
+# Also outputs a table with the criteria values for each model
 
 import os
 import sys
@@ -29,47 +33,70 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 test_scr=False
+colscheme='groupall' # 'groupall' or 'grouplast'
+alphord=True    # models in alphabetical order
 group=True
-threshtest=False
-figdim=[14, 6]
+threshtest=True
+figdim=[14, 12]
 xplots=2
-yplots=1
+yplots=2
 nys=35.0 # This is now been standardised so all datasets have 35 years
+trendline=False
 
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
+seas='NDJFM'
 peryear = True # counts cbs per year
 weightlats=True
 
-figlabels=['a','b']
-labpos=np.array([(0.01,0.95),(0.44,0.95)])
+figlabels=['a','b','c','d']
+nplot=len(figlabels)
+labpos=np.array([(0.01,0.93),(0.44,0.93),(0.01,0.45),(0.44,0.45)])
 
-# part a - full domain
-all_ttt_wlon=7.5
-all_ttt_elon=100.0 # east most limit of CBs used
-rel_a=False     # do you want relative number of CBs?
-dom_a='subt'
-all_ttt_seas='NDJFM'
 
-# part b - percent TTTs in west
-per_ttt_wlon=7.5
-per_ttt_elon=55.0 # east most limit of CBs used - usually use 55 - 45 works too but much lower r2 value
-rel_b=True      # do you want relative number of CBs?
-dom_b='contsub_nh'
-per_ttt_seas='NDJFM'
+# Two domains
+# full domain
+fulldom_wlon=7.5
+fulldom_elon=100.0
+dom_full='subt'
+
+# cont domain
+contdom_wlon=7.5
+contdom_elon=55.0
+dom_cont='contsub_nh'
 
 # info for pr
 globv='pr'
-under_of='under'
+under_of='dayof'
 raintype='rainperttt'
+
+# Info for each plot
+# 0 is full domain, 1 is continental domain
+# part a - nttt
+dom_a=0
+# part b - percent TTTs in west
+dom_b=1
+# part c - intensity over continent
+dom_c=1
+# part d - group chars
+dom_d_xaxis=0
+dom_d_yaxis=1
+dom_d_size=1
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
+txtdir=botdir+"histpaper_txt/"
 figdir=botdir+"histpaper_figs/scatter_groupdef/"
 my.mkdir_p(figdir)
 threshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
+## Seas information
+if seas == 'NDJFM':
+    mons = [1, 2, 3, 11, 12]
+    nmon = len(mons)
+    mon1 = 11
+    mon2 = 3
 
 ### Dsets
 dsets = 'spec'
@@ -99,18 +126,17 @@ nallmod=np.sum(nm_dset)
 nallmod=int(nallmod)
 
 ### colours
-if not group:
-    cols=['b','g','r','c','m','gold','k',\
-        'b','g','r','c','m','gold','k',\
-        'b','g','r','c','m','gold','k',\
-        'b','g','r','c','m','gold','k']
-    markers=["o","o","o","o","o","o","o",\
-        "^","^","^","^","^","^","^",\
-        "*","*","*","*","*","*","*",\
-        "d","d","d","d","d","d","d"]
-elif group:
-    grcls = ['fuchsia', 'gold', 'darkblue', 'r', 'blueviolet', 'springgreen']
-    grmrs=["o","^","*","d","+","v","h",">"]
+cols=['b','g','r','c','m','gold','k',\
+    'b','g','r','c','m','gold','k',\
+    'b','g','r','c','m','gold','k',\
+    'b','g','r','c','m','gold','k']
+markers=["o","o","o","o","o","o","o",\
+    "^","^","^","^","^","^","^",\
+    "*","*","*","*","*","*","*",\
+    "d","d","d","d","d","d","d"]
+
+grcls = ['fuchsia', 'gold', 'darkblue', 'r', 'blueviolet', 'springgreen']
+grmrs=["o","^","*","d","+","v","h",">"]
 
 
 # First get ref data for bias
@@ -126,13 +152,11 @@ meanfile = botdir + refdset + '/' + refmod + '/' \
            + refmod + '.' + globv + '.mon.mean.' + ys + '.nc'
 
 # Open with two different domains
-doms=[dom_a, dom_b]
+doms=[dom_full, dom_cont]
 ndoms=len(doms)
-seas_picks = [all_ttt_seas, per_ttt_seas]
 reg_ref_means=np.zeros(ndoms,dtype=np.float32)
 for do in range(ndoms):
     thisdom=doms[do]
-    ths_seas=seas_picks[do]
 
     ncout = mync.open_multi(meanfile, globv, refmod, \
                         dataset=refdset, subs=thisdom)
@@ -154,10 +178,6 @@ for do in range(ndoms):
     _, idx = np.unique(tmp, return_index=True)
     dtime = dtime[idx]
     meandata = meandata[idx, :, :]
-
-    if ths_seas == 'NDJFM':
-        mons = [1, 2, 3, 11, 12]
-        nmon=len(mons)
 
     # Select seasons and get mean
     thesemons = np.zeros((nmon, nlat, nlon), dtype=np.float32)
@@ -186,13 +206,20 @@ nthresh=len(thnames)
 
 for t in range(nthresh):
 
+    print 'Opening txtfile'
+    if test_scr:
+        txtname=txtdir + "/group_criteria.thresh_"+thnames[t]+"."+under_of+".testmodels.txt"
+    else:
+        txtname=txtdir + "/group_criteria.thresh_"+thnames[t]+"."+under_of+".txt"
+
+    txtfile = open(txtname, "w")
+
     print "Setting up plot..."
     g = plt.figure(figsize=figdim)
     ax = plt.subplot(111)
-    xvals = np.ma.zeros((nallmod,2), dtype=np.float32)
-    yvals = np.ma.zeros((nallmod,2), dtype=np.float32)
-    zvals = np.ma.zeros((nallmod,2), dtype=np.float32)
-    sizes = np.ma.zeros((nallmod,2), dtype=np.float32)
+    xvals = np.ma.zeros((nallmod,4), dtype=np.float32)
+    yvals = np.ma.zeros((nallmod,4), dtype=np.float32)
+    sizes = np.ma.zeros((nallmod,4), dtype=np.float32)
     cnt = 0
     grcnt=np.zeros(7,dtype=np.int8)
 
@@ -212,12 +239,20 @@ for t in range(nthresh):
             mnames_tmp = list(dsetdict.dset_deets[dset])
         if mods == 'spec':  # edit for the models you want
             if dset == 'noaa':
-                mnames = ['cdr2']
+                mnames_tmp = ['cdr2']
             elif dset == 'cmip5':
-                mnames = list(dsetdict.dset_deets[dset])
-        nmod = len(mnames)
+                mnames_tmp = list(dsetdict.dset_deets[dset])
+        nmod = len(mnames_tmp)
         nmstr = str(nmod)
         mdcnt = 0
+
+        if dset == 'cmip5':
+            if alphord:
+                mnames = sorted(mnames_tmp, key=lambda s: s.lower())
+            else:
+                mnames = mnames_tmp
+        else:
+            mnames = mnames_tmp
 
         if test_scr:
             nmod=1
@@ -302,6 +337,13 @@ for t in range(nthresh):
                 dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
                     dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
 
+            # Subset the season
+            print 'Subsetting by season?'
+            print 'Selecting months for : ' + seas
+            dates_se, cXs_se, cYs_se, degs_se, chs_se, keys_se, daynos_se, tworecdt_se = \
+                sset.sel_seas(mons, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
+                              tworecdt_dd)
+
             # Get details for rain
             print 'Getting info on rain for this model'
             moddct = dsetdict.dset_deets[dset][name]
@@ -327,32 +369,24 @@ for t in range(nthresh):
             rainfile = botdir + raindset + "/" + rainmod + "." + globp + ".day.mean." + rys + ".nc"
             print 'Selecting ' + rainfile
 
+            rainmeanfile=botdir + raindset + '/' + rainmod + '/' \
+                       + rainmod + '.' + globp + '.mon.mean.' + rys + '.nc'
 
-            # Now looping to do the processing that differs for part a and b
-            seas_picks=[all_ttt_seas,per_ttt_seas]
-            wlon_picks=[all_ttt_wlon,per_ttt_wlon]
-            elon_picks=[all_ttt_elon,per_ttt_elon]
-            rel_picks=[rel_a,rel_b]
+            # Now looping to get info for diff domains
+            wlon_picks=[fulldom_wlon,contdom_wlon]
+            elon_picks=[fulldom_elon,contdom_elon]
+
+            nttts_doms=np.zeros(ndoms,dtype=np.float32)
+            pttts_doms=np.zeros(ndoms,dtype=np.float32)
+            biases_doms=np.zeros(ndoms,dtype=np.float32)
+            intens_doms=np.zeros(ndoms,dtype=np.float32)
+
             for do in range(ndoms):
-                print 'Making calculations for plot part '+figlabels[do]
+                print 'Making calculations for domain '+doms[do]
 
                 thisdom = doms[do]
-                ths_seas=seas_picks[do]
                 wlon=wlon_picks[do]
                 elon=elon_picks[do]
-
-                if ths_seas=='NDJFM':
-                    mons = [1, 2, 3, 11, 12]
-                    mon1 = 11
-                    mon2 = 3
-                    nmon = len(mons)
-
-                # First check the season
-                print 'Subsetting by season?'
-                print 'Selecting months for : ' + per_ttt_seas
-                dates_se, cXs_se, cYs_se, degs_se, chs_se, keys_se, daynos_se, tworecdt_se = \
-                    sset.sel_seas(mons, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
-                                  tworecdt_dd)
 
                 # Then subset by longitude
                 print 'Subsetting by latitude?'
@@ -361,57 +395,48 @@ for t in range(nthresh):
                     sset.sel_cen_lon(wlon,elon,dates_se, cXs_se, cYs_se, degs_se, \
                                      chs_se, keys_se, daynos_se, tworecdt_se)
 
+                print 'Calculating number of TTTs'
                 nttt=len(dates_ln)
+                if peryear:
+                    nttt4plot = nttt / nys
 
-                # Computing value for x axis
-                print 'Getting value for x -axis'
-                tot_ttt=len(dates_ln)
-                if rel_picks[do]==True:
-                    tot_ttt=float(tot_ttt)/len(dates_se)*100.0
-                else:
-                    if peryear:
-                        tot_ttt=tot_ttt/nys
 
-                xvals[cnt,do]=tot_ttt
+                nttts_doms[do]=nttt4plot
+
+                per_ttt = float(nttt) / len(dates_se) * 100.0
+
+                pttts_doms[do]=per_ttt
 
                 # OK moving onto rain
-                print 'Now working on y axis'
-                print 'Opening '+rainfile
+                print 'Opening '+rainmeanfile
                 print 'for domain '+thisdom
 
-                rainout = mync.open_multi(rainfile, globp, rainmod, \
+                rainmean = mync.open_multi(rainmeanfile, globp, rainmod, \
                                       dataset=raindset, subs=thisdom)
 
-                rdim = len(rainout)
+                rdim = len(rainmean)
                 if rdim == 5:
-                    rain, rtime, rlat, rlon, rdtime = rainout
+                    rain, rtime, rlat, rlon, rdtime = rainmean
                 elif rdim == 6:
-                    rain, rtime, rlat, rlon, rlev, rdtime = rainout
+                    rain, rtime, rlat, rlon, rlev, rdtime = rainmean
                     rain = np.squeeze(rain)
                 else:
                     print 'Check number of levels in ncfile'
                 rdtime[:, 3] = 0
                 nlat = len(rlat)
                 nlon = len(rlon)
-                nboxes = float(nlat * nlon)
 
                 print 'Checking for duplicate timesteps'  # do retain this - IPSL A LR has double tsteps
                 tmp = np.ascontiguousarray(rdtime).view(np.dtype((np.void, rdtime.dtype.itemsize * rdtime.shape[1])))
                 _, idx = np.unique(tmp, return_index=True)
                 rdtime = rdtime[idx]
-                rain = rain[idx, :, :]
+                meandata = rain[idx, :, :]
 
-                # Get correct months
-                print 'Selecting the right months'
-                if ths_seas=='DJF' or ths_seas=='NDJFM':
-                    raindat2 = np.where((rdtime[:, 1] >= mon1) | (rdtime[:, 1] <= mon2))
-                elif ths_seas=='JF':
-                    raindat2 = np.where((rdtime[:, 1] >= mon1) & (rdtime[:, 1] <= mon2))
-                rain = np.squeeze(rain[raindat2, :, :])
-                rdtime = rdtime[raindat2]
-                totdays_hist = len(rdtime)
-
-                seasmean = np.nanmean(rain, 0)
+                # Select seasons and get mean
+                thesemons = np.zeros((nmon, nlat, nlon), dtype=np.float32)
+                for zz in range(len(mons)):
+                    thesemons[zz, :, :] = meandata[mons[zz] - 1, :, :]
+                seasmean = np.nanmean(thesemons, 0)
 
                 # Regional mean
                 if weightlats:
@@ -426,10 +451,40 @@ for t in range(nthresh):
                 print 'Getting value for y -axis'
                 bias = reg_mean - reg_ref_means[do]
 
-                yvals[cnt,do] = bias
+                biases_doms[do] = bias
 
-                # Finally getting intensity
-                print 'Now moving on to get data for the size of dot'
+                # Getting intensity
+                print 'Now moving on to get data for the intensity'
+                rainout = mync.open_multi(rainfile, globp, rainmod, \
+                                      dataset=raindset, subs=thisdom)
+
+                rdim = len(rainout)
+                if rdim == 5:
+                    rain, rtime, rlat, rlon, rdtime = rainout
+                elif rdim == 6:
+                    rain, rtime, rlat, rlon, rlev, rdtime = rainout
+                    rain = np.squeeze(rain)
+                else:
+                    print 'Check number of levels in ncfile'
+                rdtime[:, 3] = 0
+                nlat = len(rlat)
+                nlon = len(rlon)
+
+                print 'Checking for duplicate timesteps'  # do retain this - IPSL A LR has double tsteps
+                tmp = np.ascontiguousarray(rdtime).view(np.dtype((np.void, rdtime.dtype.itemsize * rdtime.shape[1])))
+                _, idx = np.unique(tmp, return_index=True)
+                rdtime = rdtime[idx]
+                rain = rain[idx, :, :]
+
+                # Get correct months
+                print 'Selecting the right months'
+                if seas=='DJF' or seas=='NDJFM':
+                    raindat2 = np.where((rdtime[:, 1] >= mon1) | (rdtime[:, 1] <= mon2))
+                elif seas=='JF':
+                    raindat2 = np.where((rdtime[:, 1] >= mon1) & (rdtime[:, 1] <= mon2))
+                rain = np.squeeze(rain[raindat2, :, :])
+                rdtime = rdtime[raindat2]
+                totdays_hist = len(rdtime)
 
                 print 'Selecting TTTs from rain data'
                 indices = []
@@ -495,67 +550,154 @@ for t in range(nthresh):
                 per75rain=np.nanpercentile(reg_ttt_mean,75)
 
                 if raintype=='totrain':
-                    zvals[cnt,do]=tottttrain
+                    intensval=tottttrain
                 elif raintype=='rainperttt':
-                    zvals[cnt,do]=rainperttt
+                    intensval=rainperttt
                 elif raintype=='perc75':
-                    zvals[cnt,do]=per75rain
+                    intensval=per75rain
 
-                sizes[cnt,do]=round(zvals[cnt,do])
+                intens_doms[do]=intensval
 
-                if group:
-                    colour = grcl
-                    mk = grmr
-                else:
-                    colour = cols[cnt]
-                    mk = markers[cnt]
+            # Now looping by 4 to get plots
+            print 'Now we have calculated everything for 2 domains, entering 4 plots'
 
-                if cnt==0:
-                    label=labname+' | '+rainlabname
-                else:
-                    label=labname
+            if colscheme=='groupall':
+                colour = grcl
+                mk = grmr
+            elif colscheme=='grouplast':
+                colour = 'k'
+                mk = '*'
 
-                ax=plt.subplot(yplots, xplots, do + 1)
-                ax.plot(xvals[cnt,do], yvals[cnt,do], marker=mk, \
-                    color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,do], linestyle='None')
+            if cnt == 0:
+                label = labname + ' | ' + rainlabname
+            else:
+                label = labname
+
+            std_mkr=8 # standard marker size
+
+            # part a
+            fgn=0
+            ax = plt.subplot(yplots, xplots, fgn+1)
+
+            xvals[cnt,fgn]=nttts_doms[dom_a]
+            yvals[cnt,fgn]=biases_doms[dom_a]
+            sizes[cnt,fgn]=std_mkr
+
+            ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
+                color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,fgn], linestyle='None')
+
+            # Highlight area with less than 1/3 of observed
+            if cnt==1:
+                if colscheme=='grouplast':
+                    ax.axvspan(40,49,alpha=0.1,color='springgreen')
+            ax.set_xlim(20,160)
+
+            # part b
+            fgn=1
+            ax = plt.subplot(yplots, xplots, fgn+1)
+
+            xvals[cnt,fgn]=pttts_doms[dom_b]
+            yvals[cnt,fgn]=biases_doms[dom_b]
+            sizes[cnt,fgn]=std_mkr
+            ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
+                color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,fgn], linestyle='None')
+
+            # Highlight high and low regions
+            if cnt==1:
+                if colscheme=='grouplast':
+                    ax.axvspan(10,50,alpha=0.1,color='blueviolet')
+                    ax.axvspan(80,90,alpha=0.1,color='r')
+            ax.set_xlim(10,90)
+
+
+            # part c
+            fgn=2
+            ax = plt.subplot(yplots, xplots, fgn+1)
+
+            xvals[cnt,fgn]=intens_doms[dom_c]
+            yvals[cnt,fgn]=biases_doms[dom_c]
+            sizes[cnt,fgn]=std_mkr
+
+            ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
+                color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,fgn], linestyle='None')
+            ax.set_xlim(2.0,6.0)
+
+
+            # Highlight high and low regions
+            if cnt==1:
+                if colscheme=='grouplast':
+                    ax.axvspan(2.0,3.9,alpha=0.1,color='gold')
+                    ax.axvspan(4.1,6.0,alpha=0.1,color='darkblue')
+
+
+            # part d
+            fgn=3
+            ax = plt.subplot(yplots, xplots, fgn+1)
+
+            colour = grcl
+            mk = grmr
+
+            xvals[cnt,fgn]=nttts_doms[dom_d_xaxis]
+            yvals[cnt,fgn]=pttts_doms[dom_d_yaxis]
+
+            if under_of=='dayof':
+                mult=3
+            elif under_of=='under':
+                multi=1.25
+
+            sizes[cnt,fgn]=intens_doms[dom_d_size]*mult
+
+            ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
+                color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,fgn], linestyle='None')
+            ax.set_xlim(20,160)
+
+
+            print 'Now writing values to textfile for this model'
+            print 'Model name, tot num ttt, tot num cont ttt, per ttt cont, intensity fulldom, intensity contdom'
+            txtfile.write(label+ "\t" +str(round(nttts_doms[0],2))+ "\t" +str(round(nttts_doms[1],2))+ \
+                          "\t" +str(round(pttts_doms[1],2))+ "\t"\
+                          + str(round(intens_doms[0],2))+ "\t" + str(round(intens_doms[1],2))+"\n")
 
             cnt += 1
             mdcnt += 1
 
-
-    print 'Checking sizes'
-    print sizes
-
     # Set up plot
-    print 'Looping part a and b'
+    print 'Looping 4 figure parts'
     for fg in range(len(figlabels)):
         ax=plt.subplot(yplots,xplots,fg+1)
 
         grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(xvals[:,fg], yvals[:,fg])
         rsquared = r_value ** 2
-        if rsquared > 0.4:
-            ax.plot(xvals[:,fg], (grad * xvals[:,fg] + inter), '-', color='k')
+        if trendline:
+            if rsquared > 0.4:
+                ax.plot(xvals[:,fg], (grad * xvals[:,fg] + inter), '-', color='k')
 
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
 
-        if fg==0:
-            xlab='Number of TTTs'
 
-
-            ylab='Precipitation bias'
-            plt.ylabel(ylab,fontsize=10, fontweight='demibold')
-
-        else:
+        if (fg==0) or (fg==3):
+            xlab='Number of TTTs in NDJFM'
+        elif fg==1:
             xlab='Proportion of TTTs over continent'
+        elif fg==2:
+            xlab='Mean Precip on TTT Days'
+
+        if fg==3:
+            ylab='Proportion of TTTs over continent'
+        elif fg==0:
+            ylab='Precipitation Bias in subtropics'
+        else:
+            ylab='Precipitation Bias over southern Africa'
 
         plt.xlabel(xlab, fontsize=10, fontweight='demibold')
+        plt.ylabel(ylab, fontsize=10, fontweight='demibold')
 
-    plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.1, wspace=0.2, hspace=0.2)
+    plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.1, wspace=0.2, hspace=0.5)
 
     handles, labels = ax.get_legend_handles_labels()
-    g.legend(handles, labels, loc='center right',fontsize='x-small',markerscale=0.8,numpoints=1)
+    g.legend(handles, labels, loc='center right',fontsize='x-small',markerscale=0.5,numpoints=1)
 
-    # Plot labels a to b
+    # Plot labels a to d
     for lab in range(len(figlabels)):
         xloc=labpos[lab,0]
         yloc=labpos[lab,1]
@@ -569,9 +711,12 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
+    txtfile.close()
+    print 'saving txtfile as ' + txtname
 
-    scatterfig=figdir+'/scatter_yay.a_nTTT_rnbias_intens.'+all_ttt_seas+'.elon_'+str(all_ttt_elon)+'.'+dom_a+'.b_perTTT_rnbias_intens.'\
-               +per_ttt_seas+'.elon_'+str(per_ttt_elon)+'.'+dom_b+'.'+under_of+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+
+    scatterfig=figdir+'/scatter_4panel.'+colscheme+'.a_nTTT_rnbias.fulldom.b_perTTT_rnbias.contdom.'\
+               +'c_intensTTT_rnbias.'+under_of+'.d_allcriteria.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.'+seas+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
