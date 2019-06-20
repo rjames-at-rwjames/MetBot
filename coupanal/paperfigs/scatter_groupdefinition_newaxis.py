@@ -581,7 +581,7 @@ for t in range(nthresh):
         figsuf=figsuf+'_testmodels'
 
 
-    scatterfig=figdir+'/scatter.a_nTTT_rnbias_intens.'+all_ttt_seas+'.elon_'+str(all_ttt_elon)+'.'+dom_a+'.b_perTTT_rnbias_intens.'\
+    scatterfig=figdir+'/AXESPLAY_scatter.a_nTTT_rnbias_intens.'+all_ttt_seas+'.elon_'+str(all_ttt_elon)+'.'+dom_a+'.b_perTTT_rnbias_intens.'\
                +per_ttt_seas+'.elon_'+str(per_ttt_elon)+'.'+dom_b+'.'+under_of+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
