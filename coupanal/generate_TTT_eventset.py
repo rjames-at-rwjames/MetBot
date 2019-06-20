@@ -23,7 +23,7 @@ import numpy as np
 from datetime import date
 
 # Option to run disconnected from x11 forwarding session
-runoffline=True
+runoffline=False
 if runoffline==True:
     import matplotlib
     matplotlib.use('Agg')
@@ -47,8 +47,8 @@ tstart=tmr.time()
 ### Running options
 olrall=True      # Get mbs for $dset-olr-0-all
 olrfull=True     # Get mbs for $dset-olr-0-full
-testfile=False    # Uses a test file with short period
-testyear=False  # Only uses first 365 days of olr data
+testfile=True    # Uses a test file with short period
+testyear=True  # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
 calcthresh=True    # If calc thresh true, calculates again
@@ -62,14 +62,14 @@ plothist=False       # Option to output histogram even if a new threshold is not
                     # useful for comparing future dist with past
 threshtest=True  # Option to run on thresholds + and - 5Wm2 as a test
 getmbs=True         # Actually run the MetBot algorithm
-showblb=False        # Show the blobs while running
+showblb=True        # Show the blobs while running
 debugplots=False     # Show 2 additional blob windows in showblobs
-intract=False        # Interactive running of showblobs
+intract=True        # Interactive running of showblobs
 refsubset=False     # This is used if noaaolr=True to only look in time window
 hrwindow=49         # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True      # Build tracks of cloud blobs that become TTT cloud bands
                     # ... which are then used to build TTT events.
-onlynew=True       # Option to only run if the synop file doesn't exist yet
+onlynew=False       # Option to only run if the synop file doesn't exist yet
                     # ... useful for looping through models
 addrain=False       # Add event rain - at the moment need to be running synoptics too
 heavythresh=50      # Threshold for heavy precip (if add event rain)
@@ -95,8 +95,8 @@ if dsets=='all':
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
     ndset=1
-    #dsetnames=['noaa']
-    dsetnames=['cmip5']
+    dsetnames=['noaa']
+    #dsetnames=['cmip5']
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -106,7 +106,7 @@ for d in range(ndset):
     print 'This is dset '+dcnt+' of '+ndstr+' in list'
 
     ### Multi model?
-    mods='all'  # "all" or "spec" to choose specific model(s)
+    mods='spec'  # "all" or "spec" to choose specific model(s)
     if mods=='all':
         nmod=len(dsetdict.dset_deets[dset])
         mnames=list(dsetdict.dset_deets[dset])
