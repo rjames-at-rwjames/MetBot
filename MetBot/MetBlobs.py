@@ -409,9 +409,47 @@ def SAfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1,rsltn='c',\
 
     return m, f1
 
+def AfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1,rsltn='l'):
+    '''m, f = AfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1)
+
+    Adapted from N Hart MetBlobs SAfBasemap
+
+    This creates a basemap instance from lat's and lon's provided.
+    USAGE: lat, lon
+    RETURNS: m, basemap object pointer (handle in matlab language)
+             f, pointer figure'''
+    xy=(lat.min(),lat.max(),lon.min(),lon.max())
+    nx = len(lon); ny = len(lat)
+
+    if prj=='cyl':
+        m = bm.Basemap(llcrnrlon=xy[2],llcrnrlat=xy[0],urcrnrlon=xy[3],\
+                       urcrnrlat=xy[1],resolution=rsltn,area_thresh=10000.,\
+                       projection='cyl')
+    if prj=='aea':
+        m = bm.Basemap(llcrnrlon=xy[2]-5.,llcrnrlat=xy[0],urcrnrlon=xy[3],\
+                       urcrnrlat=xy[1]+5,resolution=rsltn,projection='aea',\
+                        lat_1=-45.,lat_2=0.,lon_0=40.)
+
+    ### SET UP FIGURE AND MERIDIANS
+    delon = 10.
+    meridians = np.arange(0.,360.,delon)
+    delat = 10.
+    parallels = np.arange(-90.,90.,delat)
+    f1 = plt.figure(fno,figsize=[12.0, 8.0])
+
+    if drawstuff:
+        m.drawcoastlines()
+        m.drawcountries()
+        m.drawparallels(parallels,linewidth='0.1',labels=[1,0,0,0])
+        m.drawmeridians(meridians,linewidth='0.1',labels=[0,0,0,1])
+
+    return m, f1
+
 def SAfrBasemap2(lat,lon,drawstuff=False,prj='cyl', rsltn='c',\
     fontdict=False):
-    '''m, f = SAfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1)
+    '''m = SAfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1)
+
+    this one does not create figure
 
     This creates a basemap instance from lat's and lon's provided.
     Specific for this application of metblobs, so currently using proj='cyl',
@@ -445,6 +483,55 @@ def SAfrBasemap2(lat,lon,drawstuff=False,prj='cyl', rsltn='c',\
                         fontdict=fontdict)
         m.drawmeridians(meridians,linewidth='0.1',labels=[0,0,0,1],\
                         fontdict=fontdict)
+
+    return m
+
+def AfrBasemap2(lat,lon,latsp,lonsp,drawstuff=False,prj='cyl', rsltn='c',\
+    fontdict=False,onlyedge=False):
+    '''m = SAfrBasemap(lat,lon,drawstuff=False,prj='cyl',fno=1)
+
+    Adapted from N Hart MetBlobs SAfBasemap
+    this one does not create figure "f"
+
+    This creates a basemap instance from lat's and lon's provided.
+    Specific for this application of metblobs, so currently using proj='cyl',
+    however Albers equal area is here uncommented.
+    USAGE: lat, lon
+    RETURNS: m, basemap object pointer (handle in matlab language)'''
+    xy=(lat.min(),lat.max(),lon.min(),lon.max())
+    nx = len(lon); ny = len(lat)
+    if not fontdict: fontdict = {'fontsize':10,'fontweight':'normal'}
+    if prj=='cyl':
+        m = bm.Basemap(llcrnrlon=xy[2],llcrnrlat=xy[0],urcrnrlon=xy[3],\
+                       urcrnrlat=xy[1],resolution=rsltn,area_thresh=10000.,\
+                       projection='cyl')
+    if prj=='aea':
+        m = bm.Basemap(llcrnrlon=xy[2]-5.,llcrnrlat=xy[0],urcrnrlon=xy[3],\
+                       urcrnrlat=xy[1]+5,resolution=rsltn,projection='aea',\
+                        lat_1=-45.,lat_2=0.,lon_0=40.)
+
+    ### SET UP FIGURE AND MERIDIANS
+    delon = lonsp
+    meridians = np.arange(0.,360.,delon)
+    delat = latsp
+    circles = np.arange(0.,90.+delat,delat).tolist()+\
+              np.arange(-delat,-90.-delat,-delat).tolist()
+
+    if drawstuff:
+        m.drawcoastlines()
+        m.drawcountries()
+        if not onlyedge:
+            m.drawparallels(circles,linewidth='0.1',labels=[1,0,0,0],\
+                        fontdict=fontdict)
+            m.drawmeridians(meridians,linewidth='0.1',labels=[0,0,0,1],\
+                        fontdict=fontdict)
+        elif onlyedge=='lat':
+            m.drawparallels(circles,linewidth='0.1',labels=[1,0,0,0],\
+                        fontdict=fontdict)
+        elif onlyedge=='lon':
+            m.drawmeridians(meridians,linewidth='0.1',labels=[0,0,0,1],\
+                        fontdict=fontdict)
+
 
     return m
 

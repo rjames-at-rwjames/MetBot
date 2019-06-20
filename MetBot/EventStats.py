@@ -1315,6 +1315,123 @@ def spatiofreq4(m,s,modname,lat,lon,yrs,eventkeys,per='year',meanmask=False,\
 
     return std_mask
 
+def spatiofreq5(m,s,modname,lat,lon,yrs,eventkeys,per='year',\
+                clim=(4,36,4),savefig=False,\
+                flagonly=False,col='col',frm_event='all',cbar='ind',title=''):
+    '''Get grid-cell frequencies for no. of times a grid-cell falls within a
+       contour describing a feature from metblobs.
+       spatiofreq5 similar to spatiofreq5 but edited by RJ for plotting within a varied multipanel plot
+
+       per is used to determine if it's plotting per year or per CBs in this model
+
+       If a subset of month or season is required, input using specific eventkeys
+
+    USAGE: if wish to have only for particular month, month=yourchoice
+           if wish to only count for flagged days, flagonly=True
+           if cbar='ind' will make it for just this plot
+           if cbar='set' will make it at right assuming multipanel
+           title can be string or variable e.g. modname '''
+    if not eventkeys:
+        eventkeys=[]
+        for ed in s.uniques:
+            eventkeys.append(ed[0])
+
+    allmask = np.zeros((lat.shape[0],lon.shape[0]),dtype=np.float32)
+
+    #Determine which variable we dealing with
+    countkey=s.events.values()[0].refkey
+    if flagonly: countkey = s.flagkey
+
+    cnt=0
+    for k in eventkeys:
+        e = s.events[k]
+        if flagonly:
+            itrk=e.ixflags
+        else:
+            trkarr = np.int32(e.trkarrs[countkey])
+            if trkarr.ndim==2:
+                ixt = np.where(trkarr[:,1]>0)[0]
+                itrk = trkarr[ixt,1]
+            elif trkarr.ndim==3:
+                itrk = np.ndarray((0,),dtype=np.int32)
+                for d in xrange(trkarr.shape[2]):
+                    ixt = np.where(trkarr[:,1,d]>0)[0]
+                    uni,iu=np.unique(trkarr[ixt,0],return_index=True)
+                    ixt=ixt[iu]
+                    itrk = np.append(itrk,trkarr[ixt,1,d].squeeze())
+        # Get masks for each contour feature of a track
+        if frm_event=='all':
+            # note that there is a chance some of the chs will be counted twice with this
+            # if they form part of more than 1 event
+            for ixtrk in itrk:
+                mask = my.poly2mask(lon,lat,e.blobs[countkey]['ch'][ixtrk])
+                allmask=allmask+np.float32(mask)
+                cnt+=1
+        elif frm_event=='first':
+            ixtrk=itrk[0]
+            mask = my.poly2mask(lon, lat, e.blobs[countkey]['ch'][ixtrk])
+            allmask = allmask + np.float32(mask)
+            cnt += 1
+
+    nblobs=cnt
+
+    if col=='col':
+        cm = plt.cm.magma
+    elif col=='bw':
+        cm=plt.cm.gist_gray_r
+    #cm.set_under(color='w')
+
+    if per=='year':
+        std_mask=allmask/len(yrs)
+    elif per=='cbs':
+        std_mask=allmask/nblobs*100
+        print 'Dividing by number of blobs'
+        print nblobs
+
+    ## NEED TO DO THIS SINCE PCOLOR IS NOT SHADING VALUES OUTSIDE OF THE CLIMS
+    cstd_mask=np.where(std_mask>clim[1],clim[1],std_mask)
+    cstd_mask=np.where(cstd_mask<clim[0],clim[0],cstd_mask)
+    # Plot pcolor
+    pcolmap=m.pcolormesh(lon,lat,cstd_mask,cmap=cm,zorder=1)
+    img=plt.gci() # gets a reference for the image
+
+    plt.clim(clim[0],clim[1]) # sets color limits of current image
+    bounds=np.arange(clim[0],clim[1]+clim[2],clim[2])
+    if savefig:
+        f,ax=plt.gcf(),plt.gca()
+        axcol=f.add_axes([0.93,0.2,0.02,0.6])
+        plt.colorbar(mappable=img,cax=axcol,boundaries=bounds)
+        my.ytickfonts()
+        if isinstance(meanmask,np.ndarray):
+            plt.ylabel('anomaly grid-point count / year',fontdict=fd)
+        else:
+            plt.ylabel('grid-point count / year',fontdict=fd)
+        plt.axes(ax)
+        plt.title('Cloudband Grid-Point Count Climatology: '\
+                  +descr.upper(),fontsize='14',fontdict=fd)
+        fname='/FootprintFreqencygray-'+descr+'.png'
+        if flagonly:
+            fname='/FootprintFreqencygray-'+descr+'_flagonly.png'
+        plt.savefig(fname,dpi=150)
+    else:
+        f, ax = plt.gcf(), plt.gca() # get reference and set axes
+        if cbar=='set':
+            axcol = f.add_axes([0.91, 0.15, 0.01, 0.6])
+            plt.colorbar(cax=axcol, boundaries=bounds)
+        elif cbar=='ind':
+            plt.colorbar()
+        my.ytickfonts(fontsize=10,fontweight='demibold')
+        if per=='year':
+            if cbar=='set':
+                plt.ylabel('grid-point count / year', fontsize=10)
+        elif per=='cbs':
+            if cbar=='set':
+                plt.ylabel('% of cbs covering gridbox', fontsize=10)
+        plt.axes(ax)
+        plt.title(title,fontsize=8, fontweight='demibold')
+
+    return std_mask, img
+
 
 def wetlandevents(s, eventkeys, land_datasets=['wrc']):
     '''Returns the keys of events that produce continental rainfall'''

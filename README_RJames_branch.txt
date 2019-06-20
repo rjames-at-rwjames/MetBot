@@ -24,8 +24,9 @@ In general additional functions have been added to add a different option for ru
 rather than amending the original function
 
 ** MetBlobs
- - new function SAfrBasemap2 - has slightly different execution to SAfrBasemap
+ - new functions SAfrBasemap2 and AfrBasemap - have slightly different execution to SAfrBasemap
  - new function MetBlobs_th - this allows OLR threshold to be specified
+
 
 ** mynetcdf
  - Lots of changes to open files from different datasets
