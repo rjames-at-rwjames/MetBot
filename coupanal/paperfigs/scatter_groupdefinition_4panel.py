@@ -35,7 +35,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 test_scr=False
-colscheme='groupall' # 'groupall' or 'grouplast'
+colscheme='grouplast' # 'groupall' or 'grouplast'
 alphord=True    # models in alphabetical order
 group=True
 threshtest=True
@@ -567,13 +567,18 @@ for t in range(nthresh):
                 colour = grcl
                 mk = grmr
             elif colscheme=='grouplast':
-                colour = 'k'
-                mk = '*'
+                if dset=='noaa':
+                    colour='fuchsia'
+                else:
+                    colour = 'k'
+                mk = 'o'
 
             if cnt == 0:
                 label = labname + ' | ' + rainlabname
+                zord=3
             else:
                 label = labname
+                zord=2
 
             std_mkr=8 # standard marker size
 
@@ -586,13 +591,17 @@ for t in range(nthresh):
             sizes[cnt,fgn]=std_mkr
 
             ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,fgn], linestyle='None')
+                color=colour, label=label, markeredgecolor=colour,\
+                    markersize=sizes[cnt,fgn], linestyle='None',zorder=zord)
 
             # Highlight area with less than 1/3 of observed
-            if cnt==1:
+            if cnt==0:
                 if colscheme=='grouplast':
-                    ax.axvspan(40,49,alpha=0.1,color='springgreen')
+                    ax.axvspan(20,49,alpha=0.1,color='springgreen',zorder=1)
+                elif colscheme=='groupall':
+                    ax.plot([49,49],[-0.2,1.4],color='springgreen',lw=3,alpha=0.5,zorder=1)
             ax.set_xlim(20,160)
+            ax.set_ylim(-0.2,1.4)
 
             # part b
             fgn=1
@@ -602,14 +611,20 @@ for t in range(nthresh):
             yvals[cnt,fgn]=biases_doms[dom_b]
             sizes[cnt,fgn]=std_mkr
             ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,fgn], linestyle='None')
+                color=colour, label=label, markeredgecolor=colour,\
+                    markersize=sizes[cnt,fgn], linestyle='None',zorder=zord)
 
             # Highlight high and low regions
-            if cnt==1:
+            if cnt==0:
                 if colscheme=='grouplast':
-                    ax.axvspan(10,50,alpha=0.1,color='blueviolet')
-                    ax.axvspan(80,90,alpha=0.1,color='r')
+                    ax.axvspan(10,50,alpha=0.1,color='blueviolet',zorder=1)
+                    ax.axvspan(80,90,alpha=0.1,color='r',zorder=1)
+                elif colscheme=='groupall':
+                    ax.plot([50,50],[-1.0,2.5],color='blueviolet',lw=3,alpha=0.5,zorder=1)
+                    ax.plot([80,80],[-1.0,2.5],color='r',lw=3,zorder=1)
             ax.set_xlim(10,90)
+            ax.set_ylim(-1.0,2.5)
+
 
 
             # part c
@@ -621,15 +636,20 @@ for t in range(nthresh):
             sizes[cnt,fgn]=std_mkr
 
             ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,fgn], linestyle='None')
-            ax.set_xlim(2.0,6.0)
+                color=colour, label=label, markeredgecolor=colour,\
+                    markersize=sizes[cnt,fgn], linestyle='None',zorder=zord)
 
 
             # Highlight high and low regions
-            if cnt==1:
+            if cnt==0:
                 if colscheme=='grouplast':
-                    ax.axvspan(2.0,3.9,alpha=0.1,color='gold')
-                    ax.axvspan(4.1,6.0,alpha=0.1,color='darkblue')
+                    ax.axvspan(2.0,4.0,alpha=0.1,color='gold',zorder=1)
+                    ax.axvspan(4.0,6.0,alpha=0.1,color='darkblue',zorder=1)
+                elif colscheme=='groupall':
+                    ax.plot([4.0,4.0],[-1.0,2.5],color='gold',lw=3,zorder=1)
+                    ax.plot([4.05,4.05],[-1.0,2.5],color='darkblue',lw=3,alpha=0.5,zorder=1)
+            ax.set_xlim(2.0,6.0)
+            ax.set_ylim(-1.0,2.5)
 
 
             # part d
@@ -650,7 +670,8 @@ for t in range(nthresh):
             sizes[cnt,fgn]=intens_doms[dom_d_size]*mult
 
             ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                color=colour, label=label, markeredgecolor=colour, markersize=sizes[cnt,fgn], linestyle='None')
+                color=colour, label=label, markeredgecolor=colour,\
+                    markersize=sizes[cnt,fgn], linestyle='None',zorder=zord)
             ax.set_xlim(20,160)
 
 
@@ -682,22 +703,27 @@ for t in range(nthresh):
         elif fg==1:
             xlab='Proportion of TTTs over continent'
         elif fg==2:
-            xlab='Mean Precip on TTT Days'
+            xlab='Mean precipitation on TTT Days'
 
         if fg==3:
             ylab='Proportion of TTTs over continent'
         elif fg==0:
-            ylab='Precipitation Bias in subtropics'
+            ylab='Precipitation bias in subtropics'
         else:
-            ylab='Precipitation Bias over southern Africa'
+            ylab='Precipitation bias over southern Africa'
 
         plt.xlabel(xlab, fontsize=10, fontweight='demibold')
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')
 
-    plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.1, wspace=0.2, hspace=0.5)
+    plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.05, wspace=0.2, hspace=0.5)
 
     handles, labels = ax.get_legend_handles_labels()
-    g.legend(handles, labels, loc='center right',fontsize='x-small',markerscale=0.5,numpoints=1)
+    if colscheme=='grouplast':
+        legloc='lower right'
+    elif colscheme=='groupall':
+        legloc='center right'
+
+    g.legend(handles, labels, loc=legloc,fontsize='x-small',markerscale=0.5,numpoints=1)
 
     # Plot labels a to d
     for lab in range(len(figlabels)):

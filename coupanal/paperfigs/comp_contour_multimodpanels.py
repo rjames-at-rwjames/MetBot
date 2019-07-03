@@ -591,7 +591,7 @@ for t in range(nthresh):
                 # Plot cbar
                 axcl = g.add_axes([0.94, 0.15, 0.01, 0.6])
                 cbar = plt.colorbar(cs, cax=axcl)
-                my.ytickfonts(fontsize=12.)
+                my.ytickfonts(fontsize=10.)
 
                 # Save
                 if ctyp == 'anom_mon' or ctyp=='anom_seas':
