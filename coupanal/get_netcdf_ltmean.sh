@@ -13,7 +13,7 @@ onlynew=True
 # Loop datasets - by name because they are original
 echo 'Looping datasets and models'
 
-for name in MIROC5;do
+for name in cdr2;do
 #for name in $(more $dset_dict | gawk '{print $1}');do
     echo $name
     dset=$(grep -w $name $dset_dict  | gawk '{print $2}' | head -1)
@@ -21,7 +21,7 @@ for name in MIROC5;do
 
     #Loop variables
     echo 'Looping variables'
-    for var in u v q;do
+    for var in olr;do
     # for var in olr pr omega gpth u v q T;do
 
         echo "Running on"

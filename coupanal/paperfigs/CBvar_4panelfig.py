@@ -23,7 +23,6 @@ import MetBot.mytools as my
 import MetBot.mynetcdf as mync
 import MetBot.SynopticAnatomy as sy
 import MetBot.MetBlobs as blb
-import MetBot as stats
 import coupanal.Subset_Events as sset
 import coupanal.Plotting_Blobs as plbl
 

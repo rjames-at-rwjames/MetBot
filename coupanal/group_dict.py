@@ -19,7 +19,7 @@ dset_deets['cmip5']={
 'CMCC-CM': {'name': "CMCC-CM",'group':"2",'ord':"3"},
 'CMCC-CMS': {'name': "CMCC-CMS",'group':"2",'ord':"4"},
 'CNRM-CM5': {'name': "CNRM-CM5",'group':"3",'ord':"12"},
-'CSIRO-Mk3-6-0': {'name': "CSIRO-Mk3-6-0",'group':"6"},
+'CSIRO-Mk3-6-0': {'name': "CSIRO-Mk3-6-0",'group':"6",'ord':"28"},
 'FGOALS-g2': {'name': "FGOALS-g2",'group':"2",'ord':"5"},
 'GFDL-CM3': {'name': "GFDL-CM3",'group':"3",'ord':"13"},
 'GFDL-ESM2G': {'name': "GFDL-ESM2G",'group':"3",'ord':"14"},
