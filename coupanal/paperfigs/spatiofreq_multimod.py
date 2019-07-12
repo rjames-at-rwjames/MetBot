@@ -41,8 +41,6 @@ from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 group=True
 bias=True # for models, plot bias relative to obs
-biasper=False # bias as a percentage of reference data mean
-                # to get this "bias" must also be True
 
 res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
@@ -284,9 +282,6 @@ for t in range(nthresh):
                 else:
                     biasmask = allmask - refmask
 
-                    if biasper:
-                        biasmask = biasmask / refmask * 100
-
                 if cnt==1:
                     clim = nos4cbar
                     cm = plt.cm.gist_gray_r
@@ -322,10 +317,7 @@ for t in range(nthresh):
 
     # Final stuff
     if bias:
-        if biasper:
-            figsuf = 'biasper.'
-        else:
-            figsuf = 'bias.'
+        figsuf = 'bias.'
     else:
         figsuf = ''
 

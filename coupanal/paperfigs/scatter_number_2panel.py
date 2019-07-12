@@ -2,7 +2,6 @@
 # part a - mean subtropical OLR and nTTT
 # part b - mean Congo Basin OLR and nTTT
 
-
 import os
 import sys
 
@@ -40,7 +39,6 @@ trendline=True
 
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
-seas='NDJFM'
 peryear = True # counts cbs per year
 weightlats=True
 
@@ -60,11 +58,13 @@ else:
 fulldom_wlon=7.5
 fulldom_elon=100.0
 dom_full='subt'
+seas_full='NDJFM'
 
 # cont domain
 contdom_wlon=7.5
 contdom_elon=45.0
 dom_cont='scongo'
+seas_cont='DJF'
 
 # Info for each plot
 # 0 is full domain, 1 is continental domain
@@ -81,18 +81,6 @@ txtdir=botdir+"histpaper_txt/"
 figdir=botdir+"histpaper_figs/scatter_number/"
 my.mkdir_p(figdir)
 threshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
-
-## Seas information
-if seas == 'NDJFM':
-    mons = [1, 2, 3, 11, 12]
-    nmon = len(mons)
-    mon1 = 11
-    mon2 = 3
-elif seas=='DJF':
-    mons = [1, 2, 12]
-    nmon = len(mons)
-    mon1 = 11
-    mon2 = 2
 
 ### Dsets
 dsets = 'spec'
@@ -280,13 +268,6 @@ for t in range(nthresh):
                 dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
                     dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
 
-            # Subset the season
-            print 'Subsetting by season?'
-            print 'Selecting months for : ' + seas
-            dates_se, cXs_se, cYs_se, degs_se, chs_se, keys_se, daynos_se, tworecdt_se = \
-                sset.sel_seas(mons, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
-                              tworecdt_dd)
-
             ### Convection information for x axis
             print 'Getting info on convection for this model'
             # Switch variable if NOAA
@@ -317,6 +298,7 @@ for t in range(nthresh):
             ndoms = len(doms)
             wlon_picks=[fulldom_wlon,contdom_wlon]
             elon_picks=[fulldom_elon,contdom_elon]
+            seas_picks=[seas_full,seas_cont]
 
             convmn_doms=np.zeros(ndoms,dtype=np.float32)
             nttts_doms=np.zeros(ndoms,dtype=np.float32)
@@ -327,6 +309,26 @@ for t in range(nthresh):
                 thisdom = doms[do]
                 wlon=wlon_picks[do]
                 elon=elon_picks[do]
+                thseas=seas_picks[do]
+
+                ## Seas information
+                if thseas == 'NDJFM':
+                    mons = [1, 2, 3, 11, 12]
+                    nmon = len(mons)
+                    mon1 = 11
+                    mon2 = 3
+                elif thseas == 'DJF':
+                    mons = [1, 2, 12]
+                    nmon = len(mons)
+                    mon1 = 11
+                    mon2 = 2
+
+                # Subset the season
+                print 'Subsetting by season?'
+                print 'Selecting months for : ' + thseas
+                dates_se, cXs_se, cYs_se, degs_se, chs_se, keys_se, daynos_se, tworecdt_se = \
+                    sset.sel_seas(mons, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
+                                  tworecdt_dd)
 
                 # Then subset by longitude
                 print 'Subsetting by latitude?'
@@ -450,11 +452,11 @@ for t in range(nthresh):
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
 
         if (fg==0):
-            xlab='Mean subtropical OLR '+seas
-            ylab='Number of TTTs'
+            xlab='Mean '+seas_full+' subtropical OLR'
+            ylab='Number of '+seas_full+' TTTs'
         elif fg==1:
-            xlab='Mean OLR in southern Congo '+seas
-            ylab='Number of continental TTTs'
+            xlab='Mean '+seas_cont+' OLR in southern Congo'
+            ylab='Number of '+seas_cont+' continental TTTs'
 
         plt.xlabel(xlab, fontsize=10, fontweight='demibold')
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')
@@ -481,8 +483,8 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    scatterfig=figdir+'/scatter_number_2panel.'+globv+'.seas_'+seas+'.'\
-               +figsuf+'.thresh_'+thnames[t]+'.'+str(contdom_elon)+'.png'
+    scatterfig=figdir+'/scatter_number_2panel.'+globv+'.a.'+seas_full+'.'\
+               +'b.'+seas_cont+'.w_'+str(contdom_elon)+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
