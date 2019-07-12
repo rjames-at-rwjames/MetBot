@@ -28,7 +28,7 @@ import coupanal.group_dict as dset_grp
 
 
 ### Running options
-test_scr=False
+test_scr=True
 threshtest=False
 plotdom='SA' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
@@ -39,9 +39,9 @@ nos4cbar = (20, 50, 3)
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 group=True
-
-col_plot=True
-bw_plot=False
+bias=True # for models, plot bias relative to obs
+biasper=False # bias as a percentage of reference data mean
+                # to get this "bias" must also be True
 
 res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
@@ -271,9 +271,24 @@ for t in range(nthresh):
                     m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
                                         fontdict={'fontsize': 8, 'fontweight': 'normal'}, onlyedge='lon')
 
-            allmask, img = plbl.spatiofreq6(m, chs_ddm, name, lat4sf, lon4sf, yrs, per=rate, clim=nos4cbar, \
+            if not bias:
+                allmask, img = plbl.spatiofreq6(m, chs_ddm, name, lat4sf, lon4sf, yrs, per=rate, clim=nos4cbar, \
                                             savefig=False, \
                                             col='bw', cbar='none', title=labname)
+            elif bias:
+                allmask = plbl.spatiofreq_noplot(chs_ddm, lat4sf, lon4sf, yrs, per=rate)
+
+                if cnt==1:
+                    refmask = allmask[:]
+                else:
+                    biasmask = allmask - refmask
+
+                    if biasper:
+                        biasmask = biasmask / refmask * 100
+
+                cm = plt.cm.bwr_r
+                pcolmap = m.pcolormesh(lon4sf, lat4sf, biasmask, cmap=cm, zorder=1)
+                plt.title(title, fontsize=8, fontweight='demibold')
 
             m.drawcountries(color='k')
             m.drawcoastlines(color='k')
@@ -293,10 +308,19 @@ for t in range(nthresh):
     my.ytickfonts(fontsize=10.)
 
     # Final stuff
-    if group:
-        figsuf='grouped'
+    if bias:
+        if biasper:
+            figsuf = 'biasper.'
+        else:
+            figsuf = 'bias.'
     else:
-        figsuf=''
+        figsuf = ''
+
+    if group:
+        figsuf=figsuf +'grouped.'
+
+    if test_scr:
+        figsuf = figsuf + 'testmodels.'
 
     figname = figdir + 'multi_spatiofreq.'+seas+'.'+res+'.' + plotdom + '.per_'+rate+'.'+figsuf+'.'+thnames[t]+'.png'
     print 'saving figure as ' + figname

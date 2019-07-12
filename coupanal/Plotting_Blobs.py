@@ -86,3 +86,39 @@ def spatiofreq6(m,chs,modname,lat,lon,yrs,per='year',\
         plt.title(title,fontsize=8, fontweight='demibold')
 
     return std_mask, img
+
+
+def spatiofreq_noplt(chs,lat,lon,yrs,per='year'):
+    '''Get grid-cell frequencies for no. of times a grid-cell falls within a
+       contour describing a feature from metblobs.
+       spatiofreq_nolt is new version by RJ designed to read in subsets of events
+       designed for plotting within a multipanel plot
+       AND to just output the values of "allmask" rather than plotting
+       so that you can do plotting in the wrapper
+       & calculate biases
+
+       Need to first run SubSet_Events.evset_info to get chs
+
+       per is used to determine if it's plotting per year or per CBs in this model
+
+       If a subset of month or season is required, input only those cbs'''
+
+
+    allmask = np.zeros((lat.shape[0],lon.shape[0]),dtype=np.float32)
+
+    nblobs=len(chs)
+    print 'Running spatiofreq on '+str(nblobs)+' CBs '
+
+    for bl in range(nblobs):
+        this_ch=chs[bl]
+        mask = my.poly2mask(lon, lat, this_ch)
+        allmask=allmask+np.float32(mask)
+
+    if per=='year':
+        std_mask=allmask/len(yrs)
+    elif per=='cbs':
+        std_mask=allmask/nblobs*100
+        print 'Dividing by number of blobs'
+        print nblobs
+
+    return std_mask
