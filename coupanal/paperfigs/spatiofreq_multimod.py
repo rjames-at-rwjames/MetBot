@@ -30,8 +30,9 @@ import coupanal.group_dict as dset_grp
 ### Running options
 test_scr=True
 threshtest=False
-plotdom='SA' # which area to include in the plot - SA (with tropics and extratrops)
+plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
+                # SA_TR works much more nicely because can see it clearly and runs quickly
 seas='NDJFM'
 rate='cbs' # if rate='year' it will plot cbs per year
             # if cbs it will plot for that models total number of CBs
@@ -276,7 +277,7 @@ for t in range(nthresh):
                                             savefig=False, \
                                             col='bw', cbar='none', title=labname)
             elif bias:
-                allmask = plbl.spatiofreq_noplot(chs_ddm, lat4sf, lon4sf, yrs, per=rate)
+                allmask = plbl.spatiofreq_noplt(chs_ddm, lat4sf, lon4sf, yrs, per=rate)
 
                 if cnt==1:
                     refmask = allmask[:]
@@ -286,9 +287,21 @@ for t in range(nthresh):
                     if biasper:
                         biasmask = biasmask / refmask * 100
 
-                cm = plt.cm.bwr_r
-                pcolmap = m.pcolormesh(lon4sf, lat4sf, biasmask, cmap=cm, zorder=1)
-                plt.title(title, fontsize=8, fontweight='demibold')
+                if cnt==1:
+                    clim = nos4cbar
+                    cm = plt.cm.gist_gray_r
+                    std_mask = allmask[:]
+                    cstd_mask = np.where(std_mask > clim[1], clim[1], std_mask)
+                    cstd_mask = np.where(cstd_mask < clim[0], clim[0], cstd_mask)
+                    # Plot pcolor
+                    pcolmap = m.pcolormesh(lon4sf, lat4sf, cstd_mask, cmap=cm, zorder=1)
+                    plt.clim(clim[0], clim[1])  # sets color limits of current image
+                    bounds = np.arange(clim[0], clim[1] + clim[2], clim[2])
+                else:
+                    cm = plt.cm.bwr_r
+                    pcolmap = m.pcolormesh(lon4sf, lat4sf, biasmask, cmap=cm, zorder=1)
+
+                plt.title(labname, fontsize=8, fontweight='demibold')
 
             m.drawcountries(color='k')
             m.drawcoastlines(color='k')
