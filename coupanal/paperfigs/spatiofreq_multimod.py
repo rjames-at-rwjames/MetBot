@@ -36,11 +36,13 @@ plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extra
 seas='NDJFM'
 rate='cbs' # if rate='year' it will plot cbs per year
             # if cbs it will plot for that models total number of CBs
-nos4cbar = (20, 50, 3)
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 group=True
 bias=True # for models, plot bias relative to obs
+nos4cbar = (20, 50, 3)
+if bias:
+    nos4bias=(-10, 10, 1)
 
 res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
@@ -291,10 +293,14 @@ for t in range(nthresh):
                     # Plot pcolor
                     pcolmap = m.pcolormesh(lon4sf, lat4sf, cstd_mask, cmap=cm, zorder=1)
                     plt.clim(clim[0], clim[1])  # sets color limits of current image
-                    bounds = np.arange(clim[0], clim[1] + clim[2], clim[2])
                 else:
+                    clim2 = nos4bias
+
+                    bstd_mask = np.where(biasmask > clim2[1], clim2[1], biasmask)
+                    bstd_mask = np.where(biasmask < clim2[0], clim2[0], biasmask)
                     cm = plt.cm.bwr_r
-                    pcolmap = m.pcolormesh(lon4sf, lat4sf, biasmask, cmap=cm, zorder=1)
+                    pcolmap = m.pcolormesh(lon4sf, lat4sf, bstd_mask, cmap=cm, zorder=1)
+                    plt.clim(clim2[0], clim2[1])  # sets color limits of current image
 
                 plt.title(labname, fontsize=8, fontweight='demibold')
 
@@ -309,11 +315,14 @@ for t in range(nthresh):
     plt.subplots_adjust(left=0.05, right=0.9, top=0.95, bottom=0.02, wspace=0.1, hspace=0.2)
 
     # Plot cbar
-    # axcl = g.add_axes([0.94, 0.15, 0.01, 0.6])
-    # clim=nos4cbar[:]
-    # bounds=np.arange(clim[0],clim[1]+clim[2],clim[2])
-    # cbar = plt.colorbar(img, cax=axcl, boundaries=bounds, extend='both')
-    # my.ytickfonts(fontsize=8.)
+    axcl = g.add_axes([0.94, 0.15, 0.01, 0.6])
+    if bias:
+        clim=nos4bias[:]
+    else:
+        clim=nos4cbar[:]
+    bounds=np.arange(clim[0],clim[1]+clim[2],clim[2])
+    cbar = plt.colorbar(img, cax=axcl, boundaries=bounds, extend='both')
+    my.ytickfonts(fontsize=8.)
 
     # Final stuff
     if bias:
