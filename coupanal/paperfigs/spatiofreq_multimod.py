@@ -29,9 +29,9 @@ import coupanal.group_dict as dset_grp
 
 ### Running options
 test_scr=True
-threshtest=True
-sub="SA"
-sfdom="SA_TR"
+threshtest=False
+plotdom='SA' # which area to include in the plot - SA (with tropics and extratrops)
+                # or SA_TR (which is the domain over which the blobs are identified)
 seas='NDJFM'
 rate='cbs' # if rate='year' it will plot cbs per year
             # if cbs it will plot for that models total number of CBs
@@ -47,18 +47,27 @@ res='make'              # Option to plot at 'native' res or 'make' to create own
 if res=='make':
     gsize=2.0
     extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
-    lt1=-0.5
-    lt2=-59.5
-    ln1=0.5
-    ln2=99.5
+    if plotdom=='SA':
+        lt1=-0.5
+        lt2=-59.5
+        ln1=0.5
+        ln2=99.5
+    elif plotdom=='SA_TR':
+        lt1=-15.5
+        lt2=-39.5
+        ln1=7.5
+        ln2=99.5
 
 xplots = 4
 yplots = 7
-figdim=[10,7]
+if plotdom=='SA':
+    figdim=[9,11]
+elif plotdom=='SA_TR':
+    figdim=[10,7]
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
-figdir=bkdir+"/histpaper_figs/spatiofreq_multimod"
+figdir=bkdir+"/histpaper_figs/spatiofreq_multimod/"
 my.mkdir_p(figdir)
 threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
@@ -264,7 +273,7 @@ for t in range(nthresh):
 
             allmask, img = plbl.spatiofreq6(m, chs_ddm, name, lat4sf, lon4sf, yrs, per=rate, clim=nos4cbar, \
                                             savefig=False, \
-                                            col='bw', cbar='none', title='')
+                                            col='bw', cbar='none', title=labname)
 
             m.drawcountries(color='k')
             m.drawcoastlines(color='k')
