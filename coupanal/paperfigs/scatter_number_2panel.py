@@ -122,8 +122,8 @@ elif group:
     grcls = ['fuchsia', 'gold', 'darkblue', 'r', 'blueviolet', 'springgreen']
     grmrs=["o","^","*","d","+","v","h",">"]
 
-siz = np.full((28), 5)
-siz[0] = 8
+siz = np.full((28), 8)
+siz[0] = 10
 
 ### Loop threshs
 if threshtest:
@@ -467,7 +467,7 @@ for t in range(nthresh):
     handles, labels = ax.get_legend_handles_labels()
     legloc='center right'
 
-    g.legend(handles, labels, loc=legloc,fontsize='x-small',markerscale=0.5,numpoints=1)
+    g.legend(handles, labels, loc=legloc,fontsize='x-small',markerscale=0.8,numpoints=1)
 
     # Plot labels a to d
     for lab in range(len(figlabels)):
