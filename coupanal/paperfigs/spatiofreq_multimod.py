@@ -54,10 +54,10 @@ if res=='make':
         ln1=0.5
         ln2=99.5
     elif plotdom=='SA_TR':
-        lt1=-15.5
-        lt2=-39.5
+        lt1=-16.0
+        lt2=-38.0
         ln1=7.5
-        ln2=99.5
+        ln2=99.0
 
 xplots = 4
 yplots = 7
@@ -76,7 +76,7 @@ if group:
     grcls=['fuchsia','gold','darkblue','r','blueviolet','springgreen']
 
 # Lon and lat spacing
-latsp=15.
+latsp=10.
 lonsp=20.
 wplotdraw='edges' # which plot to draw latitude and longitude
                     # 'first' for first only
@@ -314,11 +314,11 @@ for t in range(nthresh):
     plt.subplots_adjust(left=0.05, right=0.9, top=0.95, bottom=0.02, wspace=0.1, hspace=0.2)
 
     # Plot cbar
-    axcl = g.add_axes([0.94, 0.15, 0.01, 0.6])
-    clim=nos4cbar[:]
-    bounds=np.arange(clim[0],clim[1]+clim[2],clim[2])
-    cbar = plt.colorbar(img, cax=axcl, boundaries=bounds, extend='both')
-    my.ytickfonts(fontsize=10.)
+    # axcl = g.add_axes([0.94, 0.15, 0.01, 0.6])
+    # clim=nos4cbar[:]
+    # bounds=np.arange(clim[0],clim[1]+clim[2],clim[2])
+    # cbar = plt.colorbar(img, cax=axcl, boundaries=bounds, extend='both')
+    # my.ytickfonts(fontsize=8.)
 
     # Final stuff
     if bias:
