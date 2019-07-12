@@ -302,6 +302,7 @@ for t in range(nthresh):
                     pcolmap = m.pcolormesh(lon4sf, lat4sf, bstd_mask, cmap=cm, zorder=1)
                     plt.clim(clim2[0], clim2[1])  # sets color limits of current image
 
+                img = plt.gci()  # gets a reference for the image
                 plt.title(labname, fontsize=8, fontweight='demibold')
 
             m.drawcountries(color='k')
