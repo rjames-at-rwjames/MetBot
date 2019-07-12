@@ -28,7 +28,7 @@ import coupanal.group_dict as dset_grp
 
 
 ### Running options
-test_scr=True
+test_scr=False
 threshtest=False
 plotdom='SA' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
@@ -298,7 +298,7 @@ for t in range(nthresh):
     else:
         figsuf=''
 
-    figname = figdir + 'multi_spatiofreq.'+seas+'.'+res+'.' + sub + '.per_'+rate+'.'+figsuf+'.'+thnames[t]+'.png'
+    figname = figdir + 'multi_spatiofreq.'+seas+'.'+res+'.' + plotdom + '.per_'+rate+'.'+figsuf+'.'+thnames[t]+'.png'
     print 'saving figure as ' + figname
     plt.savefig(figname, dpi=150)
     plt.close()
