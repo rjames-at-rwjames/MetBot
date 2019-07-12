@@ -28,7 +28,7 @@ import coupanal.group_dict as dset_grp
 
 
 ### Running options
-test_scr=True
+test_scr=False
 threshtest=False
 plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
@@ -42,7 +42,7 @@ group=True
 bias=True # for models, plot bias relative to obs
 nos4cbar = (20, 50, 3)
 if bias:
-    nos4bias=(-10, 10, 1)
+    nos4bias=(-16, 18, 2)
 
 res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
