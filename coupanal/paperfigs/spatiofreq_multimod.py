@@ -42,7 +42,7 @@ group=True
 bias=True # for models, plot bias relative to obs
 nos4cbar = (20, 50, 3)
 if bias:
-    nos4bias=(-16, 18, 2)
+    nos4bias=(-16, 16, 2)
 
 res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
