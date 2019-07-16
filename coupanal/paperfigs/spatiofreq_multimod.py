@@ -44,9 +44,9 @@ nos4cbar = (20, 50, 3)
 if bias:
     nos4bias=(-16, 16, 2)
 
-res='native'              # Option to plot at 'native' res or 'make' to create own grid
+res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
-    gsize=2.0
+    gsize=2.5
     extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
     if plotdom=='SA':
         lt1=-0.5
@@ -362,7 +362,12 @@ for t in range(nthresh):
     if test_scr:
         figsuf = figsuf + 'testmodels.'
 
-    figname = figdir + 'multi_spatiofreq.'+seas+'.'+res+'.' + plotdom + '.per_'+rate+'.'+figsuf+'.'+thnames[t]+'.png'
+    if res=='make':
+        resnm=res+str(gsize)
+    else:
+        resnm=res
+
+    figname = figdir + 'multi_spatiofreq.'+seas+'.'+resnm+'.' + plotdom + '.per_'+rate+'.'+figsuf+'.'+thnames[t]+'.png'
     print 'saving figure as ' + figname
     plt.savefig(figname, dpi=150)
     plt.close()

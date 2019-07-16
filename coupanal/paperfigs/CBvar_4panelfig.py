@@ -49,7 +49,7 @@ rate='cbs' # if rate='year' it will plot cbs per year
 nos4cbar = (20, 50, 3)
 res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
-    gsize=2.0
+    gsize=2.5
     extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
 
 # part b - outlines
@@ -325,7 +325,12 @@ for t in range(nthresh):
     if rm_samedates:
         addname=addname+'noduplicatedates'
 
-    figname = figdir + '/CBvar_4panelfig.' + seas + '.' + res + '.' + sub + '.per_' + rate + '.' + \
+    if res=='make':
+        resnm=res+str(gsize)
+    else:
+        resnm=res
+
+    figname = figdir + '/CBvar_4panelfig.' + seas + '.' + resnm + '.' + sub + '.per_' + rate + '.' + \
               thnames[t] + '.frmevnt_'+from_event+'.'+addname+'.png'
     print 'saving figure as ' + figname
     plt.savefig(figname, dpi=150)
