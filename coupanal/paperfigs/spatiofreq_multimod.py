@@ -17,18 +17,18 @@ cwd=os.getcwd()
 sys.path.append(cwd+'/..')
 sys.path.append(cwd+'/../..')
 import MetBot.SynopticAnatomy as sy
-import MetBot.EventStats as stats
 import MetBot.MetBlobs as blb
 import MetBot.mytools as my
-import MetBot.mynetcdf as mync
 import MetBot.dset_dict as dsetdict
 import coupanal.Subset_Events as sset
 import coupanal.Plotting_Blobs as plbl
 import coupanal.group_dict as dset_grp
+import MetBot.mynetcdf as mync
+
 
 
 ### Running options
-test_scr=False
+test_scr=True
 threshtest=False
 plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
@@ -39,12 +39,12 @@ rate='cbs' # if rate='year' it will plot cbs per year
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 group=True
-bias=True # for models, plot bias relative to obs
+bias=False # for models, plot bias relative to obs
 nos4cbar = (20, 50, 3)
 if bias:
     nos4bias=(-16, 16, 2)
 
-res='make'              # Option to plot at 'native' res or 'make' to create own grid
+res='native'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
     gsize=2.0
     extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
@@ -90,9 +90,13 @@ if seas=='NDJFM':
     nmon=len(months)
 
 # Make grid
-lat4sf = np.arange(lt2, lt1 + extent, gsize)
-lat4sf = lat4sf[::-1]  # latitude has to be made the other way because of the negative numbers
-lon4sf = np.arange(ln1, ln2 + extent, gsize)
+if res=='make':
+    lat4sf = np.arange(lt2, lt1 + extent, gsize)
+    lat4sf = lat4sf[::-1]  # latitude has to be made the other way because of the negative numbers
+    lon4sf = np.arange(ln1, ln2 + extent, gsize)
+elif res=='native':
+    globv = 'olr'
+    sub = 'SA'
 
 ### Loop threshs
 if threshtest:
@@ -116,7 +120,8 @@ for t in range(nthresh):
     if dsets == 'all':
         dsetnames = list(dsetdict.dset_deets)
     elif dsets == 'spec':
-        dsetnames = ['noaa', 'cmip5']
+        #dsetnames = ['noaa', 'cmip5']
+        dsetnames=['cmip5']
     ndset = len(dsetnames)
     ndstr = str(ndset)
 
@@ -134,7 +139,8 @@ for t in range(nthresh):
             if dset == 'noaa':
                 mnames_tmp = ['cdr2']
             elif dset == 'cmip5':
-                mnames_tmp = list(dsetdict.dset_deets[dset])
+                #mnames_tmp = list(dsetdict.dset_deets[dset])
+                mnames_tmp =['CMCC-CESM']
         nmod = len(mnames_tmp)
         nmstr = str(nmod)
 
@@ -176,6 +182,25 @@ for t in range(nthresh):
             year1 = float(ys[0:4])
             year2 = float(ys[5:9])
             yrs=np.arange(year1,year2+1,1)
+
+            # if resolution is native open OLR file to get lat and lon grid
+            if res=='native':
+                infile = bkdir+ dset + '/' + name + ".olr.day.mean." + ys + ".nc"
+
+                ncout = mync.open_multi(infile,globv,name,\
+                                                            dataset=dset,subs=sub)
+                ndim = len(ncout)
+                if ndim==5:
+                    olr,time,lat,lon,dtime = ncout
+                elif ndim==6:
+                    olr, time, lat, lon, lev, dtime = ncout
+                    olr=np.squeeze(olr)
+                else:
+                    print 'Check number of levels in ncfile'
+
+                lat4sf=lat
+                lon4sf=lon
+
 
             # Get threshold
             print 'getting threshold....'
