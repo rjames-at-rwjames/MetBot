@@ -120,8 +120,8 @@ for t in range(nthresh):
     if dsets == 'all':
         dsetnames = list(dsetdict.dset_deets)
     elif dsets == 'spec':
-        #dsetnames = ['noaa', 'cmip5']
-        dsetnames=['cmip5']
+        dsetnames = ['noaa', 'cmip5']
+        #dsetnames=['cmip5']
     ndset = len(dsetnames)
     ndstr = str(ndset)
 
@@ -139,8 +139,8 @@ for t in range(nthresh):
             if dset == 'noaa':
                 mnames_tmp = ['cdr2']
             elif dset == 'cmip5':
-                #mnames_tmp = list(dsetdict.dset_deets[dset])
-                mnames_tmp =['CMCC-CESM']
+                mnames_tmp = list(dsetdict.dset_deets[dset])
+                #mnames_tmp =['CMCC-CESM']
         nmod = len(mnames_tmp)
         nmstr = str(nmod)
 
