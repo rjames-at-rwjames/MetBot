@@ -28,7 +28,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 test_scr=False
-threshtest=False
+threshtest=True
 group=True
 alphord=False
 figdim=[14, 6]

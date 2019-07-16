@@ -28,7 +28,7 @@ import MetBot.mynetcdf as mync
 
 
 ### Running options
-test_scr=True
+test_scr=False
 threshtest=False
 plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
@@ -44,7 +44,7 @@ nos4cbar = (20, 50, 3)
 if bias:
     nos4bias=(-16, 16, 2)
 
-res='make'              # Option to plot at 'native' res or 'make' to create own grid
+res='native'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
     gsize=2.5
     extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
