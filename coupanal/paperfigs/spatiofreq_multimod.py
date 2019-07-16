@@ -96,7 +96,7 @@ if res=='make':
     lon4sf = np.arange(ln1, ln2 + extent, gsize)
 elif res=='native':
     globv = 'olr'
-    sub = 'SA'
+    sub = plotdom
 
 ### Loop threshs
 if threshtest:
