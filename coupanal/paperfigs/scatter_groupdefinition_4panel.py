@@ -252,7 +252,16 @@ for t in range(nthresh):
             if alphord:
                 mnames = sorted(mnames_tmp, key=lambda s: s.lower())
             else:
-                mnames = mnames_tmp
+                if group:
+                    mnames = np.zeros(nmod, dtype=object)
+
+                    for mo in range(nmod):
+                        name = mnames_tmp[mo]
+                        groupdct = dset_grp.dset_deets[dset][name]
+                        thisord = int(groupdct['ord']) - 2  # minus 2 because cdr already used
+                        mnames[thisord] = name
+                else:
+                    mnames = mnames_tmp
         else:
             mnames = mnames_tmp
 

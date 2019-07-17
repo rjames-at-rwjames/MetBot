@@ -181,7 +181,16 @@ for t in range(nthresh):
             if alphord:
                 mnames = sorted(mnames_tmp, key=lambda s: s.lower())
             else:
-                mnames = mnames_tmp
+                if group:
+                    mnames = np.zeros(nmod, dtype=object)
+
+                    for mo in range(nmod):
+                        name = mnames_tmp[mo]
+                        groupdct = dset_grp.dset_deets[dset][name]
+                        thisord = int(groupdct['ord']) - 2  # minus 2 because cdr already used
+                        mnames[thisord] = name
+                else:
+                    mnames = mnames_tmp
         else:
             mnames = mnames_tmp
 
@@ -202,7 +211,7 @@ for t in range(nthresh):
                 grmr=grmrs[grcnt[thisgroup-1]]
                 grcnt[thisgroup-1]+=1
 
-            ### TTT info for x axis
+            ### TTT info for y axis
             ### Get threshold for TTTs
             print 'Getting threshold for this model'
             with open(threshtxt) as f:
@@ -315,13 +324,9 @@ for t in range(nthresh):
                 if thseas == 'NDJFM':
                     mons = [1, 2, 3, 11, 12]
                     nmon = len(mons)
-                    mon1 = 11
-                    mon2 = 3
                 elif thseas == 'DJF':
                     mons = [1, 2, 12]
                     nmon = len(mons)
-                    mon1 = 11
-                    mon2 = 2
 
                 # Subset the season
                 print 'Subsetting by season?'
@@ -393,7 +398,7 @@ for t in range(nthresh):
 
                 convmn_doms[do] = reg_mean
 
-            # Now looping by 4 to get plots
+            # Now looping by 2 to get plots
             print 'Now we have calculated everything for 2 domains, entering 2 plots'
 
             colour = grcl
@@ -431,8 +436,8 @@ for t in range(nthresh):
             print 'Now writing values to textfile for this model'
             print 'Model name, convmn dom 1, convmn dom 2, num ttt dom 1, num ttt dom 2'
             txtfile.write(label+ "\t" +str(round(convmn_doms[0],2))+ "\t" +str(round(convmn_doms[1],2))+ \
-                          "\t" +str(round(nttts_doms[1],2))+ "\t"\
-                          + str(round(nttts_doms[0],2))+"\n")
+                          "\t" +str(round(nttts_doms[0],2))+ "\t"\
+                          + str(round(nttts_doms[1],2))+"\n")
 
             cnt += 1
             mdcnt += 1

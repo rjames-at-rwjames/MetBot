@@ -176,7 +176,16 @@ for t in range(nthresh):
             if alphord:
                 mnames = sorted(mnames_tmp, key=lambda s: s.lower())
             else:
-                mnames = mnames_tmp
+                if group:
+                    mnames = np.zeros(nmod, dtype=object)
+
+                    for mo in range(nmod):
+                        name = mnames_tmp[mo]
+                        groupdct = dset_grp.dset_deets[dset][name]
+                        thisord = int(groupdct['ord']) - 2  # minus 2 because cdr already used
+                        mnames[thisord] = name
+                else:
+                    mnames = mnames_tmp
         else:
             mnames = mnames_tmp
 
@@ -400,7 +409,7 @@ for t in range(nthresh):
                     ind=0
                     with open(ind_file) as f:
                         for line in f:
-                            if name3 in line:
+                            if name3+' ' in line:
                                 ind = line.split()[1]
                                 print 'it exists! index=' + str(ind)
 
@@ -416,10 +425,10 @@ for t in range(nthresh):
 
             if cnt == 0:
                 zord=3
+                label = 'NCDR-OLR | ERAI'
             else:
                 zord=2
-
-            label = labname
+                label = labname
 
             # part b - plotting this first because need all handles for the legend
                 # and Froude has missing values
@@ -463,7 +472,8 @@ for t in range(nthresh):
 
     # Set up plot
     print 'Looping 2 figure parts'
-    for fg in range(len(figlabels)):
+    figrev=[1,0]
+    for fg in figrev:
         ax=plt.subplot(yplots,xplots,fg+1)
 
         grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(xvals[:,fg], yvals[:,fg])
@@ -474,7 +484,7 @@ for t in range(nthresh):
 
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
 
-        if (fg==0):
+        if fg==0:
             xlab='Mean '+seas_a+' OLR in southern Congo'
             ylab='Percentage of '+seas_a+' TTTs west of '+str(dom_a_elon)
         elif fg==1:
