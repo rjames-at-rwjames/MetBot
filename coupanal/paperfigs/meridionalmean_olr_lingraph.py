@@ -31,7 +31,7 @@ if levsel:
 else:
     choosel='1'
 
-figdim=[10,6]
+figdim=[9,6]
 
 ### Directories
 bkdir=cwd+"/../../../../CTdata/"
@@ -205,7 +205,7 @@ for d in range(ndset):
             dtime[:, 3] = 0
 
             # Fix lat and lons if it spans 0
-            if sub == 'bigtrop':
+            if sub == 'meridcross':
                 print "Ammending lons around 0"
                 for i in range(len(lon)):
                     if lon[i] > 180:
