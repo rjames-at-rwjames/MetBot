@@ -429,15 +429,15 @@ for t in range(nthresh):
             yvals[cnt,fgn]=perttts[1]
             if ind!=0:
                 xvals[cnt,fgn]=float(ind)
+
+                ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
+                    color=colour, label=label, markeredgecolor=colour,\
+                        markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
+
             else:
                 xvals[cnt, fgn]=ma.masked
                 yvals[cnt, fgn]=ma.masked
                 siz[cnt, fgn]=ma.masked
-
-            ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                color=colour, label=label, markeredgecolor=colour,\
-                    markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
-
 
             # part a
             fgn = 0
