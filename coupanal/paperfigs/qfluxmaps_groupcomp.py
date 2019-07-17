@@ -166,198 +166,199 @@ for g in range(ngrp):
 
         for mo in range(nmod):
             name = mnames[mo]
-            groupdct = dset_grp.dset_deets[dset][name]
-            thisgroup = int(groupdct['group'])
-            grcl = grcls[g]
-            if thisgroup == g+1:
+            if name !='HadGEM2-ES': # skipping this model because no q data
+                groupdct = dset_grp.dset_deets[dset][name]
+                thisgroup = int(groupdct['group'])
+                grcl = grcls[g]
+                if thisgroup == g+1:
 
-                print 'Running on ' + name
+                    print 'Running on ' + name
 
-                # Switch variable if NOAA
-                if dset == 'noaa':
-                    dset2 = 'era'
-                    name2 = 'erai'
-                else:
-                    dset2 = dset
-                    name2 = name
-
-                if pluscon:
+                    # Switch variable if NOAA
                     if dset == 'noaa':
-                        dset3 = 'era'
-                        name3 = 'erai'
+                        dset2 = 'era'
+                        name2 = 'erai'
                     else:
-                        dset3 = dset
-                        name3 = name
+                        dset2 = dset
+                        name2 = name
 
-                # Get info
-                moddct = dsetdict.dset_deets[dset2][name2]
+                    if pluscon:
+                        if dset == 'noaa':
+                            dset3 = 'era'
+                            name3 = 'erai'
+                        else:
+                            dset3 = dset
+                            name3 = name
 
-                if pluscon:
-                    condct = dsetdict.dset_deets[dset3][name3]
+                    # Get info
+                    moddct = dsetdict.dset_deets[dset2][name2]
 
-                ysclim = moddct['yrfname']
-                year1 = float(ysclim[0:4])
-                year2 = float(ysclim[5:9])
+                    if pluscon:
+                        condct = dsetdict.dset_deets[dset3][name3]
 
-                if pluscon:
-                    ysclim_c = condct['yrfname']
-                    year1_c = float(ysclim_c[0:4])
-                    year2_c = float(ysclim_c[5:9])
+                    ysclim = moddct['yrfname']
+                    year1 = float(ysclim[0:4])
+                    year2 = float(ysclim[5:9])
 
-                meanfile_u = botdir + dset2 + '/' + name2 + '/' \
-                             + name2 + '.' + globv1 + '.mon.mean.' + ysclim + '.nc'
+                    if pluscon:
+                        ysclim_c = condct['yrfname']
+                        year1_c = float(ysclim_c[0:4])
+                        year2_c = float(ysclim_c[5:9])
 
-                meanfile_v = botdir + dset2 + '/' + name2 + '/' \
-                         + name2 + '.' + globv2 + '.mon.mean.' + ysclim + '.nc'
+                    meanfile_u = botdir + dset2 + '/' + name2 + '/' \
+                                 + name2 + '.' + globv1 + '.mon.mean.' + ysclim + '.nc'
 
-                if var == 'qflux':
-                    meanfile_q = botdir + dset2 + '/' + name2 + '/' \
-                                 + name2 + '.' + globv3 + '.mon.mean.' + ysclim + '.nc'
+                    meanfile_v = botdir + dset2 + '/' + name2 + '/' \
+                             + name2 + '.' + globv2 + '.mon.mean.' + ysclim + '.nc'
 
-                print 'Opening ' + meanfile_u
-                print 'and corresponding file: ' + meanfile_v
-                if var == 'qflux':
-                    print 'and q file:' + meanfile_q
+                    if var == 'qflux':
+                        meanfile_q = botdir + dset2 + '/' + name2 + '/' \
+                                     + name2 + '.' + globv3 + '.mon.mean.' + ysclim + '.nc'
 
-                ncout_u = mync.open_multi(meanfile_u, globv1, name2, \
-                                          dataset=dset2, subs=sub, levsel=levc)
-                ncout_v = mync.open_multi(meanfile_v, globv2, name2, \
-                                          dataset=dset2, subs=sub, levsel=levc)
+                    print 'Opening ' + meanfile_u
+                    print 'and corresponding file: ' + meanfile_v
+                    if var == 'qflux':
+                        print 'and q file:' + meanfile_q
 
-                if var == 'qflux':
-                    ncout_q = mync.open_multi(meanfile_q, globv3, name2, \
+                    ncout_u = mync.open_multi(meanfile_u, globv1, name2, \
+                                              dataset=dset2, subs=sub, levsel=levc)
+                    ncout_v = mync.open_multi(meanfile_v, globv2, name2, \
                                               dataset=dset2, subs=sub, levsel=levc)
 
-
-                ndim = len(ncout_u)
-
-                if ndim == 5:
-
-                    meandata_u, time, lat, lon, dtime = ncout_u
-                    meandata_v, time, lat, lon, dtime = ncout_v
-
                     if var == 'qflux':
-                        meandata_q, time, lat, lon, meandtime = ncout_q
+                        ncout_q = mync.open_multi(meanfile_q, globv3, name2, \
+                                                  dataset=dset2, subs=sub, levsel=levc)
 
-                elif ndim == 6:
 
-                    meandata_u, time, lat, lon, lev, dtime = ncout_u
-                    meandata_u = np.squeeze(meandata_u)
+                    ndim = len(ncout_u)
 
-                    meandata_v, time, lat, lon, lev, dtime = ncout_v
-                    meandata_v = np.squeeze(meandata_v)
+                    if ndim == 5:
 
-                    if var == 'qflux':
-                        meandata_q, time, lat, lon, lev, dtime = ncout_q
-                        meandata_q = np.squeeze(meandata_q)
+                        meandata_u, time, lat, lon, dtime = ncout_u
+                        meandata_v, time, lat, lon, dtime = ncout_v
 
-                else:
-                    print 'Check number of dims in ncfile'
+                        if var == 'qflux':
+                            meandata_q, time, lat, lon, meandtime = ncout_q
 
-                dtime[:, 3] = 0
+                    elif ndim == 6:
 
-                # If anomaly for contour get the mean
-                if pluscon:
-                    meanfile_c = botdir + dset3 + '/' + name3 + '/' \
-                                 + name3 + '.' + globv_c + '.mon.mean.' + ysclim_c + '.nc'
+                        meandata_u, time, lat, lon, lev, dtime = ncout_u
+                        meandata_u = np.squeeze(meandata_u)
 
-                if levcon:
-                    ncout_c = mync.open_multi(meanfile_c, globv_c, name3, \
-                                              dataset=dset3, subs=sub, levsel=lev_c)
-                else:
-                    ncout_c = mync.open_multi(meanfile_c, globv_c, name3, \
-                                              dataset=dset3, subs=sub)
-                ndim_c = len(ncout_c)
+                        meandata_v, time, lat, lon, lev, dtime = ncout_v
+                        meandata_v = np.squeeze(meandata_v)
 
-                if ndim_c == 5:
+                        if var == 'qflux':
+                            meandata_q, time, lat, lon, lev, dtime = ncout_q
+                            meandata_q = np.squeeze(meandata_q)
 
-                    meandata_c, time_c, lat_c, lon_c, dtime_c = ncout_c
+                    else:
+                        print 'Check number of dims in ncfile'
 
-                elif ndim_c == 6:
+                    dtime[:, 3] = 0
 
-                    meandata_c, time_c, lat_c, lon_c, lev_c, dtime_c = ncout_c
-                    meandata_c = np.squeeze(meandata_c)
-
-                dtime_c[:, 3] = 0
-
-                print "Interpolating data to a " + str(gsize) + " grid"
-                newlat = np.arange(lt2, lt1 + extent, gsize)
-                newlat = newlat[::-1]  # latitude has to be made the other way because of the negative numbers
-                newlon = np.arange(ln1, ln2 + extent, gsize)
-                nlat = len(newlat)
-                nlon = len(newlon)
-
-                promeandata_u = np.zeros((12, nlat, nlon), dtype=np.float32)
-                promeandata_v = np.zeros((12, nlat, nlon), dtype=np.float32)
-
-                if var == 'qflux':
-                    promeandata_q = np.zeros((12, nlat, nlon), dtype=np.float32)
-
-                # Get rid of nans
-                nonan_u = np.nan_to_num(meandata_u)
-                nonan_v = np.nan_to_num(meandata_v)
-
-                if var == 'qflux':
-                    nonan_q = np.nan_to_num(meandata_q)
-
-                for step in range(12):
-                    Interpolator_u = spi.interp2d(lon, lat, nonan_u[step, :, :], kind='linear')
-                    Interpolator_v = spi.interp2d(lon, lat, nonan_v[step, :, :], kind='linear')
-
-                    promeandata_u[step, :, :] = Interpolator_u(newlon, newlat)
-                    promeandata_v[step, :, :] = Interpolator_v(newlon, newlat)
-
-                    if var == 'qflux':
-                        Interpolator_q = spi.interp2d(lon, lat, nonan_q[step, :, :], kind='linear')
-                        promeandata_q[step, :, :] = Interpolator_q(newlon, newlat)
-
-                if pluscon:
-                    promeandata_c = np.zeros((12, nlat, nlon), dtype=np.float32)
-                    nonan_c = np.nan_to_num(meandata_c)
-
-                    for st in range(12):
-                        Interpolator_c = spi.interp2d(lon_c, lat_c, nonan_c[st, :, :], kind='linear')
-                        promeandata_c[st, :, :] = Interpolator_c(newlon, newlat)
-
-                # If qflux then multiply sample winds with sample humidity
-                if var == 'qflux':
-                    print "Multiplying winds by q..."
-
-                    qu_mean = promeandata_u * promeandata_q
-                    qv_mean = promeandata_v * promeandata_q
-
-                    promeandata_u = qu_mean
-                    promeandata_v = qv_mean
-
-                # get seasonal mean
-                thesemons_u = np.zeros((nmon, nlat, nlon), dtype=np.float32)
-                thesemons_v = np.zeros((nmon, nlat, nlon), dtype=np.float32)
-                for zz in range(len(mons)):
-                    thesemons_u[zz, :, :] = promeandata_u[mons[zz] - 1, :, :]
-                    thesemons_v[zz, :, :] = promeandata_v[mons[zz] - 1, :, :]
-                seasmean_u = np.nanmean(thesemons_u, 0)
-                seasmean_v = np.nanmean(thesemons_v, 0)
-
-                if pluscon:
-                    # get seasonal mean
-                    thesemons = np.zeros((nmon, nlat, nlon), dtype=np.float32)
-                    for zz in range(len(mons)):
-                        thesemons[zz, :, :] = promeandata_c[mons[zz] - 1, :, :]
-                    seasmean_c = np.nanmean(thesemons, 0)
-
-                grcollect_u[grcnt[g],:,:]=seasmean_u
-                grcollect_v[grcnt[g],:,:]=seasmean_v
-
-                if pluscon:
-                    grcollect_c[grcnt[g],:,:]=seasmean_c
-
-                if dset == 'noaa':
-                    ref_u = seasmean_u
-                    ref_v = seasmean_v
+                    # If anomaly for contour get the mean
                     if pluscon:
-                        ref_c = seasmean_c
+                        meanfile_c = botdir + dset3 + '/' + name3 + '/' \
+                                     + name3 + '.' + globv_c + '.mon.mean.' + ysclim_c + '.nc'
 
-                grcnt[g]+=1
+                    if levcon:
+                        ncout_c = mync.open_multi(meanfile_c, globv_c, name3, \
+                                                  dataset=dset3, subs=sub, levsel=lev_c)
+                    else:
+                        ncout_c = mync.open_multi(meanfile_c, globv_c, name3, \
+                                                  dataset=dset3, subs=sub)
+                    ndim_c = len(ncout_c)
+
+                    if ndim_c == 5:
+
+                        meandata_c, time_c, lat_c, lon_c, dtime_c = ncout_c
+
+                    elif ndim_c == 6:
+
+                        meandata_c, time_c, lat_c, lon_c, lev_c, dtime_c = ncout_c
+                        meandata_c = np.squeeze(meandata_c)
+
+                    dtime_c[:, 3] = 0
+
+                    print "Interpolating data to a " + str(gsize) + " grid"
+                    newlat = np.arange(lt2, lt1 + extent, gsize)
+                    newlat = newlat[::-1]  # latitude has to be made the other way because of the negative numbers
+                    newlon = np.arange(ln1, ln2 + extent, gsize)
+                    nlat = len(newlat)
+                    nlon = len(newlon)
+
+                    promeandata_u = np.zeros((12, nlat, nlon), dtype=np.float32)
+                    promeandata_v = np.zeros((12, nlat, nlon), dtype=np.float32)
+
+                    if var == 'qflux':
+                        promeandata_q = np.zeros((12, nlat, nlon), dtype=np.float32)
+
+                    # Get rid of nans
+                    nonan_u = np.nan_to_num(meandata_u)
+                    nonan_v = np.nan_to_num(meandata_v)
+
+                    if var == 'qflux':
+                        nonan_q = np.nan_to_num(meandata_q)
+
+                    for step in range(12):
+                        Interpolator_u = spi.interp2d(lon, lat, nonan_u[step, :, :], kind='linear')
+                        Interpolator_v = spi.interp2d(lon, lat, nonan_v[step, :, :], kind='linear')
+
+                        promeandata_u[step, :, :] = Interpolator_u(newlon, newlat)
+                        promeandata_v[step, :, :] = Interpolator_v(newlon, newlat)
+
+                        if var == 'qflux':
+                            Interpolator_q = spi.interp2d(lon, lat, nonan_q[step, :, :], kind='linear')
+                            promeandata_q[step, :, :] = Interpolator_q(newlon, newlat)
+
+                    if pluscon:
+                        promeandata_c = np.zeros((12, nlat, nlon), dtype=np.float32)
+                        nonan_c = np.nan_to_num(meandata_c)
+
+                        for st in range(12):
+                            Interpolator_c = spi.interp2d(lon_c, lat_c, nonan_c[st, :, :], kind='linear')
+                            promeandata_c[st, :, :] = Interpolator_c(newlon, newlat)
+
+                    # If qflux then multiply sample winds with sample humidity
+                    if var == 'qflux':
+                        print "Multiplying winds by q..."
+
+                        qu_mean = promeandata_u * promeandata_q
+                        qv_mean = promeandata_v * promeandata_q
+
+                        promeandata_u = qu_mean
+                        promeandata_v = qv_mean
+
+                    # get seasonal mean
+                    thesemons_u = np.zeros((nmon, nlat, nlon), dtype=np.float32)
+                    thesemons_v = np.zeros((nmon, nlat, nlon), dtype=np.float32)
+                    for zz in range(len(mons)):
+                        thesemons_u[zz, :, :] = promeandata_u[mons[zz] - 1, :, :]
+                        thesemons_v[zz, :, :] = promeandata_v[mons[zz] - 1, :, :]
+                    seasmean_u = np.nanmean(thesemons_u, 0)
+                    seasmean_v = np.nanmean(thesemons_v, 0)
+
+                    if pluscon:
+                        # get seasonal mean
+                        thesemons = np.zeros((nmon, nlat, nlon), dtype=np.float32)
+                        for zz in range(len(mons)):
+                            thesemons[zz, :, :] = promeandata_c[mons[zz] - 1, :, :]
+                        seasmean_c = np.nanmean(thesemons, 0)
+
+                    grcollect_u[grcnt[g],:,:]=seasmean_u
+                    grcollect_v[grcnt[g],:,:]=seasmean_v
+
+                    if pluscon:
+                        grcollect_c[grcnt[g],:,:]=seasmean_c
+
+                    if dset == 'noaa':
+                        ref_u = seasmean_u
+                        ref_v = seasmean_v
+                        if pluscon:
+                            ref_c = seasmean_c
+
+                    grcnt[g]+=1
 
     if g==0:
         data4plot_u = ref_u
