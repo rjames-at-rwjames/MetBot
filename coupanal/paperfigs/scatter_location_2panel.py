@@ -409,7 +409,7 @@ for t in range(nthresh):
                     ind=0
                     with open(ind_file) as f:
                         for line in f:
-                            if name3+' ' in line:
+                            if name3 in line:
                                 ind = line.split()[1]
                                 print 'it exists! index=' + str(ind)
 
