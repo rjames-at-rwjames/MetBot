@@ -97,7 +97,7 @@ def isubs(sub,lat,lon,*args):
     domains['zonnew'] = ((-50.0,50.0),(10.0,40.0))
     domains['zonall'] = ((-50.0,50.0),(7.5,100.0))
     domains['zonmada'] = ((-50.0,10.0),(40.0,70.0))
-    domains['meridcross'] = ((-10.0,0.0),(7.5,100.0))
+    domains['meridcross'] = ((-10.0,0.0),(0,101.0))
     domains['scongo'] = ((-10.0,0.0),(10.0,30.0))
     domains['WEIO'] = ((-10.0,0.0),(50.0,70.0)) # west equatorial Indian Ocean
     domains['trop'] = ((-15.0,0.0),(7.5,100.0))

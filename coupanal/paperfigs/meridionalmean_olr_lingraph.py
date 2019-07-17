@@ -264,7 +264,7 @@ plt.ylabel('meridional mean OLR', fontsize=10.0, weight='demibold', color='k')
 if globv=='olr':
     plt.ylim(180,290)
 
-plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.1)
+plt.subplots_adjust(left=0.1, right=0.8, top=0.85, bottom=0.15)
 
 handles, labels = ax.get_legend_handles_labels()
 legloc = 'center right'
