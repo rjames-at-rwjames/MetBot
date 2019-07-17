@@ -30,7 +30,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 test_scr=False
-threshtest=False
+threshtest=True
 group=True
 alphord=False
 figdim=[14, 6]
@@ -50,7 +50,7 @@ labpos=np.array([(0.01,0.95),(0.44,0.95)])
 # Two plots
 # plot a
 dom_a_wlon=7.5
-dom_a_elon=45.0
+dom_a_elon=55.0
 seas_a='DJF'
 
 globv='olr' # olr or omega
@@ -63,7 +63,7 @@ dom_a='scongo'
 
 # plot b
 dom_b_wlon=7.5
-dom_b_elon=60.0
+dom_b_elon=55.0
 seas_b='JF'
 
 index='Froude'
@@ -516,7 +516,7 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    scatterfig=figdir+'/scatter_location_2panel.a.'+seas_a+'.w_'+str(dom_b_elon)+'.'\
+    scatterfig=figdir+'/scatter_location_2panel.a.'+seas_a+'.w_'+str(dom_a_elon)+'.'\
                +'b.'+seas_b+'.w_'+str(dom_b_elon)+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)

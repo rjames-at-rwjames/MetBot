@@ -122,7 +122,7 @@ elif group:
     grcls = ['fuchsia', 'gold', 'darkblue', 'r', 'blueviolet', 'springgreen']
     grmrs=["o","^","*","d","+","v","h",">"]
 
-siz = np.full((28), 8)
+siz = np.full((nallmod), 8)
 siz[0] = 10
 
 ### Loop threshs
