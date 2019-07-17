@@ -36,7 +36,7 @@ import coupanal.group_dict as dset_grp
 # Running options
 test_scr=False
 colscheme='grouplast' # 'groupall' or 'grouplast'
-alphord=True    # models in alphabetical order
+alphord=False   # models in alphabetical order
 group=True
 threshtest=True
 figdim=[14, 12]
