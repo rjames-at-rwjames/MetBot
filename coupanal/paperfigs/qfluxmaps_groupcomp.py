@@ -185,7 +185,7 @@ for g in range(ngrp):
                     if dset == 'noaa':
                         dset3 = 'era'
                         name3 = 'erai'
-                   else:
+                    else:
                         dset3 = dset
                         name3 = name
 
