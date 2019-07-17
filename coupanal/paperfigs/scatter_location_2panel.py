@@ -117,8 +117,8 @@ elif group:
     grcls = ['fuchsia', 'gold', 'darkblue', 'r', 'blueviolet', 'springgreen']
     grmrs=["o","^","*","d","+","v","h",">"]
 
-siz = np.full((28), 8)
-siz[0] = 10
+siz = np.full((nallmod,2), 8)
+siz[0,:] = 10
 
 ### Loop threshs
 if threshtest:
@@ -426,15 +426,17 @@ for t in range(nthresh):
             fgn=1
             ax = plt.subplot(yplots, xplots, fgn+1)
 
+            yvals[cnt,fgn]=perttts[1]
             if ind!=0:
                 xvals[cnt,fgn]=float(ind)
             else:
                 xvals[cnt, fgn]=ma.masked
-            yvals[cnt,fgn]=perttts[1]
+                yvals[cnt, fgn]=ma.masked
+                siz[cnt, fgn]=ma.masked
 
             ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
                 color=colour, label=label, markeredgecolor=colour,\
-                    markersize=siz[cnt], linestyle='None',zorder=zord)
+                    markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
 
 
             # part a
@@ -446,7 +448,7 @@ for t in range(nthresh):
 
             ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
                 color=colour, label=label, markeredgecolor=colour,\
-                    markersize=siz[cnt], linestyle='None',zorder=zord)
+                    markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
 
             print 'Now writing values to textfile for this model'
             print 'Model name, convmn dom a, per ttt a, froude number, per ttt b'
