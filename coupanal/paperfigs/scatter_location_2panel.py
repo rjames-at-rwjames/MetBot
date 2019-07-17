@@ -454,7 +454,7 @@ for t in range(nthresh):
             print 'Model name, convmn dom a, per ttt a, froude number, per ttt b'
             txtfile.write(label+ "\t" +str(round(convmn_a,2))+ \
                            "\t" +str(round(perttts[0],2))+ \
-                           "\t" +str(round(ind,2))+ \
+                           "\t" +str(round(float(ind),2))+ \
                            "\t" + str(round(perttts[1],2))+"\n")
 
             cnt += 1
