@@ -23,7 +23,7 @@ import MetBot.MetBlobs as blb
 
 
 ### Running options
-test_scr=True
+test_scr=False
 xplots = 3
 yplots = 2
 figdim = [11,5]
@@ -281,6 +281,11 @@ for g in range(ngrp):
                 dtime_c[:, 3] = 0
 
                 print "Interpolating data to a " + str(gsize) + " grid"
+                newlat = np.arange(lt2, lt1 + extent, gsize)
+                newlat = newlat[::-1]  # latitude has to be made the other way because of the negative numbers
+                newlon = np.arange(ln1, ln2 + extent, gsize)
+                nlat = len(newlat)
+                nlon = len(newlon)
 
                 promeandata_u = np.zeros((12, nlat, nlon), dtype=np.float32)
                 promeandata_v = np.zeros((12, nlat, nlon), dtype=np.float32)
