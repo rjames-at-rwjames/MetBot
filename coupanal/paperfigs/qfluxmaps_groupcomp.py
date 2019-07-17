@@ -461,9 +461,10 @@ if pluscon:
     cbar = plt.colorbar(cs1, cax=axcl)
     my.ytickfonts(fontsize=10.,fontweight='demibold')
 
-    axcl = w.add_axes([0.91, 0.15, 0.01, 0.6])
-    cbar = plt.colorbar(cs2, cax=axcl)
-    my.ytickfonts(fontsize=10.,fontweight='demibold')
+    if not test_scr:
+        axcl = w.add_axes([0.91, 0.15, 0.01, 0.6])
+        cbar = plt.colorbar(cs2, cax=axcl)
+        my.ytickfonts(fontsize=10.,fontweight='demibold')
 
 if pluscon:
     vfname=var+'_'+globv_c
