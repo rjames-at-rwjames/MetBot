@@ -19,7 +19,7 @@ import coupanal.group_dict as dset_grp
 
 
 ### Running options
-test_scr=True
+test_scr=False
 sub="meridcross"
 seas="DJF"
 group=True
@@ -99,8 +99,8 @@ nmon = len(mons)
 
 # Set up plot
 print "Setting up plot..."
-plt.figure(figsize=figdim)
-ax=plt.subplot(111)
+g = plt.figure(figsize=figdim)
+ax = plt.subplot(111)
 
 if test_scr:
     ndset = 1
@@ -264,10 +264,12 @@ plt.ylabel('meridional mean OLR', fontsize=10.0, weight='demibold', color='k')
 if globv=='olr':
     plt.ylim(180,290)
 
-box=ax.get_position()
-ax.set_position([box.x0, box.y0, box.width*0.8, box.height])
-ax.legend(loc='center left',bbox_to_anchor=[1,0.5],fontsize='x-small')
+plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.1)
 
+handles, labels = ax.get_legend_handles_labels()
+legloc = 'center right'
+
+g.legend(handles, labels, loc=legloc, fontsize='xx-small')
 
 if group:
     figsuf='grouped'
