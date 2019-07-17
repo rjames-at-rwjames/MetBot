@@ -48,7 +48,7 @@ else:
 if ctyp=='abs':
     skip=1
 elif ctyp=='anom':
-    skip=2
+    skip=1
 
 # Info for contour
 pluscon=True
@@ -168,7 +168,7 @@ for g in range(ngrp):
             name = mnames[mo]
             groupdct = dset_grp.dset_deets[dset][name]
             thisgroup = int(groupdct['group'])
-            grcl = grcls[thisgroup - 1]
+            grcl = grcls[g]
             if thisgroup == g+1:
 
                 print 'Running on ' + name
@@ -448,7 +448,7 @@ for g in range(ngrp):
     m.drawcountries()
     m.drawcoastlines()
 
-    m.drawmapboundary(color=grcls[thisgroup-1], linewidth=3)
+    m.drawmapboundary(color=grcls[g], linewidth=3)
 
     cnt+=1
 
@@ -474,8 +474,13 @@ else:
 # Save
 cstr=ctyp
 
+figsuf=''
+if test_scr:
+    figsuf = figsuf+ 'testmodels.'
+
+
 compname = figdir + 'qfluxmaps_group_comp.'+cstr+'.' + vfname + \
-      '.'+choosel+'.'+sub+'.'+str(gsize)+'.skip'+str(skip)+'.png'
+      '.'+choosel+'.'+sub+'.'+str(gsize)+'.skip'+str(skip)+'.'+figsuf+'png'
 
 plt.savefig(compname, dpi=150)
 plt.close()
