@@ -29,7 +29,7 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-test_scr=True
+test_scr=False
 threshtest=False
 group=True
 alphord=False
@@ -478,7 +478,7 @@ for t in range(nthresh):
             xlab='Mean '+seas_a+' OLR in southern Congo'
             ylab='Percentage of '+seas_a+' TTTs west of '+str(dom_a_elon)
         elif fg==1:
-            xlab=index + ' number in '+seas_b
+            xlab=index + ' number for '+seas_b
             ylab='Percentage of '+seas_b+' TTTs west of '+str(dom_b_elon)
 
         plt.xlabel(xlab, fontsize=10, fontweight='demibold')
