@@ -104,12 +104,12 @@ ngrp=len(grcls)
 # Grid
 if sub == 'SA_qflux':
     lt1 = 10.0
-    lt2 = -50.0
+    lt2 = -40.0
     ln1 = 0.0
-    ln2 = 80.0
+    ln2 = 70.0
 
-newlat = np.arange(lt2, lt1 + extent, gsize)
-#newlat = newlat[::-1]  # latitude has to be made the other way because of the negative numbers
+newlat = np.arange(lt2, lt1 + extent, gsize) # note latitude is switched relative to the netcdf files
+                                            # but this is required for the interpolator
 newlon = np.arange(ln1, ln2 + extent, gsize)
 nlat = len(newlat)
 nlon = len(newlon)
