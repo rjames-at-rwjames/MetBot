@@ -29,7 +29,7 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-test_scr=True
+test_scr=False
 threshtest=False
 group=True
 alphord=False
