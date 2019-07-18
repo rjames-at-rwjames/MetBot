@@ -48,7 +48,7 @@ else:
 if ctyp=='abs':
     skip=1
 elif ctyp=='anom':
-    skip=1
+    skip=2
 
 # Info for contour
 pluscon=True
@@ -458,14 +458,14 @@ plt.subplots_adjust(left=0.05,right=0.8,top=0.95,bottom=0.02,wspace=0.1,hspace=0
 if pluscon:
 
     # Plot cbar
-    axcl = w.add_axes([0.81, 0.15, 0.01, 0.6])
+    axcl = w.add_axes([0.83, 0.15, 0.01, 0.6])
     cbar = plt.colorbar(cs1, cax=axcl)
-    my.ytickfonts(fontsize=10.,fontweight='demibold')
+    my.ytickfonts(fontsize=8.,fontweight='demibold')
 
     if not test_scr:
         axcl = w.add_axes([0.91, 0.15, 0.01, 0.6])
         cbar = plt.colorbar(cs2, cax=axcl)
-        my.ytickfonts(fontsize=10.,fontweight='demibold')
+        my.ytickfonts(fontsize=8.,fontweight='demibold')
 
 if pluscon:
     vfname=var+'_'+globv_c
