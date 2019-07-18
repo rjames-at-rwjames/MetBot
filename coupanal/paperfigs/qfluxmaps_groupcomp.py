@@ -377,11 +377,11 @@ for g in range(ngrp):
     # Get lon lat grid
     plon, plat = np.meshgrid(newlon, newlat)
 
-    # # Add skips
-    # data4plot_u = data4plot_u[::skip, ::skip]
-    # data4plot_v = data4plot_v[::skip, ::skip]
-    # skiplon = newlon[::skip]
-    # skiplat = newlat[::skip]
+    # Add skips
+    data4plot_u = data4plot_u[::skip, ::skip]
+    data4plot_v = data4plot_v[::skip, ::skip]
+    skiplon = newlon[::skip]
+    skiplat = newlat[::skip]
 
     # Plot
     print "Plotting for group " + grname[g]
@@ -438,7 +438,7 @@ for g in range(ngrp):
                     usc = 0.05
                     lab = '0.05 kg/kg/ms'
 
-    q = plt.quiver(newlon, newlat, data4plot_u, data4plot_v, scale=wind_sc, width=0.005)
+    q = plt.quiver(skiplon, skiplat, data4plot_u, data4plot_v, scale=wind_sc, width=0.005)
     if cnt < 3:
         plt.quiverkey(q, X=1.0, Y=1.1, U=usc, label=lab, labelpos='W', fontproperties={'size': 'xx-small'})
 
