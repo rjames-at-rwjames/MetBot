@@ -33,7 +33,7 @@ sub='SA_qflux'
 gsize=1.75
 extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
 
-seas='DJF'
+seas='NDJFM'
 
 # Info for vector
 var='qflux'
@@ -480,7 +480,7 @@ if test_scr:
     figsuf = figsuf+ 'testmodels.'
 
 
-compname = figdir + 'qfluxmaps_group_comp.'+cstr+'.' + vfname + \
+compname = figdir + 'qfluxmaps_group_comp.'+seas+'.'+cstr+'.' + vfname + \
       '.'+choosel+'.'+sub+'.'+str(gsize)+'.skip'+str(skip)+'.'+figsuf+'png'
 
 plt.savefig(compname, dpi=150)
