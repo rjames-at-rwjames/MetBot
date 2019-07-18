@@ -297,7 +297,7 @@ for t in range(nthresh):
             ind_picks=[index_a,index_b]
             dom_picks=[dom_a,dom_b]
 
-            indices=np.zeros(nplot,dtype=np.float32)
+            ind_4_x=np.zeros(nplot,dtype=np.float32)
             intensitys=np.zeros(nplot,dtype=np.float32)
 
             for pt in range(nplot):
@@ -460,17 +460,17 @@ for t in range(nthresh):
                 else:
                     name3=name
 
-                ind=0
+                indval=0
                 with open(ind_file) as f:
                     for line in f:
                         if name3 in line:
-                            ind = line.split()[1]
-                            print 'it exists! index=' + str(ind)
+                            indval = line.split()[1]
+                            print 'it exists! index=' + str(indval)
 
-                if ind==0:
+                if indval==0:
                     print 'does not exist for this model'
 
-                indices[pt]=float(ind)
+                ind_4_x[pt]=float(indval)
 
             # Now looping by 2 to get plots
             print 'Now we have calculated everything for 2 domains, entering 2 plots'
@@ -489,9 +489,9 @@ for t in range(nthresh):
             fgn = 0
             ax = plt.subplot(yplots, xplots, fgn + 1)
 
-            yvals[cnt, fgn] = intensitys[0]
-            if indices[0]!=0:
-                xvals[cnt,fgn]=indices[0]
+            yvals[cnt, fgn] = intensitys[fgn]
+            if ind_4_x[fgn]!=0:
+                xvals[cnt,fgn]=ind_4_x[fgn]
 
                 ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
                     color=colour, label=label, markeredgecolor=colour,\
@@ -506,9 +506,9 @@ for t in range(nthresh):
             fgn=1
             ax = plt.subplot(yplots, xplots, fgn+1)
 
-            yvals[cnt,fgn]=intensitys[1]
-            if indices[1]!=0:
-                xvals[cnt,fgn]=indices[1]
+            yvals[cnt,fgn]=intensitys[fgn]
+            if ind_4_x[fgn]!=0:
+                xvals[cnt,fgn]=ind_4_x[fgn]
 
                 ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
                     color=colour, label=label, markeredgecolor=colour,\
@@ -522,9 +522,9 @@ for t in range(nthresh):
 
             print 'Now writing values to textfile for this model'
             print 'Model name, Froude Number, intens ttt a, Angola Low, intens ttt b'
-            txtfile.write(label+ "\t" +str(round(indices[0],2))+ \
+            txtfile.write(label+ "\t" +str(round(ind_4_x[0],2))+ \
                            "\t" +str(round(intensitys[0],2))+ \
-                           "\t" +str(round(indices[1],2))+ \
+                           "\t" +str(round(ind_4_x[1],2))+ \
                            "\t" + str(round(intensitys[1],2))+"\n")
 
             cnt += 1
