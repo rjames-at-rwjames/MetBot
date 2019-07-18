@@ -109,7 +109,7 @@ if sub == 'SA_qflux':
     ln2 = 80.0
 
 newlat = np.arange(lt2, lt1 + extent, gsize)
-newlat = newlat[::-1]  # latitude has to be made the other way because of the negative numbers
+#newlat = newlat[::-1]  # latitude has to be made the other way because of the negative numbers
 newlon = np.arange(ln1, ln2 + extent, gsize)
 nlat = len(newlat)
 nlon = len(newlon)
