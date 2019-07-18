@@ -97,7 +97,7 @@ if pluscon:
     globv_c = convar
 
 grcls = ['fuchsia', 'gold', 'darkblue', 'r', 'blueviolet', 'springgreen']
-ns_groups = [1,7,8,3,6,2] # number in each group
+ns_groups = [1,7,8,3,6,2] # number in each group - 6 for purple because missing data for HadGEM2-ES
 grname = ['ERAI','MANY_DRY','MANY_WET','LAND_FOCUS','OCEAN_FOCUS','TOO_FEW']
 ngrp=len(grcls)
 
