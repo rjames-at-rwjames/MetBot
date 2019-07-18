@@ -548,7 +548,7 @@ for t in range(nthresh):
         if fg==0:
             xlab=ind_picks[0]+' for '+seas_a
             ylab='Mean rainfall per '+seas_a+' day'
-            ax.set_xlim(3.0,6.5)
+            ax.set_ylim(3.0,6.5)
         elif fg==1:
             xlab=ind_picks[1]+' for '+seas_b
             ylab='Mean rainfall per '+seas_b+' day'
