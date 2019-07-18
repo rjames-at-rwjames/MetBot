@@ -48,7 +48,7 @@ else:
 if ctyp=='abs':
     skip=1
 elif ctyp=='anom':
-    skip=1
+    skip=2
 
 # Info for contour
 pluscon=True
