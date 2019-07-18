@@ -282,11 +282,6 @@ for g in range(ngrp):
                     dtime_c[:, 3] = 0
 
                     print "Interpolating data to a " + str(gsize) + " grid"
-                    newlat = np.arange(lt2, lt1 + extent, gsize)
-                    newlat = newlat[::-1]  # latitude has to be made the other way because of the negative numbers
-                    newlon = np.arange(ln1, ln2 + extent, gsize)
-                    nlat = len(newlat)
-                    nlon = len(newlon)
 
                     promeandata_u = np.zeros((12, nlat, nlon), dtype=np.float32)
                     promeandata_v = np.zeros((12, nlat, nlon), dtype=np.float32)
@@ -385,8 +380,8 @@ for g in range(ngrp):
     # Add skips
     data4plot_u = data4plot_u[::skip, ::skip]
     data4plot_v = data4plot_v[::skip, ::skip]
-    newlon = newlon[::skip]
-    newlat = newlat[::skip]
+    skiplon = newlon[::skip]
+    skiplat = newlat[::skip]
 
     # Plot
     print "Plotting for group " + grname[g]
@@ -443,7 +438,7 @@ for g in range(ngrp):
                     usc = 0.05
                     lab = '0.05 kg/kg/ms'
 
-    q = plt.quiver(newlon, newlat, data4plot_u, data4plot_v, scale=wind_sc, width=0.005)
+    q = plt.quiver(skiplon, skiplat, data4plot_u, data4plot_v, scale=wind_sc, width=0.005)
     if cnt < 3:
         plt.quiverkey(q, X=0.9, Y=1.1, U=usc, label=lab, labelpos='W', fontproperties={'size': 'xx-small'})
 
