@@ -487,6 +487,8 @@ for t in range(nthresh):
         if fg==0:
             xlab='Mean '+seas_a+' OLR in southern Congo'
             ylab='Percentage of '+seas_a+' TTTs west of '+str(dom_a_elon)
+            ax.set_xlim(190,260)
+            ax.set_ylim(10,100)
         elif fg==1:
             xlab=index + ' number for '+seas_b
             ylab='Percentage of '+seas_b+' TTTs west of '+str(dom_b_elon)

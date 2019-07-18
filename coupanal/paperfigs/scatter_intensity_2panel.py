@@ -30,7 +30,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 test_scr=False
-threshtest=False
+threshtest=True
 group=True
 alphord=False
 figdim=[14, 6]
@@ -56,14 +56,14 @@ dom_a_wlon=7.5
 dom_a_elon=55.0
 seas_a='JF'
 index_a='Froude'
-dom_a='contsub'
+dom_a='contsub_nh'
 
 # plot b
 dom_b_wlon=7.5
 dom_b_elon=55.0
 seas_b='DJF'
 index_b='AngolaLow'
-dom_b='contsub'
+dom_b='contsub_nh'
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
@@ -540,7 +540,7 @@ for t in range(nthresh):
         grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(xvals[:,fg], yvals[:,fg])
         rsquared = r_value ** 2
         if trendline:
-            if rsquared > 0.4:
+            if rsquared > 0.28:
                 ax.plot(xvals[:,fg], (grad * xvals[:,fg] + inter), '-', color='k')
 
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
@@ -548,9 +548,12 @@ for t in range(nthresh):
         if fg==0:
             xlab=ind_picks[0]+' for '+seas_a
             ylab='Mean rainfall per '+seas_a+' day'
+            ax.set_xlim(3.0,6.5)
         elif fg==1:
             xlab=ind_picks[1]+' for '+seas_b
             ylab='Mean rainfall per '+seas_b+' day'
+            ax.set_xlim(1460,1510)
+
 
         plt.xlabel(xlab, fontsize=10, fontweight='demibold')
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')

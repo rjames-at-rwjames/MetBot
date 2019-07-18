@@ -62,7 +62,7 @@ seas_full='NDJFM'
 
 # cont domain
 contdom_wlon=7.5
-contdom_elon=45.0
+contdom_elon=55.0
 dom_cont='scongo'
 seas_cont='DJF'
 
@@ -451,20 +451,23 @@ for t in range(nthresh):
         grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(xvals[:,fg], yvals[:,fg])
         rsquared = r_value ** 2
         if trendline:
-            if rsquared > 0.4:
+            if rsquared > 0.3:
                 ax.plot(xvals[:,fg], (grad * xvals[:,fg] + inter), '-', color='k')
 
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
 
-        if (fg==0):
+        if fg==0:
             xlab='Mean '+seas_full+' subtropical OLR'
             ylab='Number of '+seas_full+' TTTs'
         elif fg==1:
             xlab='Mean '+seas_cont+' OLR in southern Congo'
             ylab='Number of '+seas_cont+' continental TTTs'
+            ax.set_xlim(190,260)
 
         plt.xlabel(xlab, fontsize=10, fontweight='demibold')
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')
+
+
 
 
     plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.1, wspace=0.2, hspace=0.5)
