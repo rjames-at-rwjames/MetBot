@@ -63,7 +63,7 @@ dom_b_wlon=7.5
 dom_b_elon=55.0
 seas_b='DJF'
 index_b='AngolaLow'
-dom_b='contsub_cm'
+dom_b='contsub_nh'
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
@@ -480,7 +480,7 @@ for t in range(nthresh):
 
             if cnt == 0:
                 zord=3
-                label = 'NCDR-OLR | ERAI'
+                label = 'NCDR-OLR | TRMM | ERAI'
             else:
                 zord=2
                 label = labname
