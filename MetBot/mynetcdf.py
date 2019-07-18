@@ -67,7 +67,7 @@ def isubs(sub,lat,lon,*args):
     domains['AFTROP'] = ((-50.0,10.0),(0.0,100.0))
     domains['SA_ST'] = ((-40.0,-15.0),(0.0,100.0))
     domains['SA_TROP'] = ((-15.0,0.0),(0.0,100.0))
-    domains['SA_qflux'] = ((-40.0,10.0),(0.0,70.0))
+    domains['SA_qflux'] = ((-45.0,10.0),(0.0,75.0))
     domains['SA_EX'] = ((-60.0,-40.0),(0.0,100.0))
     domains['SA_TR'] = ((-40.0,-15.0),(7.5,100.0))
     domains['SA_TRMM'] = ((-49.0, 0.0), (0.0, 100.0))

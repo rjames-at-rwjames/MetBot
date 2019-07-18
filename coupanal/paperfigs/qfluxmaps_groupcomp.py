@@ -62,7 +62,7 @@ else:
 
 
 latsp = 20. # lat spacing
-lonsp = 25. # lon spacing
+lonsp = 20. # lon spacing
 wplotdraw='edges' # which plot to draw latitude and longitude
                     # 'first' for first only
                     # 'all' for all
@@ -104,9 +104,9 @@ ngrp=len(grcls)
 # Grid
 if sub == 'SA_qflux':
     lt1 = 10.0
-    lt2 = -40.0
+    lt2 = -45.0
     ln1 = 0.0
-    ln2 = 70.0
+    ln2 = 75.0
 
 newlat = np.arange(lt2, lt1 + extent, gsize) # note latitude is switched relative to the netcdf files
                                             # but this is required for the interpolator
@@ -440,7 +440,7 @@ for g in range(ngrp):
 
     q = plt.quiver(newlon, newlat, data4plot_u, data4plot_v, scale=wind_sc, width=0.005)
     if cnt < 3:
-        plt.quiverkey(q, X=0.9, Y=1.1, U=usc, label=lab, labelpos='W', fontproperties={'size': 'xx-small'})
+        plt.quiverkey(q, X=1.0, Y=1.1, U=usc, label=lab, labelpos='W', fontproperties={'size': 'xx-small'})
 
     pltname= grname[g]
     plt.title(pltname, fontsize=8, fontweight='demibold')
