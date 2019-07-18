@@ -43,7 +43,7 @@ from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 weightlats=True
 globv='pr'
-under_of='under'
+under_of='dayof'
 raintype='rainperttt'
 
 figlabels=['a','b']
@@ -56,14 +56,14 @@ dom_a_wlon=7.5
 dom_a_elon=55.0
 seas_a='JF'
 index_a='Froude'
-dom_a='contsub_nh'
+dom_a='contsub'
 
 # plot b
 dom_b_wlon=7.5
 dom_b_elon=55.0
 seas_b='DJF'
 index_b='AngolaLow'
-dom_b='contsub_nh'
+dom_b='contsub'
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
