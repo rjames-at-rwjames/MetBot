@@ -30,7 +30,7 @@ figdim = [11,5]
 spec_col=True
 sub='SA_qflux'
 
-gsize=2.5
+gsize=1.75
 extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
 
 seas='DJF'
@@ -48,7 +48,7 @@ else:
 if ctyp=='abs':
     skip=1
 elif ctyp=='anom':
-    skip=2
+    skip=1
 
 # Info for contour
 pluscon=True
