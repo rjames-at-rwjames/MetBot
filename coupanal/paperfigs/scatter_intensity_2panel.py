@@ -43,7 +43,7 @@ from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 weightlats=True
 globv='pr'
-under_of='dayof'
+under_of='under'
 raintype='rainperttt'
 
 figlabels=['a','b']
@@ -577,7 +577,7 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    scatterfig=figdir+'/scatter_intensity_2panel.a.'+ind_picks[0]+'_'+seas_a+'.'+dom_a+'.'\
+    scatterfig=figdir+'/scatter_intensity_2panel.'+under_of+'.a.'+ind_picks[0]+'_'+seas_a+'.'+dom_a+'.'\
                +'b.'+ind_picks[1]+'.'+seas_b+'.w_'+dom_b+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
