@@ -33,7 +33,7 @@ sub='SA_qflux'
 gsize=1.75
 extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
 
-seas='NDJFM'
+seas='DJF'
 
 # Info for vector
 var='qflux'
