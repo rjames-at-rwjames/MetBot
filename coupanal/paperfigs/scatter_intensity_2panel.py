@@ -309,7 +309,7 @@ for t in range(nthresh):
                 thind=ind_picks[pt]
                 thdom=dom_picks[pt]
 
-                ind_file = '../indices/' + thind + '_' + seas_b + '_multimod.txt'
+                ind_file = '../indices/' + thind + '_' + thseas + '_multimod.txt'
 
                 ## Seas information
                 if thseas == 'NDJFM':
