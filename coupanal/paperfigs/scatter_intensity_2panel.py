@@ -31,6 +31,7 @@ import coupanal.group_dict as dset_grp
 # Running options
 test_scr=False
 threshtest=True
+no_purp=True
 group=True
 alphord=False
 figdim=[14, 6]
@@ -502,6 +503,12 @@ for t in range(nthresh):
                 yvals[cnt, fgn]=ma.masked
                 siz[cnt, fgn]=ma.masked
 
+            if no_purp:
+                if thisgroup==5:
+                    xvals[cnt, fgn] = ma.masked
+                    yvals[cnt, fgn] = ma.masked
+                    siz[cnt, fgn] = ma.masked
+
             # part b
             fgn=1
             ax = plt.subplot(yplots, xplots, fgn+1)
@@ -579,6 +586,8 @@ for t in range(nthresh):
         figsuf=figsuf+'_grouped'
     if test_scr:
         figsuf=figsuf+'_testmodels'
+    if no_purp:
+        figsuf=figsuf+'_nopurplemodels'
 
     scatterfig=figdir+'/scatter_intensity_2panel.'+under_of+'.a.'+ind_picks[0]+'_'+seas_a+'.'+dom_a+'.'\
                +'b.'+ind_picks[1]+'.'+seas_b+'.w_'+dom_b+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
