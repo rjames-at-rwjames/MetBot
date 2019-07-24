@@ -526,6 +526,11 @@ for t in range(nthresh):
                 yvals[cnt, fgn]=ma.masked
                 siz[cnt, fgn]=ma.masked
 
+            if no_purp:
+                if thisgroup==5:
+                    xvals[cnt, fgn] = ma.masked
+                    yvals[cnt, fgn] = ma.masked
+                    siz[cnt, fgn] = ma.masked
 
             print 'Now writing values to textfile for this model'
             print 'Model name, Froude Number, intens ttt a, Angola Low, intens ttt b'
