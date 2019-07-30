@@ -25,7 +25,7 @@ import numpy as np
 from datetime import date
 
 # Option to run disconnected from x11 forwarding session
-runoffline=False
+runoffline=True
 if runoffline==True:
     import matplotlib
     matplotlib.use('Agg')
@@ -66,9 +66,9 @@ plothist=False       # Option to output histogram even if a new threshold is not
 threshtest=True     # Option to run on thresholds + and - 5Wm2 as a test
                         # if future will also use historical threshold
 getmbs=True         # Actually run the MetBot algorithm
-showblb=True        # Show the blobs while running
+showblb=False        # Show the blobs while running
 debugplots=False     # Show 2 additional blob windows in showblobs
-intract=True        # Interactive running of showblobs
+intract=False        # Interactive running of showblobs
 refsubset=False     # This is used if noaaolr=True to only look in time window
 hrwindow=49         # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True      # Build tracks of cloud blobs that become TTT cloud bands
