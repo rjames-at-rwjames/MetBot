@@ -321,7 +321,7 @@ for d in range(ndset):
                 olr_flat = np.nan_to_num(olrvals.ravel())
                 y, binEdges = np.histogram(olr_flat, bins=50, density=True)
                 bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
-                if ndset==2:
+                if ndset<=2:
                     plt.plot(bincentres, y, c=cols[z],linestyle=styls[z], linewidth=lws[z], zorder=zorders[z], label=labname)
                 elif ndset>2:
                     plt.plot(bincentres, y, linestyle=styls[d], linewidth=lws[d], zorder=zorders[d], label=labname)
