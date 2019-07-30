@@ -15,15 +15,17 @@
 # (use 'spec' to run on certain models only)
 #
 # Now can also be run on future data
+# ... designed to sample 2065 to 2099
 # ... if use calc thresh it will generate new thresh for future
-# ... this also has a threshold test option for + or - from this thresh
-# ... if do not use calc thresh it will currently use historical threshs from text file
+# ... if not threshtest will use threshold defined from future period only
+# ... if threshtest will use 4 thresholds
+#           historical, future, future + 5, future - 5
 
 import numpy as np
 from datetime import date
 
 # Option to run disconnected from x11 forwarding session
-runoffline=False
+runoffline=True
 if runoffline==True:
     import matplotlib
     matplotlib.use('Agg')
@@ -51,6 +53,7 @@ testfile=False   # Uses a test file with short period
 testyear=False  # Only uses first 365 days of olr data
                  # (testfile designed to be used together with testyear
                  # ..but testyear can be used on any file)
+future=True        # If true use future data, if false use historical data
 calcthresh=True    # If calc thresh true, calculates again
                     # if false uses text file already computed
                     # (not test txtfile...
@@ -60,11 +63,12 @@ showdistr=True   # Save a figure showing histogram of OLR values
                     # Only works if calcthresh is True
 plothist=False       # Option to output histogram even if a new threshold is not calc'd
                     # useful for comparing future dist with past
-threshtest=True  # Option to run on thresholds + and - 5Wm2 as a test
+threshtest=True     # Option to run on thresholds + and - 5Wm2 as a test
+                        # if future will also use historical threshold
 getmbs=True         # Actually run the MetBot algorithm
-showblb=True        # Show the blobs while running
+showblb=False        # Show the blobs while running
 debugplots=False     # Show 2 additional blob windows in showblobs
-intract=True        # Interactive running of showblobs
+intract=False        # Interactive running of showblobs
 refsubset=False     # This is used if noaaolr=True to only look in time window
 hrwindow=49         # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True      # Build tracks of cloud blobs that become TTT cloud bands
@@ -74,15 +78,16 @@ onlynew=False       # Option to only run if the synop file doesn't exist yet
 addrain=False       # Add event rain - at the moment need to be running synoptics too
 heavythresh=50      # Threshold for heavy precip (if add event rain)
 
-future=False        # new option to run on future data - only for CMIP5 - currently RCP85
-fut_th_test=False # Future threshtest option - for testing sensitivity of change to thresh
+if future:
+    fyear1 = '2065'
+    fyear2 = '2099'
 
-selyear=False       # to select years - useful for future
-if selyear:
-    fyear1='1979'
-    fyear2='2013'
 
 bkdir=cwd+"/../../../CTdata/metbot_multi_dset/"
+if future:
+    txtdir=bkdir+"/futpaper_txt"
+else:
+    txtdir=bkdir+"/histpaper_txt"
 
 ### Ensure only look at Southern Africa
 sub="SA"
@@ -93,10 +98,12 @@ dsets='spec'     # "all" or "spec" to choose specific dset(s)
 if dsets=='all':
     ndset=len(dsetdict.dset_deets)
     dsetnames=list(dsetdict.dset_deets)
+    dsetstr = 'all_dset'
 elif dsets=='spec': # edit for the dset you want
     ndset=1
     #dsetnames=['noaa']
     dsetnames=['cmip5']
+    dsetstr = '_'.join(dsetnames)
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -106,7 +113,7 @@ for d in range(ndset):
     print 'This is dset '+dcnt+' of '+ndstr+' in list'
 
     ### Multi model?
-    mods='spec'  # "all" or "spec" to choose specific model(s)
+    mods='all'  # "all" or "spec" to choose specific model(s)
     if mods=='all':
         nmod=len(dsetdict.dset_deets[dset])
         mnames=list(dsetdict.dset_deets[dset])
@@ -147,6 +154,7 @@ for d in range(ndset):
             infile=indir+name+".olr.day.mean."+ys+".nc"
         print infile
 
+        # Check if OLR file exists for this model
         if os.path.exists(infile):
 
             outdir=indir+name+"/"
@@ -155,11 +163,7 @@ for d in range(ndset):
             my.mkdir_p(outdir)
             outsuf=outdir+name+'_'
             if future:
-                outsuf=outsuf+'fut_'
-            if selyear:
-                if future:
-                    outsuf=outsuf+fyear1+'_'+fyear2+'_'
-
+                outsuf=outsuf+'fut_rcp85_'
 
             ### Open OLR data
             v = dset + "-olr-0-0"
@@ -174,10 +178,6 @@ for d in range(ndset):
                 olr=np.squeeze(olr)
             else:
                 print 'Check number of levels in ncfile'
-
-            # if name=='cdr2':
-            #     dtimeO = mync.kh.num2date(time, "days since 1970-01-01 00:00")
-            #     time = mync.kh.date2num(dtimeO, "hours since 1800-01-01 00:00")
 
             print 'Please check dtime'
             print dtime
@@ -220,7 +220,7 @@ for d in range(ndset):
                     olr, dtime, time = olr[:360, :, :], dtime[:360], time[:360]
                 else:
                     olr, dtime, time = olr[:365,:,:],dtime[:365],time[:365]
-            if selyear:
+            if future:
                 print 'Selecting years '+fyear1+' to '+fyear2
                 inds=np.where((dtime[:,0] >= int(fyear1)) & (dtime[:,0] <= int(fyear2)))[0]
                 dtime=dtime[inds]
@@ -232,7 +232,10 @@ for d in range(ndset):
                 thresh=fs.find_saddle(olr,method='fmin',addtests=threshtest,\
                                   showplot=showdistr,figd=outsuf)
             else:
-                threshtxt=bkdir+'thresholds.fmin.all_dset.txt'
+                if future:
+                    threshtxt = txtdir + 'thresholds.fmin.fut_rcp85.cmip5.txt'
+                else:
+                    threshtxt=txtdir + '/thresholds.fmin.noaa_cmip5.txt'
                 print threshtxt
                 with open(threshtxt) as f:
                     for line in f:
@@ -246,15 +249,20 @@ for d in range(ndset):
                                     showplot=True, figd=outsuf)
 
             if threshtest:
-                lowert = thresh - 5
-                uppert = thresh + 5
-                threshs = [lowert, thresh, uppert]
-            elif fut_th_test:
-                first = thresh - 4
-                second = thresh - 2
-                third = thresh + 2
-                fourth = thresh + 4
-                threshs = [first,second,third,fourth]
+                if future:
+                    lowert = thresh - 5
+                    uppert = thresh + 5
+                    thresh_hist_text=txtdir + '/thresholds.fmin.noaa_cmip5.txt'
+                    with open(thresh_hist_text) as f:
+                        for line in f:
+                            if dset+'\t'+name in line:
+                                hist_th = line.split()[2]
+                    hist_th = int(hist_th)
+                    threshs = [thresh, lowert, uppert, hist_th]
+                else:
+                    lowert = thresh - 5
+                    uppert = thresh + 5
+                    threshs = [lowert, thresh, uppert]
             else:
                 threshs = [thresh]
 

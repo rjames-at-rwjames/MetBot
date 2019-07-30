@@ -38,7 +38,7 @@ import MetBot.find_saddle as fs
 
 ### Running options
 sub="SA"
-threshtext=False         # to put olr thresholds in text file - needed for paperfigs
+threshtext=True         # to put olr thresholds in text file - needed for paperfigs
 histplot=True           # to get olr histograms - figure in paper
 
 threshplot=False         # to get olr threshold plot
@@ -50,16 +50,22 @@ testfile=False           # Uses a test file with short period
                         # ..but testyear can be used seperately)
 
 title=False      # plot title - for figures
-future=False     # get future thresholds
+future=True     # get future thresholds
 refdset="noaa"
 refmod="cdr2"
 globv='olr'
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset"
 
-txtdir=bkdir+"/histpaper_txt"
+if future:
+    txtdir=bkdir+"/futpaper_txt"
+else:
+    txtdir=bkdir+"/histpaper_txt"
 my.mkdir_p(txtdir)
 
-figdir=bkdir+"/histpaper_figs/OLRdists"
+if future:
+    figdir = bkdir + "/futpaper_play/OLRdists"
+else:
+    figdir=bkdir+"/histpaper_figs/OLRdists"
 my.mkdir_p(figdir)
 
 if future:
@@ -74,7 +80,8 @@ if dsets=='all':
     dsetstr = 'all_dset'
 elif dsets=='spec': # edit for the dset you want
 #    dsetnames=['noaa','ncep','era','20cr','um','cmip5']
-    dsetnames=['noaa','cmip5']
+    #dsetnames=['noaa','cmip5']
+    dsetnames=['cmip5']
     ndset=len(dsetnames)
     dsetstr = '_'.join(dsetnames)
 ndstr=str(ndset)
@@ -184,8 +191,8 @@ if threshtext:
         txtfile = open(bkdir + "/thresholds.fmin." + dsetstr + ".test.txt", "w")
     else:
         if future:
-            txtfile = open(bkdir + "/thresholds.fmin.fut_rcp85_"\
-                           +fyear1+"_"+fyear2+"."+dsetstr+".txt", "w")
+            txtfile = open(txtdir + "/thresholds.fmin.fut_rcp85."\
+                           +dsetstr+".txt", "w")
         else:
             txtfile = open(txtdir + "/thresholds.fmin."+dsetstr+".txt", "w")
 if threshplot: plt.figure(num='threshs',figsize=[10,3])
@@ -352,10 +359,12 @@ if histplot:
     ax.legend(loc='center left', bbox_to_anchor=[1, 0.5], fontsize='xx-small')
 
     ### Save figure
-    rawfig=figdir+'/olr_raw_hist.'+dsetstr+'.png'
+    if future:
+        rawfig = figdir + '/olr_raw_fut.' + dsetstr + '.png'
+    else:
+        rawfig=figdir+'/olr_raw_hist.'+dsetstr+'.png'
     plt.savefig(rawfig)
     print 'Saving figure as '+rawfig
-
 
 ### Edits to text file
 if threshtext:
