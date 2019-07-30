@@ -235,7 +235,7 @@ for d in range(ndset):
                 if future:
                     threshtxt = txtdir + 'thresholds.fmin.fut_rcp85.cmip5.txt'
                 else:
-                    threshtxt=txtdir + '/thresholds.fmin.noaa_cmip5.txt'
+                    threshtxt=bkdir+'/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
                 print threshtxt
                 with open(threshtxt) as f:
                     for line in f:
