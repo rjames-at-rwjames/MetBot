@@ -188,6 +188,17 @@ elif ndset==2:
     lws[0]=5
     zorders = np.full((28), 2)
     zorders[0]=3
+elif ndset==1:
+    cols=['g','r','c','m','gold','b',\
+            'g','r','c','m','gold','b','indigo',\
+            'g','r','c','m','gold','b','indigo',\
+            'g','r','c','m','gold','b','indigo']
+    styls = ["solid", "solid", "solid", "solid", "solid", "solid", "solid", \
+             "dashed", "dashed", "dashed", "dashed", "dashed", "dashed", "dashed", \
+             "dotted", "dotted", "dotted", "dotted", "dotted", "dotted", "dotted", \
+             "-.", "-.", "-.", "-.", "-.", "-.", "-."]
+    lws = np.full((28), 2)
+    zorders = np.full((28), 2)
 
 ### Open figures
 if histplot:
