@@ -26,8 +26,15 @@
 # Can now also read in future data
 
 import numpy as np
-import matplotlib.pyplot as plt
 from datetime import date
+
+# Option to run disconnected from x11 forwarding session
+runoffline=True
+if runoffline==True:
+    import matplotlib
+    matplotlib.use('Agg')
+
+import matplotlib.pyplot as plt
 import sys,os
 cwd=os.getcwd()
 sys.path.append(cwd+'/../..')
