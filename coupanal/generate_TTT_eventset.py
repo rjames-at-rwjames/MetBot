@@ -25,7 +25,7 @@ import numpy as np
 from datetime import date
 
 # Option to run disconnected from x11 forwarding session
-runoffline=True
+runoffline=False
 if runoffline==True:
     import matplotlib
     matplotlib.use('Agg')
@@ -66,9 +66,9 @@ plothist=False       # Option to output histogram even if a new threshold is not
 threshtest=True     # Option to run on thresholds + and - 5Wm2 as a test
                         # if future will also use historical threshold
 getmbs=True         # Actually run the MetBot algorithm
-showblb=False        # Show the blobs while running
+showblb=True        # Show the blobs while running
 debugplots=False     # Show 2 additional blob windows in showblobs
-intract=False        # Interactive running of showblobs
+intract=True        # Interactive running of showblobs
 refsubset=False     # This is used if noaaolr=True to only look in time window
 hrwindow=49         # ... close (49 hours/ 2days) to flagged cloud band days
 synoptics=True      # Build tracks of cloud blobs that become TTT cloud bands
@@ -235,7 +235,7 @@ for d in range(ndset):
                 if future:
                     threshtxt = txtdir + 'thresholds.fmin.fut_rcp85.cmip5.txt'
                 else:
-                    threshtxt=bkdir+'/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                    threshtxt= txtdir+ 'thresholds.fmin.noaa_cmip5.txt'
                 print threshtxt
                 with open(threshtxt) as f:
                     for line in f:
@@ -252,7 +252,7 @@ for d in range(ndset):
                 if future:
                     lowert = thresh - 5
                     uppert = thresh + 5
-                    thresh_hist_text=txtdir + '/thresholds.fmin.noaa_cmip5.txt'
+                    thresh_hist_text=bkdir+'/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
                     with open(thresh_hist_text) as f:
                         for line in f:
                             if dset+'\t'+name in line:
