@@ -334,11 +334,11 @@ for d in range(ndset):
                     clevs = np.arange(200, 280, 10)
                     cm = plt.cm.gray_r
                 else:
-                    clevs = np.arange(-100.0, 110, 10)
+                    clevs = np.arange(-16,18,2)
                     cm = plt.cm.BrBG_r
             elif globv=='omega':
                 if choosel[l]=='500':
-                    clevs = np.arange(-0.10, 0.11, 0.01)
+                    clevs = np.arange(-0.040, 0.045, 0.005)
                 elif choosel[l]=='200':
                     clevs = np.arange(-0.08, 0.088, 0.008)
                 elif choosel[l]=='700':
@@ -349,7 +349,7 @@ for d in range(ndset):
                     clevs = np.arange(0,16,2)
                     cm = plt.cm.magma
                 else:
-                    clevs= np.arange(-6.0,7.0,1)
+                    clevs= np.arange(-2.0,2.2,0.2)
                     cm = plt.cm.bwr_r
             cs = m.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
         else:
