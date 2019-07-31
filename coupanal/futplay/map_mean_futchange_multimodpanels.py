@@ -238,7 +238,7 @@ for d in range(ndset):
 
             # Open ltmonmean file - future
             ys2 = '2065_2099'
-            meanfile2 = botpath+'/' + name2 + '.' + globv + '.mon.mean.' + ysclim + '.nc'
+            meanfile2 = botpath+'/' + name2 + '.' + globv + '.mon.mean.' + ys2 + '.nc'
 
             if os.path.exists(meanfile2):
 
