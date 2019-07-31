@@ -25,7 +25,7 @@ import coupanal.group_dict as dset_grp
 import MetBot.MetBlobs as blb
 
 ### Running options
-test_scr=False
+test_scr=True
 xplots = 4
 yplots = 7
 seas='NDJFM'
@@ -35,10 +35,10 @@ biasper=False  # bias as a percentage of reference data mean
                 # to get this "bias" must also be True
 group=True
 
-globv='pr'
-levsel=False
+globv='omega'
+levsel=True
 if levsel:
-    choosel='700'
+    choosel='500'
 else:
     choosel='1'
 
@@ -299,11 +299,11 @@ for d in range(ndset):
                     clevs = np.arange(200, 280, 10)
                     cm = plt.cm.gray_r
             elif globv=='omega':
-                if choosel[l]=='500':
+                if choosel=='500':
                     clevs = np.arange(-0.10, 0.11, 0.01)
-                elif choosel[l]=='200':
+                elif choosel=='200':
                     clevs = np.arange(-0.08, 0.088, 0.008)
-                elif choosel[l]=='700':
+                elif choosel=='700':
                     clevs = np.arange(-0.10, 0.11, 0.01)
                 cm = plt.cm.bwr
             elif globv=='pr':
