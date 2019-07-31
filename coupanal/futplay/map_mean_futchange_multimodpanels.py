@@ -137,8 +137,6 @@ for d in range(ndset):
 
             else:
                 mnames = mnames_tmp
-        else:
-            mnames = mnames_tmp
     else:
         mnames = mnames_tmp
 
