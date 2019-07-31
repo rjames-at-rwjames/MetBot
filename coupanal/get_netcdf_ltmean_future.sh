@@ -12,7 +12,7 @@ sogdir=/soge-home/data/model/cmip5/
 alldir=../../../CTdata
 mbdir=$alldir/metbot_multi_dset
 dset_dict=./dicts4CDO/dset_info_4CDO.26models.txt
-onlynew=True
+onlynew=False
 
 scen=rcp85
 tres=mon
@@ -58,9 +58,9 @@ for name in $(more $dset_dict | gawk '{print $1}');do
 
         indir=$sogdir/$name/$scen/$tres/$cdom/$run/
 
-        for infile in $(ls $indir/atlas_${vname}_${cdom}_${name}_${scen}_${run}_*.nc)
+        for infile in $(ls $indir/atlas_${vname}_${cdom}_${name}_${scen}_${run}_*.nc);do
 
-            echo "Generating new file"
+	    echo "Generating new file"
 
             cdo $units -ymonmean -seldate,${year1}-01-01,${year2}-12-31 $infile $outfile
 

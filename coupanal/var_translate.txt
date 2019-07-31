@@ -1,4 +1,4 @@
-pr	pr
+pr	pr	-mulc,86400
 rlut	olr
 ua	u
 va	v
