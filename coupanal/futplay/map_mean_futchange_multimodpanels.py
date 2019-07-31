@@ -33,7 +33,7 @@ alphord=True
 group=False
 
 globv='omega'
-levsel=False
+levsel=True
 if levsel:
     choosel='500'
 else:
@@ -337,11 +337,11 @@ for d in range(ndset):
                     clevs = np.arange(-16,18,2)
                     cm = plt.cm.BrBG_r
             elif globv=='omega':
-                if choosel[l]=='500':
+                if choosel=='500':
                     clevs = np.arange(-0.040, 0.045, 0.005)
-                elif choosel[l]=='200':
+                elif choosel=='200':
                     clevs = np.arange(-0.08, 0.088, 0.008)
-                elif choosel[l]=='700':
+                elif choosel=='700':
                     clevs = np.arange(-0.10, 0.11, 0.01)
                 cm = plt.cm.bwr
             elif globv=='pr':
