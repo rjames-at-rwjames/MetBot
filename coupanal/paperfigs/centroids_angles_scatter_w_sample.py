@@ -20,7 +20,7 @@ import coupanal.Subset_Events as sset
 import sample_dict as sdict
 
 # Running options
-test_scr=True  # if True will just run on first panel for each dataset
+test_scr=False  # if True will just run on first panel for each dataset
 threshtest=False
 future=True
 xplots = 4
@@ -147,128 +147,137 @@ for t in range(nthresh):
                     if thcnt > 0:
                         break
 
-            if thname=='actual':
-                thisthresh=thresh
-            elif thname=='lower':
-                thisthresh=thresh-5
-            elif thname=='upper':
-                thisthresh=thresh+5
-            elif thname=='hist_th':
-                thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
-                with open(thresh_hist_text) as f:
-                    for line in f:
-                        if dset + '\t' + name in line:
-                            hist_th = line.split()[2]
-                hist_th = int(hist_th)
-                thisthresh=hist_th
+            # Only continue if the model is found
+            # ... if not it probably doesn't have data
+            if thcnt > 0:
 
-            thre_str = str(int(thisthresh))
+                if thname=='actual':
+                    thisthresh=thresh
+                elif thname=='lower':
+                    thisthresh=thresh-5
+                elif thname=='upper':
+                    thisthresh=thresh+5
+                elif thname=='hist_th':
+                    thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                    with open(thresh_hist_text) as f:
+                        for line in f:
+                            if dset + '\t' + name in line:
+                                hist_th = line.split()[2]
+                    hist_th = int(hist_th)
+                    thisthresh=hist_th
 
-            print 'opening metbot files...'
-            outsuf = botpath + name + '_'
-            if future:
-                outsuf = outsuf + 'fut_rcp85_'
+                thre_str = str(int(thisthresh))
 
-            syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
-            s = sy.SynopticEvents((), [syfile], COL=False)
-            ks = s.events.keys();
-            ks.sort()  # all
-            refkey = s.mbskeys[0]
+                print 'opening metbot files...'
+                outsuf = botpath + name + '_'
+                if future:
+                    outsuf = outsuf + 'fut_rcp85_'
 
-            mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
-            refmbs, refmbt, refch = blb.mbopen(mbsfile)
+                syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
+                s = sy.SynopticEvents((), [syfile], COL=False)
+                ks = s.events.keys();
+                ks.sort()  # all
+                refkey = s.mbskeys[0]
 
-            # Get lots of info about event set
-            print 'Getting more info about each cloud band...'
-            dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
+                mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
+                refmbs, refmbt, refch = blb.mbopen(mbsfile)
 
-            numleft = len(dates)
-            print 'Now with ' + str(numleft) + ' dates'
+                # Get lots of info about event set
+                print 'Getting more info about each cloud band...'
+                dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
 
-            # If wanting first day of event only, subset
-            print 'Subset by first day?...'
-            if from_event == 'first':
-                print 'Selecting first day of event only'
-                dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                    sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+                numleft = len(dates)
+                print 'Now with ' + str(numleft) + ' dates'
+
+                # If wanting first day of event only, subset
+                print 'Subset by first day?...'
+                if from_event == 'first':
+                    print 'Selecting first day of event only'
+                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                        sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+                else:
+                    print 'Retaining all days from each event'
+                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                        dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
+
+                numleft = len(dates_d)
+                print 'Now with ' + str(numleft) + ' dates'
+
+                # If you want to remove duplicate dates, subset
+                print 'Removing duplicate dates?'
+                if rm_samedates:
+                    print 'Removing duplicate dates...'
+                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                        sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
+
+                else:
+                    print 'Retaining potential duplicate dates... note they may have 2 CBs'
+                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                        dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
+
+                numleft = len(dates_dd)
+                print 'Now with ' + str(numleft) + ' dates'
+
+                # If selecting a specific season, subset
+                print 'Subsetting by season?'
+                if seas_sub:
+                    print 'Selecting months for : ' + seas
+                    dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
+                        sset.sel_seas(months, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd)
+
+                else:
+                    print 'Retaining all months...'
+                    dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
+                        dates_dd[:], cXs_dd[:], cYs_dd[:], degs_dd[:], chs_dd[:], keys_dd[:], daynos_dd[:], tworecdt_dd[:]
+                numleft = len(dates_ddm)
+                print 'Now with ' + str(numleft) + ' dates'
+
+
+                if show_sample:
+                    nsamp=len(sample_doms)
+                    sampledct = sdict.sample_deets[sample][sample_doms[0]]
+                    ndays = sampledct['ndays']
+
+                    smp_cXs=np.zeros((ndays,nsamp),dtype=np.float32)
+                    smp_degs=np.zeros((ndays,nsamp),dtype=np.float32)
+
+                    # Loop sample domain
+                    for o in range(nsamp):
+                        smp_dom = sample_doms[o]
+                        print "Getting data for sample " + smp_dom
+
+                        # Get sample
+                        dates_s,cXs_s, cYs_s, degs_s, chs_s, keys_s, daynos_s, tworecdt_s = \
+                            sset.sample_arche_cbs(sample,smp_dom,dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm)
+
+                        smp_cXs[:,o]=cXs_s
+                        smp_degs[:,o]=degs_s
+
+                        print smp_dom
+                        print dates_s
+
+                # Plotting for this model
+                print 'Plotting for '+name
+                plt.subplot(yplots, xplots, cnt)
+                plt.scatter(cXs_ddm,degs_ddm,c='k',marker="o",s=0.1,edgecolors='face')
+                if show_sample:
+                    cols=['fuchsia','blue']
+                    for o in range(nsamp):
+                        plt.scatter(smp_cXs[:,o],smp_degs[:,o],c=cols[o],marker="o",s=0.5,edgecolors='face')
+                plt.xlim(7.5, 100.0)
+                xlabs=[20,40,60,80]
+                plt.xticks(xlabs,fontsize=8,fontweight='normal')
+                plt.ylim(-90.0, -5.0)
+                ylabs=[-90,-60,-30]
+                plt.yticks(ylabs,fontsize=8, fontweight='normal')
+                plt.title(labname, fontsize=9, fontweight='demibold')
+
+                cnt += 1
+
             else:
-                print 'Retaining all days from each event'
-                dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                    dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
 
-            numleft = len(dates_d)
-            print 'Now with ' + str(numleft) + ' dates'
-
-            # If you want to remove duplicate dates, subset
-            print 'Removing duplicate dates?'
-            if rm_samedates:
-                print 'Removing duplicate dates...'
-                dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                    sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
-
-            else:
-                print 'Retaining potential duplicate dates... note they may have 2 CBs'
-                dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                    dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
-
-            numleft = len(dates_dd)
-            print 'Now with ' + str(numleft) + ' dates'
-
-            # If selecting a specific season, subset
-            print 'Subsetting by season?'
-            if seas_sub:
-                print 'Selecting months for : ' + seas
-                dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
-                    sset.sel_seas(months, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd)
-
-            else:
-                print 'Retaining all months...'
-                dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
-                    dates_dd[:], cXs_dd[:], cYs_dd[:], degs_dd[:], chs_dd[:], keys_dd[:], daynos_dd[:], tworecdt_dd[:]
-            numleft = len(dates_ddm)
-            print 'Now with ' + str(numleft) + ' dates'
-
-
-            if show_sample:
-                nsamp=len(sample_doms)
-                sampledct = sdict.sample_deets[sample][sample_doms[0]]
-                ndays = sampledct['ndays']
-
-                smp_cXs=np.zeros((ndays,nsamp),dtype=np.float32)
-                smp_degs=np.zeros((ndays,nsamp),dtype=np.float32)
-
-                # Loop sample domain
-                for o in range(nsamp):
-                    smp_dom = sample_doms[o]
-                    print "Getting data for sample " + smp_dom
-
-                    # Get sample
-                    dates_s,cXs_s, cYs_s, degs_s, chs_s, keys_s, daynos_s, tworecdt_s = \
-                        sset.sample_arche_cbs(sample,smp_dom,dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm)
-
-                    smp_cXs[:,o]=cXs_s
-                    smp_degs[:,o]=degs_s
-
-                    print smp_dom
-                    print dates_s
-
-            # Plotting for this model
-            print 'Plotting for '+name
-            plt.subplot(yplots, xplots, cnt)
-            plt.scatter(cXs_ddm,degs_ddm,c='k',marker="o",s=0.1,edgecolors='face')
-            if show_sample:
-                cols=['fuchsia','blue']
-                for o in range(nsamp):
-                    plt.scatter(smp_cXs[:,o],smp_degs[:,o],c=cols[o],marker="o",s=0.5,edgecolors='face')
-            plt.xlim(7.5, 100.0)
-            xlabs=[20,40,60,80]
-            plt.xticks(xlabs,fontsize=8,fontweight='normal')
-            plt.ylim(-90.0, -5.0)
-            ylabs=[-90,-60,-30]
-            plt.yticks(ylabs,fontsize=8, fontweight='normal')
-            plt.title(labname, fontsize=9, fontweight='demibold')
-
-            cnt += 1
+                print 'No TTT threshold found for model ' + name
+                print '...OLR data missing for this model?'
 
     addname=''
 
