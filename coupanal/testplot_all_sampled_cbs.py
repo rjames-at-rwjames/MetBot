@@ -96,7 +96,7 @@ for d in range(ndset):
         vnamedict = globv + 'name'
         varstr = moddct[vnamedict]
         if future:
-            ys='2065_2099'
+            ys = moddct['futrun']
         else:
             ys = moddct['yrfname']
         dimdict = dim_exdict.dim_deets[globv][dset]
