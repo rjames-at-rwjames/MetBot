@@ -20,8 +20,9 @@ import coupanal.Subset_Events as sset
 import sample_dict as sdict
 
 # Running options
-test_scr=False  # if True will just run on first panel for each dataset
-threshtest=True
+test_scr=True  # if True will just run on first panel for each dataset
+threshtest=False
+future=True
 xplots = 4
 yplots = 7
 figdim = [9, 13]
@@ -48,15 +49,24 @@ sample_doms=['cont','mada']
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
-threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+if future:
+    threshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+else:
+    threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
-figdir=bkdir+"/histpaper_figs/cen_ang_scatter/"
+if future:
+    figdir = bkdir + "/futpaper_play/cen_ang_scatter/"
+else:
+    figdir=bkdir+"/histpaper_figs/cen_ang_scatter/"
 my.mkdir_p(figdir)
 
 
 # Loop threshs
 if threshtest:
-    thnames=['lower','actual','upper']
+    if future:
+        thnames = ['actual','lower','upper','hist_th']
+    else:
+        thnames=['actual','lower','upper']
 else:
     thnames=['actual']
 
@@ -75,7 +85,10 @@ for t in range(nthresh):
     if dsets=='all':
         dsetnames = list(dsetdict.dset_deets)
     elif dsets=='spec':
-        dsetnames=['noaa','cmip5']
+        if future:
+            dsetnames = ['cmip5']
+        else:
+            dsetnames = ['noaa', 'cmip5']
     ndset=len(dsetnames)
     ndstr=str(ndset)
 
@@ -120,13 +133,19 @@ for t in range(nthresh):
             labname = moddct['labname']
 
             # Get threshold
+            thcnt = 0
             print 'getting threshold....'
             with open(threshtxt) as f:
                 for line in f:
                     if dset + '\t' + name in line:
                         thresh = line.split()[2]
                         print 'thresh=' + str(thresh)
-            thresh = int(thresh)
+                        thcnt += 1
+                    # Once you have the threshold stop looping
+                    # this is important for MIROC-ESM - without this
+                    # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                    if thcnt > 0:
+                        break
 
             if thname=='actual':
                 thisthresh=thresh
@@ -134,11 +153,22 @@ for t in range(nthresh):
                 thisthresh=thresh-5
             elif thname=='upper':
                 thisthresh=thresh+5
+            elif thname=='hist_th':
+                thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                with open(thresh_hist_text) as f:
+                    for line in f:
+                        if dset + '\t' + name in line:
+                            hist_th = line.split()[2]
+                hist_th = int(hist_th)
+                thisthresh=hist_th
 
             thre_str = str(int(thisthresh))
 
             print 'opening metbot files...'
             outsuf = botpath + name + '_'
+            if future:
+                outsuf = outsuf + 'fut_rcp85_'
+
             syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
             s = sy.SynopticEvents((), [syfile], COL=False)
             ks = s.events.keys();
@@ -251,4 +281,3 @@ for t in range(nthresh):
     lonangfig = figdir + '/scatter_lon_angle.' + thname + '.' + seas + \
               '.frmevnt_'+from_event+'.'+addname+'.png'
     plt.savefig(lonangfig)
-

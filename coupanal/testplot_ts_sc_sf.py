@@ -100,7 +100,7 @@ for d in range(ndset):
     print 'This is dset '+dcnt+' of '+ndstr+' in list'
 
     ### Multi model?
-    mods='all'  # "all" or "spec" to choose specific model(s)
+    mods='spec'  # "all" or "spec" to choose specific model(s)
     if mods=='all':
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
@@ -179,72 +179,84 @@ for d in range(ndset):
                 # MIROC-ESM will get threshold for MIROC-ESM-CHEM
                 if thcnt>0:
                     break
-        thresh = int(thresh)
-        if threshtest:
-            if future:
-                lowert = thresh - 5
-                uppert = thresh + 5
-                thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
-                with open(thresh_hist_text) as f:
-                    for line in f:
-                        if dset + '\t' + name in line:
-                            hist_th = line.split()[2]
-                hist_th = int(hist_th)
-                threshs = [thresh, lowert, uppert, hist_th]
-                thnames=['actual','lower','upper','hist_th']
+
+        # Only continue if the model is found
+        # ... if not it probably doesn't have data
+        if thcnt>0:
+
+            print 'This model has TTT data, continuing...'
+
+            thresh = int(thresh)
+            if threshtest:
+                if future:
+                    lowert = thresh - 5
+                    uppert = thresh + 5
+                    thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                    with open(thresh_hist_text) as f:
+                        for line in f:
+                            if dset + '\t' + name in line:
+                                hist_th = line.split()[2]
+                    hist_th = int(hist_th)
+                    threshs = [thresh, lowert, uppert, hist_th]
+                    thnames=['actual','lower','upper','hist_th']
+                else:
+                    lowert = thresh - 5
+                    uppert = thresh + 5
+                    threshs = [thresh, lowert, uppert]
+                    thnames=['actual','lower','upper']
             else:
-                lowert = thresh - 5
-                uppert = thresh + 5
-                threshs = [thresh, lowert, uppert]
-                thnames=['actual','lower','upper']
+                threshs = [thresh]
+                thnames=['actual']
+
+            ### Loop threshes
+            nthresh=len(threshs)
+            for t in range(nthresh):
+                thisthresh=threshs[t]
+                print thisthresh
+                thre_str=str(int(thisthresh))
+                print thre_str
+
+                mbsfile=outsuf+thre_str+'_'+dset+"-olr-0-0.mbs"
+                syfile=outsuf+thre_str+'_'+dset+'-OLR.synop'
+
+                ### Open ttt data
+                s = sy.SynopticEvents((),[syfile],COL=False)
+                refmbs, refmbt, refch = blb.mbopen(mbsfile)
+
+                ### Select events
+                ks = s.events.keys();ks.sort() # all
+                kw, ke = stats.spatialsubset(s,False,cutlon=40.) # events west and east of 40E
+
+                ### Count number of events
+                count_all=str(int(len(ks)))
+                count_cont=str(int(len(kw)))
+                count_mada=str(int(len(ke)))
+
+                ### Calc seasonal cycle
+                scycle, cyclestats, yrs = stats.seasonalcycle(s,False)
+                scyclew, cyclestatsw, yrsw = stats.seasonalcycle(s,kw)
+                scyclee, cyclestatse, yrse = stats.seasonalcycle(s,ke)
+                nNF=scycle[:,3:7].sum(1) # summing years for months November to March
+
+                ### PLOT TIMESERIES OF SEASONAL CYCLE
+                print 'Plotting timeseries'
+                plt.figure(figsize=[11,5])
+                plt.plot(yrs,nNF,'k',lw=2.)
+                plt.savefig(outsuf+thre_str+'_'+dset+'_timeseries.png',dpi=150)
+
+                ### PLOT SEASONAL CYCLE WITH BOX AND WHISKERS
+                print 'Plotting seasonal cycle'
+                stats.plotseasonbox_rj(scycle,'All__'+count_all,outsuf+thre_str+'_'+dset+'_All',savefig=True)
+                stats.plotseasonbox_rj(scyclew,'Continental__'+count_cont,outsuf+thre_str+'_'+dset+'_Continental',savefig=True)
+                stats.plotseasonbox_rj(scyclee,'Oceanic__'+count_mada,outsuf+thre_str+'_'+dset+'_Oceanic',savefig=True)
+
+                ### PLOT MONTHLY GRIDPOINT COUNT
+                print 'Plotting spatiofrequency'
+                mapnm=outsuf+thre_str+'_'+dset+'_'+seasopt
+                msklist=ap.spatiofreq3_season(s,lat4sf,lon4sf,yrs,ks,\
+                    figno=1,season=seasopt,key=dset+'-olr-0-0',res=res,dclim=nos4cbar,flagonly=True,file_suffix=mapnm,savefig=True)
+
         else:
-            threshs = [thresh]
-            thnames=['actual']
 
-        ### Loop threshes
-        nthresh=len(threshs)
-        for t in range(nthresh):
-            thisthresh=threshs[t]
-            print thisthresh
-            thre_str=str(int(thisthresh))
-            print thre_str
-
-            mbsfile=outsuf+thre_str+'_'+dset+"-olr-0-0.mbs"
-            syfile=outsuf+thre_str+'_'+dset+'-OLR.synop'
-
-            ### Open ttt data
-            s = sy.SynopticEvents((),[syfile],COL=False)
-            refmbs, refmbt, refch = blb.mbopen(mbsfile)
-
-            ### Select events
-            ks = s.events.keys();ks.sort() # all
-            kw, ke = stats.spatialsubset(s,False,cutlon=40.) # events west and east of 40E
-
-            ### Count number of events
-            count_all=str(int(len(ks)))
-            count_cont=str(int(len(kw)))
-            count_mada=str(int(len(ke)))
-
-            ### Calc seasonal cycle
-            scycle, cyclestats, yrs = stats.seasonalcycle(s,False)
-            scyclew, cyclestatsw, yrsw = stats.seasonalcycle(s,kw)
-            scyclee, cyclestatse, yrse = stats.seasonalcycle(s,ke)
-            nNF=scycle[:,3:7].sum(1) # summing years for months November to March
-
-            ### PLOT TIMESERIES OF SEASONAL CYCLE
-            print 'Plotting timeseries'
-            plt.figure(figsize=[11,5])
-            plt.plot(yrs,nNF,'k',lw=2.)
-            plt.savefig(outsuf+thre_str+'_'+dset+'_timeseries.png',dpi=150)
-
-            ### PLOT SEASONAL CYCLE WITH BOX AND WHISKERS
-            print 'Plotting seasonal cycle'
-            stats.plotseasonbox_rj(scycle,'All__'+count_all,outsuf+thre_str+'_'+dset+'_All',savefig=True)
-            stats.plotseasonbox_rj(scyclew,'Continental__'+count_cont,outsuf+thre_str+'_'+dset+'_Continental',savefig=True)
-            stats.plotseasonbox_rj(scyclee,'Oceanic__'+count_mada,outsuf+thre_str+'_'+dset+'_Oceanic',savefig=True)
-
-            ### PLOT MONTHLY GRIDPOINT COUNT
-            print 'Plotting spatiofrequency'
-            mapnm=outsuf+thre_str+'_'+dset+'_'+seasopt
-            msklist=ap.spatiofreq3_season(s,lat4sf,lon4sf,yrs,ks,\
-                figno=1,season=seasopt,key=dset+'-olr-0-0',res=res,dclim=nos4cbar,flagonly=True,file_suffix=mapnm,savefig=True)
+            print 'No TTT threshold found for model '+name
+            print '...OLR data missing for this model?'
