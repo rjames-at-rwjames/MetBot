@@ -237,11 +237,21 @@ for d in range(ndset):
                 else:
                     threshtxt= txtdir+ 'thresholds.fmin.noaa_cmip5.txt'
                 print threshtxt
+                thcnt = 0
+                print 'getting threshold....'
                 with open(threshtxt) as f:
                     for line in f:
-                        if dset+'\t'+name in line:
+                        if dset + '\t' + name in line:
                             thresh = line.split()[2]
+                            print 'thresh=' + str(thresh)
+                            thcnt += 1
+                        # Once you have the threshold stop looping
+                        # this is important for MIROC-ESM - without this
+                        # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                        if thcnt > 0:
+                            break
                 thresh = int(thresh)
+
             print 'thresh=' + str(thresh)
 
             if plothist:

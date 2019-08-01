@@ -77,10 +77,9 @@ for d in range(ndset):
     if mods=='spec': # edit for the models you want
         if dset=='noaa':
             mnames=['cdr2']
-            nmod=len(mnames)
         elif dset=='cmip5':
-            nmod=len(dsetdict.dset_deets[dset])
             mnames=list(dsetdict.dset_deets[dset])
+        nmod=len(mnames)
     nmstr=str(nmod)
 
     for mo in range(nmod):
@@ -124,12 +123,19 @@ for d in range(ndset):
         dtime[:, 3] = 0
 
         # Get threshold
+        thcnt=0
         print 'getting threshold....'
         with open(threshtxt) as f:
             for line in f:
                 if dset + '\t' + name in line:
                     thresh = line.split()[2]
                     print 'thresh=' + str(thresh)
+                    thcnt+=1
+                # Once you have the threshold stop looping
+                # this is important for MIROC-ESM - without this
+                # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                if thcnt>0:
+                    break
         thresh = int(thresh)
         if threshtest:
             if future:
