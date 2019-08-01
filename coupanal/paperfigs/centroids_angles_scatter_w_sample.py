@@ -20,8 +20,8 @@ import coupanal.Subset_Events as sset
 import sample_dict as sdict
 
 # Running options
-test_scr=True # if True will just run on first panel for each dataset
-threshtest=False
+test_scr=False # if True will just run on first panel for each dataset
+threshtest=True
 future=True
 xplots = 4
 yplots = 7
