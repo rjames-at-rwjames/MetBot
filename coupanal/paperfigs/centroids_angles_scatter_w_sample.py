@@ -20,7 +20,7 @@ import coupanal.Subset_Events as sset
 import sample_dict as sdict
 
 # Running options
-test_scr=False  # if True will just run on first panel for each dataset
+test_scr=True # if True will just run on first panel for each dataset
 threshtest=False
 future=True
 xplots = 4
@@ -146,6 +146,7 @@ for t in range(nthresh):
                     # MIROC-ESM will get threshold for MIROC-ESM-CHEM
                     if thcnt > 0:
                         break
+            thresh=int(thresh)
 
             # Only continue if the model is found
             # ... if not it probably doesn't have data
