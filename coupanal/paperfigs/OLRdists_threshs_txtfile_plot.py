@@ -55,6 +55,11 @@ testyear=False           # To use output from a test
 testfile=False           # Uses a test file with short period
                         # (testfile designed to be used together with testyear
                         # ..but testyear can be used seperately)
+alphord=True            # This is important for getting a text file in order
+                        # ... so that when you select thresholds for model names
+                        # ... it still works if you have models whose whole name
+                        # ... fits within another models name
+
 
 title=False      # plot title - for figures
 future=True     # get future thresholds
@@ -227,16 +232,22 @@ for d in range(ndset):
     ### Multi model?
     mods='spec'  # "all" or "spec" to choose specific model(s)
     if mods=='all':
-        nmod=len(dsetdict.dset_deets[dset])
-        mnames=list(dsetdict.dset_deets[dset])
+        mnames_tmp=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
         if dset=='noaa':
-            mnames=['cdr2']
-            nmod=len(mnames)
+            mnames_tmp=['cdr2']
         elif dset=='cmip5':
-            nmod=len(dsetdict.dset_deets[dset])
-            mnames=list(dsetdict.dset_deets[dset])
+            mnames_tmp=list(dsetdict.dset_deets[dset])
+    nmod=len(mnames_tmp)
     nmstr=str(nmod)
+
+    if dset == 'cmip5':
+        if alphord:
+            mnames = sorted(mnames_tmp, key=lambda s: s.lower())
+        else:
+            mnames = mnames_tmp
+    else:
+        mnames = mnames_tmp
 
     for m in range(nmod):
         name=mnames[m]

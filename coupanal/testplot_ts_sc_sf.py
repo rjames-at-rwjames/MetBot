@@ -1,13 +1,14 @@
-# Plotting wrapper
-# to plot
-# .... time series of no of core season TTTs over time
+# Wrapper to plot some important features for each model
+# Designed to give an initial reference point
+# or a check that the MetBot has worked
+#
+# Includes:
+# .... time series of number of core season TTTs over time
 # .... box plots for seasonal cycle of TTTs
 # ....   for whole domain, and west & east of 40E
 # .... gridpoint frequency maps for each month
 #
-# OLR threshold is detected automatically using "find_saddle"
-# Option to run on other OLR thresholds a test - currently + and - 5Wm2
-#
+# Option to run on OLR thresholds a test
 #
 # Designed to be flexible to dataset
 # and run on multiple models in a loop
@@ -16,9 +17,9 @@
 # .....name: noaa, $mo_runid (e.g. anqjn), $cmip5_model_name
 # .....directory: here ../../CTdata/metbot_multi_dset/$dset/
 # naming of ncfiles used here /$dset/$name.olr.day.mean.$firstyear_$lastyear.nc
-import iris
-iris.FUTURE.netcdf_promote=True
-iris.FUTURE.cell_datetime_objects=True
+#
+# Now also runs on future output
+
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import date
