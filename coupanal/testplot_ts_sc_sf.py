@@ -24,18 +24,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import date
 import sys,os
+
 cwd=os.getcwd()
 sys.path.append(cwd+'/..')
 import MetBot.SynopticAnatomy as sy
 import MetBot.EventStats as stats
 import MetBot.AdvancedPlots as ap
 import MetBot.MetBlobs as blb
-import MetBot.mytools as my
 import MetBot.mynetcdf as mync
 import MetBot.dset_dict as dsetdict
-import MetBot.find_saddle as fs
-#from MetBot.mytools import savef
-import mpl_toolkits.basemap as bm
 
 ### Running options
 sub="SA"
@@ -48,19 +45,52 @@ testyear=False           # To use output from a test
 testfile=False           # Uses a test file with short period
                         # (testfile designed to be used together with testyear
                         # ..but testyear can be used seperately)
-res='noaa'            # Option to plot at 'noaa' res or 'native' res
 nos4cbar=(1,7,1)        # choose the intervals for spatiofreq cbar
-threshtest=True        # Option to run on thresholds + and - 5Wm2 as a test
+threshtest=False        # Option to run on thresholds + and - 5Wm2 as a test
+future=True
+
+### Get directories
+basedir=cwd+"/../../../CTdata/"
+bkdir=basedir+"metbot_multi_dset/"
+if future:
+    threshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+else:
+    threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+
+# Grid for spatiofreq
+res='make'              # Option to plot at 'native' res or 'make' to create own grid
+if res=='make':
+    gsize=2.5
+    extent=1.0 # how far to extend grid - just to have a flexible option for finalising plot
+    if sub=='SA':
+        lt1=-0.5
+        lt2=-59.5
+        ln1=0.5
+        ln2=99.5
+    elif sub=='SA_TR':
+        lt1=-16.0
+        lt2=-38.0
+        ln1=7.5
+        ln2=99.0
+
+# Make grid
+if res=='make':
+    lat4sf = np.arange(lt2, lt1 + extent, gsize)
+    lat4sf = lat4sf[::-1]  # latitude has to be made the other way because of the negative numbers
+    lon4sf = np.arange(ln1, ln2 + extent, gsize)
+else:
+    globv='olr'
 
 ### Multi dset?
 dsets='spec'     # "all" or "spec" to choose specific dset(s)
 if dsets=='all':
-    ndset=len(dsetdict.dset_deets)
     dsetnames=list(dsetdict.dset_deets)
 elif dsets=='spec': # edit for the dset you want
-    ndset=1
-    #dsetnames=['noaa']
-    dsetnames=['cmip5']
+    if future:
+        dsetnames=['cmip5']
+    else:
+        dsetnames=['noaa','cmip5']
+ndset=len(dsetnames)
 ndstr=str(ndset)
 
 for d in range(ndset):
@@ -72,12 +102,13 @@ for d in range(ndset):
     ### Multi model?
     mods='all'  # "all" or "spec" to choose specific model(s)
     if mods=='all':
-        nmod=len(dsetdict.dset_deets[dset])
         mnames=list(dsetdict.dset_deets[dset])
     if mods=='spec': # edit for the models you want
-        nmod=1
-        #mnames=['cdr2']
-        mnames=['CanESM2']
+        if dset=='noaa':
+            mnames=['cdr2']
+        elif dset=='cmip5':
+            mnames=list(dsetdict.dset_deets[dset])
+    nmod=len(mnames)
     nmstr=str(nmod)
 
     for m in range(nmod):
@@ -86,88 +117,89 @@ for d in range(ndset):
         print 'Running on ' + name
         print 'This is model '+mcnt+' of '+nmstr+' in list'
 
-        # Get details
-        moddct=dsetdict.dset_deets[dset][name]
-        vname=moddct['olrname']
-        if testfile:
-            ys=moddct['testfileyr']
-        else:
-            ys=moddct['yrfname']
+        outdir = bkdir + dset + '/' + name + "/"
         if testyear:
-            beginatyr=moddct['testyr']
+            outdir = outdir + 'test/'
         else:
-            beginatyr = moddct['startyr']
+            outdir = outdir
+        outsuf = outdir + name + '_'
+        if future:
+            outsuf = outsuf + 'fut_rcp85_'
 
-        ### Location for olr input & outputs
-        indir=cwd+"/../../../CTdata/metbot_multi_dset/"+dset+"/"
-        infile=indir+name+".olr.day.mean."+ys+".nc"
-        print infile
-        outdir=indir+name+"/"
-        if testyear: outdir=outdir+'test/'
-        else: outdir=outdir
-        my.mkdir_p(outdir)
-        outsuf=outdir+name+'_'
-        if not threshtest:
-            outsuf = outsuf + 'nothtest_'
-
-        ### Open olr nc file
-        v = dset + "-olr-0-0"
-        daset, globv, lev, drv = v.split('-')
-        ncout = mync.open_multi(infile,globv,name,\
-                                                    dataset=dset,subs=sub)
-        ndim = len(ncout)
-        if ndim == 5:
-            olr, time, lat, lon, dtime = ncout
-        elif ndim == 6:
-            olr, time, lat, lon, lev, dtime = ncout
-            olr = np.squeeze(olr)
-        else:
-            print 'Check number of levels in ncfile'
-
-        ### Select olr data
-        ### Get time information
-        moddct = dsetdict.dset_deets[dset][name]
-        units = moddct['olrtimeunit']
-        cal = moddct['calendar']
-        ### If testfile run on all days available
-        if testfile:
-            olr = olr[:, :, :];time = time[:];dtime = dtime[:]
-        else:
-            ### Find starting timestep
-            start = moddct['startdate']
-            ystart=int(start[0:4]);mstart=int(start[5:7]);dstart=int(start[8:10])
-            if cal=="360_day":
-                startday=(ystart*360)+((mstart-1)*30)+dstart
-                beginday=((int(beginatyr))*360)+1
-                daysgap=beginday-startday+1
-            else:
-                startd=date(ystart,mstart,dstart)
-                begind=date(int(beginatyr),01,01)
-                daysgap=(begind-startd).days
-            olr=olr[daysgap:,:,:];time=time[daysgap:];dtime=dtime[daysgap:]
-        dtime[:, 3] = 0
-
-        ### Option to open noaa file for res
+        # If using native res for spatiofreq open OLR file
         if res=='native':
-            lat2=lat
-            lon2=lon
-        elif res=='noaa':
-            if testfile:
-                yr_noaa="1979_1979"
-            else:
-                yr_noaa="1974_2013"
-            f_noaa=cwd+"/../../../CTdata/metbot_multi_dset/"\
-                "noaa/noaa.olr.day.mean."+yr_noaa+".nc"
-            olrdump,timedump,lat2,lon2,dtimedump = mync.openolr(f_noaa,'olr',subs=sub)
+            # Get details
+            moddct=dsetdict.dset_deets[dset][name]
 
-        ### Get thresholds and loop
-        thresh=fs.find_saddle(olr,method='fmin')
+            if testfile:
+                ys=moddct['testfileyr']
+            else:
+                if future:
+                    ys = '2065_2099'
+                else:
+                    ys = moddct['yrfname']
+
+            ### Location for olr input & outputs
+            olrfile = bkdir + dset + '/'+name+'/' + name + '.' + globv + \
+                      '.mon.mean.' + ys + '.nc'
+
+            print 'Opening '+olrfile
+            # Check if OLR file exists for this model
+            if os.path.exists(olrfile):
+
+                ### Open olr nc file
+                ncout = mync.open_multi(olrfile,globv,name,\
+                                                            dataset=dset,subs=sub)
+                ndim = len(ncout)
+                if ndim == 5:
+                    olr, time, lat, lon, dtime = ncout
+                elif ndim == 6:
+                    olr, time, lat, lon, lev, dtime = ncout
+                    olr = np.squeeze(olr)
+                else:
+                    print 'Check number of levels in ncfile'
+
+                lat4sf=lat
+                lon4sf=lon
+
+            else:
+                print "No OLR data found for " + name
+
+        # Get threshold
+        thcnt=0
+        print 'getting threshold....'
+        with open(threshtxt) as f:
+            for line in f:
+                if dset + '\t' + name in line:
+                    thresh = line.split()[2]
+                    print 'thresh=' + str(thresh)
+                    thcnt+=1
+                # Once you have the threshold stop looping
+                # this is important for MIROC-ESM - without this
+                # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                if thcnt>0:
+                    break
+        thresh = int(thresh)
         if threshtest:
-            lowert = thresh - 5
-            uppert = thresh + 5
-            threshs = [lowert, thresh, uppert]
+            if future:
+                lowert = thresh - 5
+                uppert = thresh + 5
+                thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                with open(thresh_hist_text) as f:
+                    for line in f:
+                        if dset + '\t' + name in line:
+                            hist_th = line.split()[2]
+                hist_th = int(hist_th)
+                threshs = [thresh, lowert, uppert, hist_th]
+                thnames=['actual','lower','upper','hist_th']
+            else:
+                lowert = thresh - 5
+                uppert = thresh + 5
+                threshs = [thresh, lowert, uppert]
+                thnames=['actual','lower','upper']
         else:
             threshs = [thresh]
+            thnames=['actual']
 
         ### Loop threshes
         nthresh=len(threshs)
@@ -214,5 +246,5 @@ for d in range(ndset):
             ### PLOT MONTHLY GRIDPOINT COUNT
             print 'Plotting spatiofrequency'
             mapnm=outsuf+thre_str+'_'+dset+'_'+seasopt
-            msklist=ap.spatiofreq3_season(s,lat2,lon2,yrs,ks,\
+            msklist=ap.spatiofreq3_season(s,lat4sf,lon4sf,yrs,ks,\
                 figno=1,season=seasopt,key=dset+'-olr-0-0',res=res,dclim=nos4cbar,flagonly=True,file_suffix=mapnm,savefig=True)
