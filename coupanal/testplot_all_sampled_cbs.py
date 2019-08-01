@@ -28,6 +28,7 @@ sub='SA'
 sample='blon'
 sample_dom=['cont','mada']
 threshtest=False
+future=True
 
 # How many plots do you want?
 if size=='20':
@@ -38,8 +39,14 @@ if size=='20':
 ### Get directories
 basedir=cwd+"/../../../CTdata/"
 bkdir=basedir+"metbot_multi_dset/"
-threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
-figdir=bkdir+"histpaper_figs/plot_all_sampled_days/"
+if future:
+    threshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+else:
+    threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+if future:
+    figdir=bkdir+"futpaper_play/plot_all_sampled_days/"
+else:
+    figdir=bkdir+"histpaper_figs/plot_all_sampled_days/"
 
 my.mkdir_p(figdir)
 
@@ -48,7 +55,10 @@ dsets='spec'
 if dsets=='all':
     dsetnames = list(dsetdict.dset_deets)
 elif dsets=='spec':
-    dsetnames=['noaa','cmip5']
+    if future:
+        dsetnames=['cmip5']
+    else:
+        dsetnames=['noaa','cmip5']
 ndset=len(dsetnames)
 ndstr=str(ndset)
 
@@ -85,13 +95,20 @@ for d in range(ndset):
         moddct = dsetdict.dset_deets[dset][name]
         vnamedict = globv + 'name'
         varstr = moddct[vnamedict]
-        ys = moddct['yrfname']
+        if future:
+            ys='2065_2099'
+        else:
+            ys = moddct['yrfname']
         dimdict = dim_exdict.dim_deets[globv][dset]
         latname = dimdict[1]
         lonname = dimdict[2]
 
         # Open olr file
-        olrfile=bkdir+dset+'/'+name+'.'+globv+\
+        if future:
+            olrfile=bkdir+dset+'/'+name+'.'+globv+\
+                '.day.mean.rcp85.'+ys+'.nc'
+        else:
+            olrfile=bkdir+dset+'/'+name+'.'+globv+\
                 '.day.mean.'+ys+'.nc'
         print 'Opening '+olrfile
         ncout = mync.open_multi(olrfile, globv, name, \
@@ -115,10 +132,22 @@ for d in range(ndset):
                     print 'thresh=' + str(thresh)
         thresh = int(thresh)
         if threshtest:
-            lowert = thresh - 5
-            uppert = thresh + 5
-            threshs = [lowert, thresh, uppert]
-            thnames=['lower','actual','upper']
+            if future:
+                lowert = thresh - 5
+                uppert = thresh + 5
+                thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                with open(thresh_hist_text) as f:
+                    for line in f:
+                        if dset + '\t' + name in line:
+                            hist_th = line.split()[2]
+                hist_th = int(hist_th)
+                threshs = [thresh, lowert, uppert, hist_th]
+                thnames=['actual','lower','upper','hist_th']
+            else:
+                lowert = thresh - 5
+                uppert = thresh + 5
+                threshs = [thresh, lowert, uppert]
+                thnames=['actual','lower','upper']
         else:
             threshs = [thresh]
             thnames=['actual']
@@ -132,6 +161,8 @@ for d in range(ndset):
 
             print 'opening metbot files...'
             outsuf = botpath + name + '_'
+            if future:
+                outsuf=outsuf+'fut_rcp85_'
             syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
             s = sy.SynopticEvents((), [syfile], COL=False)
             ks = s.events.keys();
@@ -245,8 +276,13 @@ for d in range(ndset):
                     axcl = g.add_axes([0.95, 0.15, 0.02, 0.7])
                     cbar = plt.colorbar(cs, cax=axcl)
 
+                    if future:
+                        period='fut'
+                    else:
+                        period='hist'
+
                     # Save
-                    outname = figdir + 'looped_days_w_ch.'+sample+'.'+smp_dom+'.'+str(tally)+'.n' + size + '.' + dset + '.' + name + '.' + globv + \
+                    outname = figdir + 'looped_days_w_ch.'+period+'.'+sample+'.'+smp_dom+'.'+str(tally)+'.n' + size + '.' + dset + '.' + name + '.' + globv + \
                               '.'+thname+'.png'
                     plt.savefig(outname, dpi=150)
                     plt.close()
