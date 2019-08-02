@@ -530,6 +530,10 @@ for t in range(nthresh):
                     rdtime = rdtime[idx]
                     rain = rain[idx, :, :]
 
+                    # If future change unit
+                    if future:
+                        rain=rain*86400
+
                     # Get correct months
                     print 'Selecting the right months'
                     if seas=='DJF' or seas=='NDJFM':
