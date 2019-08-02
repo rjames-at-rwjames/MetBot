@@ -90,7 +90,7 @@ botdir=bkdir+"metbot_multi_dset/"
 if future:
     txtdir = botdir + "futpaper_txt/"
     figdir = botdir + "futpaper_play/scatter_groupdef/"
-    threshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+    threshtxt = botdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
 else:
     txtdir=botdir+"histpaper_txt/"
     figdir=botdir+"histpaper_figs/scatter_groupdef/"
