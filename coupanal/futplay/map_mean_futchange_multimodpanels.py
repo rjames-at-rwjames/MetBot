@@ -24,7 +24,7 @@ import coupanal.group_dict as dset_grp
 import MetBot.MetBlobs as blb
 
 ### Running options
-test_scr=True
+test_scr=False
 xplots = 4
 yplots = 7
 seas='NDJFM'
@@ -32,8 +32,8 @@ spec_col=True
 alphord=True
 group=False
 
-globv='omega'
-levsel=True
+globv='olr'
+levsel=False
 if levsel:
     choosel='500'
 else:
@@ -217,73 +217,6 @@ for d in range(ndset):
             dtime = dtime[idx]
             meandata = meandata[idx, :, :]
 
-        else:
-            print 'NO MEAN FILE AVAILABLE for ' + dset2 + '_' + name2
-            print 'Setting mean to zero'
-            meandata=np.zeros((12,nlat,nlon), dtype=np.float32)
-
-        nlat=len(lat)
-        nlon=len(lon)
-
-        # Select seasons and get mean
-        thesemons=np.zeros((nmon,nlat,nlon), dtype=np.float32)
-        for zz in range(len(mons)):
-            thesemons[zz,:,:]=meandata[mons[zz]-1,:,:]
-        seasmean=np.nanmean(thesemons,0)
-
-        if dset=='noaa':
-            data4plot=seasmean
-        else:
-            print 'If CMIP5 open future mean and get difference'
-
-            # Open ltmonmean file - future
-            ys2 = '2065_2099'
-            meanfile2 = botpath+'/' + name2 + '.' + globv + '.mon.mean.' + ys2 + '.nc'
-
-            if os.path.exists(meanfile2):
-
-                print 'Opening ' + meanfile2
-
-                if levsel:
-                    ncout = mync.open_multi(meanfile2, globv, name2, \
-                                            dataset=dset2, subs=sub, levsel=levc)
-                else:
-                    ncout = mync.open_multi(meanfile2, globv, name2, \
-                                            dataset=dset2, subs=sub)
-                print '...file opened'
-                ndim = len(ncout)
-                if ndim == 5:
-                    meandata, time, lat, lon, dtime = ncout
-                elif ndim == 6:
-                    meandata, time, lat, lon, lev, dtime = ncout
-                    meandata = np.squeeze(meandata)
-                else:
-                    print 'Check number of dims in ncfile'
-                dtime[:, 3] = 0
-
-                # Fix lat and lons if it spans 0
-                if domain == 'mac_wave' or domain == 'bigtrop':
-                    print "Ammending lons around 0"
-                    for i in range(len(lon)):
-                        if lon[i] > 180:
-                            lon[i] = lon[i] - 360
-                    ord = np.argsort(lon)
-                    lon = lon[ord]
-                    meandata = meandata[:, :, ord]
-
-                # Remove duplicate timesteps
-                print 'Checking for duplicate timesteps'
-                tmp = np.ascontiguousarray(dtime).view(
-                    np.dtype((np.void, dtime.dtype.itemsize * dtime.shape[1])))
-                _, idx = np.unique(tmp, return_index=True)
-                dtime = dtime[idx]
-                meandata = meandata[idx, :, :]
-
-            else:
-                print 'NO MEAN FILE AVAILABLE for ' + dset2 + '_' + name2
-                print 'Setting mean to zero'
-                meandata=np.zeros((12,nlat,nlon), dtype=np.float32)
-
             nlat=len(lat)
             nlon=len(lon)
 
@@ -291,85 +224,152 @@ for d in range(ndset):
             thesemons=np.zeros((nmon,nlat,nlon), dtype=np.float32)
             for zz in range(len(mons)):
                 thesemons[zz,:,:]=meandata[mons[zz]-1,:,:]
-            futmean=np.nanmean(thesemons,0)
+            seasmean=np.nanmean(thesemons,0)
 
-            if os.path.exists(meanfile):
-
-                # Calculating change
-                anoms = futmean - seasmean
-                data4plot = anoms
-
+            if dset=='noaa':
+                data4plot=seasmean
+                canweplot=True
             else:
-                data4plot = np.zeros((nlat, nlon), dtype=np.float32)
+                print 'If CMIP5 open future mean and get difference'
 
-        # Get lon lat grid and data to plot
-        plon, plat = np.meshgrid(lon, lat)
+                # Open ltmonmean file - future
+                ys2 = '2065_2099'
+                meanfile2 = botpath+'/' + name2 + '.' + globv + '.mon.mean.' + ys2 + '.nc'
 
-        # Plot
-        print "Plotting for model "+name2
-        plt.subplot(yplots,xplots,cnt)
+                if os.path.exists(meanfile2):
 
-        if wplotdraw == 'all':
-            m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                fontdict={'fontsize': 8, 'fontweight': 'normal'})
-        elif wplotdraw == 'first':
-            if cnt == 1:
-                m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                    fontdict={'fontsize': 8, 'fontweight': 'demibold'})
-            else:
-                m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=False, prj='cyl', rsltn='l', \
-                                    fontdict={'fontsize': 8, 'fontweight': 'demibold'})
-        elif wplotdraw == 'edges':
-            x_remain = cnt % xplots
-            if x_remain == 1:
-                m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                    fontdict={'fontsize': 8, 'fontweight': 'normal'})
-            else:
-                m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                    fontdict={'fontsize': 8, 'fontweight': 'normal'}, onlyedge='lon')
+                    print 'Opening ' + meanfile2
 
-        if spec_col:
-            if globv == 'olr':
-                if dset=='noaa':
-                    clevs = np.arange(200, 280, 10)
-                    cm = plt.cm.gray_r
+                    if levsel:
+                        ncout = mync.open_multi(meanfile2, globv, name2, \
+                                                dataset=dset2, subs=sub, levsel=levc)
+                    else:
+                        ncout = mync.open_multi(meanfile2, globv, name2, \
+                                                dataset=dset2, subs=sub)
+                    print '...file opened'
+                    ndim = len(ncout)
+                    if ndim == 5:
+                        meandata, time, lat, lon, dtime = ncout
+                    elif ndim == 6:
+                        meandata, time, lat, lon, lev, dtime = ncout
+                        meandata = np.squeeze(meandata)
+                    else:
+                        print 'Check number of dims in ncfile'
+                    dtime[:, 3] = 0
+
+                    # Fix lat and lons if it spans 0
+                    if domain == 'mac_wave' or domain == 'bigtrop':
+                        print "Ammending lons around 0"
+                        for i in range(len(lon)):
+                            if lon[i] > 180:
+                                lon[i] = lon[i] - 360
+                        ord = np.argsort(lon)
+                        lon = lon[ord]
+                        meandata = meandata[:, :, ord]
+
+                    # Remove duplicate timesteps
+                    print 'Checking for duplicate timesteps'
+                    tmp = np.ascontiguousarray(dtime).view(
+                        np.dtype((np.void, dtime.dtype.itemsize * dtime.shape[1])))
+                    _, idx = np.unique(tmp, return_index=True)
+                    dtime = dtime[idx]
+                    meandata = meandata[idx, :, :]
+
+                    nlat = len(lat)
+                    nlon = len(lon)
+
+                    # Select seasons and get mean
+                    thesemons = np.zeros((nmon, nlat, nlon), dtype=np.float32)
+                    for zz in range(len(mons)):
+                        thesemons[zz, :, :] = meandata[mons[zz] - 1, :, :]
+                    futmean = np.nanmean(thesemons, 0)
+
+                    # Calculating change
+                    anoms = futmean - seasmean
+                    data4plot = anoms
+                    canweplot=True
+
                 else:
-                    clevs = np.arange(-16,18,2)
-                    cm = plt.cm.BrBG_r
-            elif globv=='omega':
-                if choosel=='500':
-                    clevs = np.arange(-0.040, 0.045, 0.005)
-                elif choosel=='200':
-                    clevs = np.arange(-0.08, 0.088, 0.008)
-                elif choosel=='700':
-                    clevs = np.arange(-0.10, 0.11, 0.01)
-                cm = plt.cm.bwr
-            elif globv=='pr':
-                if dset=='noaa':
-                    clevs = np.arange(0,16,2)
-                    cm = plt.cm.magma
+                    print 'NO MEAN FILE AVAILABLE for ' + dset2 + '_' + name2
+                    canweplot=False
+
+            if canweplot:
+
+                # Get lon lat grid and data to plot
+                plon, plat = np.meshgrid(lon, lat)
+
+                # Plot
+                print "Plotting for model "+name2
+                plt.subplot(yplots,xplots,cnt)
+
+                if wplotdraw == 'all':
+                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                        fontdict={'fontsize': 8, 'fontweight': 'normal'})
+                elif wplotdraw == 'first':
+                    if cnt == 1:
+                        m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                            fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+                    else:
+                        m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=False, prj='cyl', rsltn='l', \
+                                            fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+                elif wplotdraw == 'edges':
+                    x_remain = cnt % xplots
+                    if x_remain == 1:
+                        m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                            fontdict={'fontsize': 8, 'fontweight': 'normal'})
+                    else:
+                        m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                            fontdict={'fontsize': 8, 'fontweight': 'normal'}, onlyedge='lon')
+
+                if spec_col:
+                    if globv == 'olr':
+                        if dset=='noaa':
+                            clevs = np.arange(200, 280, 10)
+                            cm = plt.cm.gray_r
+                        else:
+                            clevs = np.arange(-16,18,2)
+                            cm = plt.cm.BrBG_r
+                    elif globv=='omega':
+                        if choosel=='500':
+                            clevs = np.arange(-0.020, 0.025, 0.0025)
+                        elif choosel=='200':
+                            clevs = np.arange(-0.08, 0.088, 0.008)
+                        elif choosel=='700':
+                            clevs = np.arange(-0.10, 0.11, 0.01)
+                        cm = plt.cm.bwr
+                    elif globv=='pr':
+                        if dset=='noaa':
+                            clevs = np.arange(0,16,2)
+                            cm = plt.cm.magma
+                        else:
+                            clevs= np.arange(-2.0,2.2,0.2)
+                            cm = plt.cm.bwr_r
+                    cs = m.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
                 else:
-                    clevs= np.arange(-2.0,2.2,0.2)
-                    cm = plt.cm.bwr_r
-            cs = m.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
+                    cs = m.contourf(plon, plat, data4plot, extend='both')
+
+                plt.title(labname,fontsize=8, fontweight='demibold')
+
+                # Redraw map
+                m.drawcountries()
+                m.drawcoastlines()
+                if group:
+                    m.drawmapboundary(color=grcl, linewidth=3)
+
+                cnt += 1
+
+            else:
+                print 'NO FUT MEAN FILE AVAILABLE for ' + dset2 + '_' + name2
+
         else:
-            cs = m.contourf(plon, plat, data4plot, extend='both')
+            print 'NO HIST MEAN FILE AVAILABLE for ' + dset2 + '_' + name2
 
-        plt.title(labname,fontsize=8, fontweight='demibold')
-
-        # Redraw map
-        m.drawcountries()
-        m.drawcoastlines()
-        if group:
-            m.drawmapboundary(color=grcl, linewidth=3)
-
-        cnt += 1
 
 print "Finalising plot..."
 plt.subplots_adjust(left=0.05,right=0.9,top=0.95,bottom=0.02,wspace=0.1,hspace=0.2)
 
 # Plot cbar
-axcl = g.add_axes([0.94, 0.15, 0.01, 0.6])
+axcl = g.add_axes([0.92, 0.15, 0.01, 0.6])
 cbar = plt.colorbar(cs, cax=axcl)
 my.ytickfonts(fontsize=10.)
 

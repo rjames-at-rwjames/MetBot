@@ -25,18 +25,18 @@ import coupanal.group_dict as dset_grp
 import MetBot.MetBlobs as blb
 
 ### Running options
-test_scr=True
+test_scr=False
 xplots = 4
 yplots = 7
 seas='NDJFM'
 spec_col=True
-bias=True # for models, plot bias relative to obs
+bias=False # for models, plot bias relative to obs
 biasper=False  # bias as a percentage of reference data mean
                 # to get this "bias" must also be True
 group=True
 
-globv='omega'
-levsel=True
+globv='olr'
+levsel=False
 if levsel:
     choosel='500'
 else:
@@ -217,122 +217,120 @@ for d in range(ndset):
             dtime = dtime[idx]
             meandata = meandata[idx, :, :]
 
-        else:
-            print 'NO MEAN FILE AVAILABLE for ' + dset2 + '_' + name2
-            print 'Setting mean to zero'
-            meandata=np.zeros((12,nlat,nlon), dtype=np.float32)
+            nlat=len(lat)
+            nlon=len(lon)
 
-        nlat=len(lat)
-        nlon=len(lon)
+            # Select seasons and get mean
+            thesemons=np.zeros((nmon,nlat,nlon), dtype=np.float32)
+            for zz in range(len(mons)):
+                thesemons[zz,:,:]=meandata[mons[zz]-1,:,:]
+            seasmean=np.nanmean(thesemons,0)
 
-        # Select seasons and get mean
-        thesemons=np.zeros((nmon,nlat,nlon), dtype=np.float32)
-        for zz in range(len(mons)):
-            thesemons[zz,:,:]=meandata[mons[zz]-1,:,:]
-        seasmean=np.nanmean(thesemons,0)
-
-        # If doing a bias plot either store data or do interpolation and subtraction
-        if bias:
-            if cnt == 1:
-                reflon = lon[:]
-                reflat = lat[:]
-                refseas = seasmean[:]
-                refnlon = nlon
-                refnlat = nlat
-            else:
-                # Interpolate data
-                prodata = np.zeros((refnlat, refnlon), dtype=np.float32)
-                nonan_raw = np.nan_to_num(seasmean)
-                Interpolator = spi.interp2d(lon, lat, nonan_raw[:, :], kind='linear')
-                prodata[:, :] = Interpolator(reflon, reflat)
-
-                # Calculate bias
-                if biasper:
-                    seasmean= (prodata - refseas)/refseas*100.0
+            # If doing a bias plot either store data or do interpolation and subtraction
+            if bias:
+                if cnt == 1:
+                    reflon = lon[:]
+                    reflat = lat[:]
+                    refseas = seasmean[:]
+                    refnlon = nlon
+                    refnlat = nlat
                 else:
-                    seasmean= prodata - refseas
+                    # Interpolate data
+                    prodata = np.zeros((refnlat, refnlon), dtype=np.float32)
+                    nonan_raw = np.nan_to_num(seasmean)
+                    Interpolator = spi.interp2d(lon, lat, nonan_raw[:, :], kind='linear')
+                    prodata[:, :] = Interpolator(reflon, reflat)
 
-                # Set lon and lat to same as reference
-                lon = reflon[:]
-                lat = reflat[:]
+                    # Calculate bias
+                    if biasper:
+                        seasmean= (prodata - refseas)/refseas*100.0
+                    else:
+                        seasmean= prodata - refseas
 
-        # Get lon lat grid and data to plot
-        plon, plat = np.meshgrid(lon, lat)
-        data4plot=seasmean
+                    # Set lon and lat to same as reference
+                    lon = reflon[:]
+                    lat = reflat[:]
 
-        # Plot
-        print "Plotting for model "+name2
-        plt.subplot(yplots,xplots,cnt)
+            # Get lon lat grid and data to plot
+            plon, plat = np.meshgrid(lon, lat)
+            data4plot=seasmean
 
-        if wplotdraw == 'all':
-            m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                fontdict={'fontsize': 8, 'fontweight': 'normal'})
-        elif wplotdraw == 'first':
-            if cnt == 1:
-                m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                    fontdict={'fontsize': 8, 'fontweight': 'demibold'})
-            else:
-                m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=False, prj='cyl', rsltn='l', \
-                                    fontdict={'fontsize': 8, 'fontweight': 'demibold'})
-        elif wplotdraw == 'edges':
-            x_remain = cnt % xplots
-            if x_remain == 1:
+            # Plot
+            print "Plotting for model "+name2
+            plt.subplot(yplots,xplots,cnt)
+
+            if wplotdraw == 'all':
                 m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
                                     fontdict={'fontsize': 8, 'fontweight': 'normal'})
-            else:
-                m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                    fontdict={'fontsize': 8, 'fontweight': 'normal'}, onlyedge='lon')
+            elif wplotdraw == 'first':
+                if cnt == 1:
+                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                        fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+                else:
+                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=False, prj='cyl', rsltn='l', \
+                                        fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+            elif wplotdraw == 'edges':
+                x_remain = cnt % xplots
+                if x_remain == 1:
+                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                        fontdict={'fontsize': 8, 'fontweight': 'normal'})
+                else:
+                    m = blb.AfrBasemap2(lat, lon, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                        fontdict={'fontsize': 8, 'fontweight': 'normal'}, onlyedge='lon')
 
-        if spec_col:
-            if globv == 'olr':
-                if bias:
-                    if cnt==1:
+            if spec_col:
+                if globv == 'olr':
+                    if bias:
+                        if cnt==1:
+                            clevs = np.arange(200, 280, 10)
+                            cm = plt.cm.gray_r
+                        else:
+                            if biasper:
+                                clevs = np.arange(-60, 65.0, 10)
+                            else:
+                                clevs = np.arange(-100.0, 110, 10)
+                            cm = plt.cm.BrBG_r
+                    else:
                         clevs = np.arange(200, 280, 10)
                         cm = plt.cm.gray_r
-                    else:
-                        if biasper:
-                            clevs = np.arange(-60, 65.0, 10)
+                elif globv=='omega':
+                    if choosel=='500':
+                        clevs = np.arange(-0.10, 0.11, 0.01)
+                    elif choosel=='200':
+                        clevs = np.arange(-0.08, 0.088, 0.008)
+                    elif choosel=='700':
+                        clevs = np.arange(-0.10, 0.11, 0.01)
+                    cm = plt.cm.bwr
+                elif globv=='pr':
+                    if bias:
+                        if cnt==1:
+                            clevs = np.arange(0,16,2)
+                            cm = plt.cm.magma
                         else:
-                            clevs = np.arange(-100.0, 110, 10)
-                        cm = plt.cm.BrBG_r
-                else:
-                    clevs = np.arange(200, 280, 10)
-                    cm = plt.cm.gray_r
-            elif globv=='omega':
-                if choosel=='500':
-                    clevs = np.arange(-0.10, 0.11, 0.01)
-                elif choosel=='200':
-                    clevs = np.arange(-0.08, 0.088, 0.008)
-                elif choosel=='700':
-                    clevs = np.arange(-0.10, 0.11, 0.01)
-                cm = plt.cm.bwr
-            elif globv=='pr':
-                if bias:
-                    if cnt==1:
-                        clevs = np.arange(0,16,2)
+                            if biasper:
+                                clevs= np.arange(-100.0,120.0,20)
+                            else:
+                                clevs= np.arange(-6.0,7.0,1)
+                            cm = plt.cm.bwr_r
+                    else:
+                        clevs = np.arange(0, 16, 2)
                         cm = plt.cm.magma
-                    else:
-                        if biasper:
-                            clevs= np.arange(-100.0,120.0,20)
-                        else:
-                            clevs= np.arange(-6.0,7.0,1)
-                        cm = plt.cm.bwr_r
-                else:
-                    clevs = np.arange(0, 16, 2)
-                    cm = plt.cm.magma
-            cs = m.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
+                cs = m.contourf(plon, plat, data4plot, clevs, cmap=cm, extend='both')
+            else:
+                cs = m.contourf(plon, plat, data4plot, extend='both')
+
+            plt.title(labname,fontsize=8, fontweight='demibold')
+
+            # Redraw map
+            m.drawcountries()
+            m.drawcoastlines()
+            if group:
+                m.drawmapboundary(color=grcl, linewidth=3)
+
+            cnt += 1
+
         else:
-            cs = m.contourf(plon, plat, data4plot, extend='both')
-
-        plt.title(labname,fontsize=8, fontweight='demibold')
-
-        # Redraw map
-        m.drawcountries()
-        m.drawcoastlines()
-        if group:
-            m.drawmapboundary(color=grcl, linewidth=3)
-
-        cnt += 1
+            print 'NO HIST MEAN FILE AVAILABLE for ' + dset2 + '_' + name2
 
 print "Finalising plot..."
 plt.subplots_adjust(left=0.05,right=0.9,top=0.95,bottom=0.02,wspace=0.1,hspace=0.2)
