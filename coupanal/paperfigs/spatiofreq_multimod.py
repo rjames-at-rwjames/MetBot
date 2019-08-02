@@ -28,8 +28,9 @@ import MetBot.mynetcdf as mync
 
 
 ### Running options
-test_scr=False
+test_scr=True
 threshtest=False
+future=True
 plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
                 # SA_TR works much more nicely because can see it clearly and runs quickly
@@ -68,9 +69,16 @@ elif plotdom=='SA_TR':
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
-figdir=bkdir+"/histpaper_figs/spatiofreq_multimod/"
+if future:
+    figdir = bkdir + "/futpaper_play/spatiofreq_multimod/"
+else:
+    figdir=bkdir+"/histpaper_figs/spatiofreq_multimod/"
 my.mkdir_p(figdir)
-threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+
+if future:
+    threshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+else:
+    threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 if group:
     grcls=['fuchsia','gold','darkblue','r','blueviolet','springgreen']
@@ -100,7 +108,10 @@ elif res=='native':
 
 ### Loop threshs
 if threshtest:
-    thnames = ['actual', 'lower', 'upper']
+    if future:
+        thnames = ['actual','lower','upper','hist_th']
+    else:
+        thnames=['actual','lower','upper']
 else:
     thnames = ['actual']
 
@@ -222,6 +233,8 @@ for t in range(nthresh):
 
             print 'opening metbot files...'
             outsuf = botpath + name + '_'
+            if future:
+                outsuf = outsuf + 'fut_rcp85_'
             syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
             s = sy.SynopticEvents((), [syfile], COL=False)
             ks = s.events.keys();
