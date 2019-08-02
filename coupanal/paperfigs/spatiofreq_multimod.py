@@ -28,7 +28,7 @@ import MetBot.mynetcdf as mync
 
 
 ### Running options
-test_scr=True
+test_scr=False
 threshtest=False
 future=True
 plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extratrops)
@@ -214,143 +214,166 @@ for t in range(nthresh):
                 lat4sf=lat
                 lon4sf=lon
 
-
             # Get threshold
+            thcnt = 0
             print 'getting threshold....'
             with open(threshtxt) as f:
                 for line in f:
                     if dset + '\t' + name in line:
                         thresh = line.split()[2]
                         print 'thresh=' + str(thresh)
-            thresh = int(thresh)
+                        thcnt += 1
+                    # Once you have the threshold stop looping
+                    # this is important for MIROC-ESM - without this
+                    # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                    if thcnt > 0:
+                        break
+            thresh=int(thresh)
 
-            if thname=='actual':
-                thisthresh=thresh
-            elif thname=='lower':
-                thisthresh=thresh-5
-            elif thname=='upper':
-                thisthresh=thresh+5
+            # Only continue if the model is found
+            # ... if not it probably doesn't have data
+            if thcnt > 0:
 
-            thre_str = str(int(thisthresh))
+                if thname=='actual':
+                    thisthresh=thresh
+                elif thname=='lower':
+                    thisthresh=thresh-5
+                elif thname=='upper':
+                    thisthresh=thresh+5
+                elif thname == 'hist_th':
+                    thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                    with open(thresh_hist_text) as f:
+                        for line in f:
+                            if dset + '\t' + name in line:
+                                hist_th = line.split()[2]
+                    hist_th = int(hist_th)
+                    thisthresh = hist_th
 
-            print 'opening metbot files...'
-            outsuf = botpath + name + '_'
-            if future:
-                outsuf = outsuf + 'fut_rcp85_'
-            syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
-            s = sy.SynopticEvents((), [syfile], COL=False)
-            ks = s.events.keys();
-            ks.sort()  # all
-            refkey = s.mbskeys[0]
+                thre_str = str(int(thisthresh))
 
-            mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
-            refmbs, refmbt, refch = blb.mbopen(mbsfile)
+                print 'opening metbot files...'
+                outsuf = botpath + name + '_'
+                if future:
+                    outsuf = outsuf + 'fut_rcp85_'
+                syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
+                s = sy.SynopticEvents((), [syfile], COL=False)
+                ks = s.events.keys();
+                ks.sort()  # all
+                refkey = s.mbskeys[0]
 
-            # Get lots of info about event set
-            print 'Getting more info about each cloud band...'
-            dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
+                mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
+                refmbs, refmbt, refch = blb.mbopen(mbsfile)
 
-            numleft = len(dates)
-            print 'Now with ' + str(numleft) + ' dates'
+                # Get lots of info about event set
+                print 'Getting more info about each cloud band...'
+                dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
 
-            # If wanting first day of event only, subset
-            print 'Subset by first day?...'
-            if from_event == 'first':
-                print 'Selecting first day of event only'
-                dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                    sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
-            else:
-                print 'Retaining all days from each event'
-                dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                    dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
+                numleft = len(dates)
+                print 'Now with ' + str(numleft) + ' dates'
 
-            numleft = len(dates_d)
-            print 'Now with ' + str(numleft) + ' dates'
-
-            # If you want to remove duplicate dates, subset
-            print 'Removing duplicate dates?'
-            if rm_samedates:
-                print 'Removing duplicate dates...'
-                dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                    sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
-
-            else:
-                print 'Retaining potential duplicate dates... note they may have 2 CBs'
-                dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                    dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
-
-            numleft = len(dates_dd)
-            print 'Now with ' + str(numleft) + ' dates'
-
-            # selecting a specific season, subset
-            print 'Selecting months for : ' + seas
-            dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
-                sset.sel_seas(months, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd)
-            numleft = len(dates_ddm)
-            print 'Now with ' + str(numleft) + ' dates'
-
-            # Plot
-            print "Plotting for model " + name
-            plt.subplot(yplots, xplots, cnt)
-
-            if wplotdraw == 'all':
-                m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                    fontdict={'fontsize': 8, 'fontweight': 'normal'})
-            elif wplotdraw == 'first':
-                if cnt == 1:
-                    m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                        fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+                # If wanting first day of event only, subset
+                print 'Subset by first day?...'
+                if from_event == 'first':
+                    print 'Selecting first day of event only'
+                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                        sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
                 else:
-                    m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=False, prj='cyl', rsltn='l', \
-                                        fontdict={'fontsize': 8, 'fontweight': 'demibold'})
-            elif wplotdraw == 'edges':
-                x_remain = cnt % xplots
-                if x_remain == 1:
+                    print 'Retaining all days from each event'
+                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                        dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
+
+                numleft = len(dates_d)
+                print 'Now with ' + str(numleft) + ' dates'
+
+                # If you want to remove duplicate dates, subset
+                print 'Removing duplicate dates?'
+                if rm_samedates:
+                    print 'Removing duplicate dates...'
+                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                        sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
+
+                else:
+                    print 'Retaining potential duplicate dates... note they may have 2 CBs'
+                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                        dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
+
+                numleft = len(dates_dd)
+                print 'Now with ' + str(numleft) + ' dates'
+
+                # selecting a specific season, subset
+                print 'Selecting months for : ' + seas
+                dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
+                    sset.sel_seas(months, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd)
+                numleft = len(dates_ddm)
+                print 'Now with ' + str(numleft) + ' dates'
+
+                # Plot
+                print "Plotting for model " + name
+                plt.subplot(yplots, xplots, cnt)
+
+                if wplotdraw == 'all':
                     m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
                                         fontdict={'fontsize': 8, 'fontweight': 'normal'})
-                else:
-                    m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
-                                        fontdict={'fontsize': 8, 'fontweight': 'normal'}, onlyedge='lon')
+                elif wplotdraw == 'first':
+                    if cnt == 1:
+                        m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                            fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+                    else:
+                        m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=False, prj='cyl', rsltn='l', \
+                                            fontdict={'fontsize': 8, 'fontweight': 'demibold'})
+                elif wplotdraw == 'edges':
+                    x_remain = cnt % xplots
+                    if x_remain == 1:
+                        m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                            fontdict={'fontsize': 8, 'fontweight': 'normal'})
+                    else:
+                        m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
+                                            fontdict={'fontsize': 8, 'fontweight': 'normal'}, onlyedge='lon')
 
-            if not bias:
-                allmask, img = plbl.spatiofreq6(m, chs_ddm, name, lat4sf, lon4sf, yrs, per=rate, clim=nos4cbar, \
-                                            savefig=False, \
-                                            col='bw', cbar='none', title=labname)
-            elif bias:
-                allmask = plbl.spatiofreq_noplt(chs_ddm, lat4sf, lon4sf, yrs, per=rate)
+                if not bias:
+                    allmask, img = plbl.spatiofreq6(m, chs_ddm, name, lat4sf, lon4sf, yrs, per=rate, clim=nos4cbar, \
+                                                savefig=False, \
+                                                col='bw', cbar='none', title=labname)
+                elif bias:
+                    allmask = plbl.spatiofreq_noplt(chs_ddm, lat4sf, lon4sf, yrs, per=rate)
 
-                if cnt==1:
-                    refmask = allmask[:]
-                else:
-                    biasmask = allmask - refmask
+                    if cnt==1:
+                        refmask = allmask[:]
+                    else:
+                        biasmask = allmask - refmask
 
-                if cnt==1:
-                    clim = nos4cbar
-                    cm = plt.cm.gist_gray_r
-                    std_mask = allmask[:]
-                    cstd_mask = np.where(std_mask > clim[1], clim[1], std_mask)
-                    cstd_mask = np.where(cstd_mask < clim[0], clim[0], cstd_mask)
-                    # Plot pcolor
-                    pcolmap = m.pcolormesh(lon4sf, lat4sf, cstd_mask, cmap=cm, zorder=1)
-                    plt.clim(clim[0], clim[1])  # sets color limits of current image
-                else:
-                    clim2 = nos4bias
+                    if cnt==1:
+                        clim = nos4cbar
+                        cm = plt.cm.gist_gray_r
+                        std_mask = allmask[:]
+                        cstd_mask = np.where(std_mask > clim[1], clim[1], std_mask)
+                        cstd_mask = np.where(cstd_mask < clim[0], clim[0], cstd_mask)
+                        # Plot pcolor
+                        pcolmap = m.pcolormesh(lon4sf, lat4sf, cstd_mask, cmap=cm, zorder=1)
+                        plt.clim(clim[0], clim[1])  # sets color limits of current image
+                    else:
+                        clim2 = nos4bias
 
-                    bstd_mask = np.where(biasmask > clim2[1], clim2[1], biasmask)
-                    bstd_mask = np.where(biasmask < clim2[0], clim2[0], biasmask)
-                    cm = plt.cm.bwr_r
-                    pcolmap = m.pcolormesh(lon4sf, lat4sf, bstd_mask, cmap=cm, zorder=1)
-                    plt.clim(clim2[0], clim2[1])  # sets color limits of current image
+                        bstd_mask = np.where(biasmask > clim2[1], clim2[1], biasmask)
+                        bstd_mask = np.where(biasmask < clim2[0], clim2[0], biasmask)
+                        cm = plt.cm.bwr_r
+                        pcolmap = m.pcolormesh(lon4sf, lat4sf, bstd_mask, cmap=cm, zorder=1)
+                        plt.clim(clim2[0], clim2[1])  # sets color limits of current image
 
-                img = plt.gci()  # gets a reference for the image
-                plt.title(labname, fontsize=8, fontweight='demibold')
+                    img = plt.gci()  # gets a reference for the image
+                    plt.title(labname, fontsize=8, fontweight='demibold')
 
-            m.drawcountries(color='k')
-            m.drawcoastlines(color='k')
-            if group:
-                m.drawmapboundary(color=grcl, linewidth=3)
+                m.drawcountries(color='k')
+                m.drawcoastlines(color='k')
+                if group:
+                    m.drawmapboundary(color=grcl, linewidth=3)
 
-            cnt+=1
+                cnt+=1
+
+            else:
+
+                print 'No TTT threshold found for model ' + name
+                print '...OLR data missing for this model?'
 
     print "Finalising plot..."
     plt.subplots_adjust(left=0.05, right=0.9, top=0.95, bottom=0.02, wspace=0.1, hspace=0.2)
