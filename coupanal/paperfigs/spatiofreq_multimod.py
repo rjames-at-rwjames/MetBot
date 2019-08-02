@@ -131,8 +131,10 @@ for t in range(nthresh):
     if dsets == 'all':
         dsetnames = list(dsetdict.dset_deets)
     elif dsets == 'spec':
-        dsetnames = ['noaa', 'cmip5']
-        #dsetnames=['cmip5']
+        if future:
+            dsetnames = ['cmip5']
+        else:
+            dsetnames = ['noaa', 'cmip5']
     ndset = len(dsetnames)
     ndstr = str(ndset)
 
