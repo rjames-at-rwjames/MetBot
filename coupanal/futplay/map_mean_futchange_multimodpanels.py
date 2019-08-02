@@ -32,7 +32,7 @@ spec_col=True
 alphord=True
 group=False
 
-globv='olr'
+globv='pr'
 levsel=False
 if levsel:
     choosel='500'
