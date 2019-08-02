@@ -30,6 +30,7 @@ xplots = 4
 yplots = 7
 seas='NDJFM'
 spec_col=True
+future=True
 bias=False # for models, plot bias relative to obs
 biasper=False  # bias as a percentage of reference data mean
                 # to get this "bias" must also be True
@@ -73,7 +74,10 @@ if group:
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-figdir=botdir+"/histpaper_figs/mapltmean_multimod/"
+if future:
+    figdir=botdir+"/futpaper_play/mapltmean_multimod/"
+else:
+    figdir=botdir+"/histpaper_figs/mapltmean_multimod/"
 my.mkdir_p(figdir)
 
 if seas == 'NDJFM':
@@ -171,7 +175,13 @@ for d in range(ndset):
         # Get info
         moddct = dsetdict.dset_deets[dset2][name2]
         labname = moddct['labname']
-        ysclim = moddct['yrfname']
+        if dset=='cmip5':
+            if future:
+                ysclim='2065_2099'
+            else:
+                ysclim = moddct['yrfname']
+        else:
+            ysclim = moddct['yrfname']
 
         botpath = botdir + dset2 + '/' + name2
 
