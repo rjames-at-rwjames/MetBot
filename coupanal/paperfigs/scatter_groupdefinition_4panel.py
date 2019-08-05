@@ -411,7 +411,10 @@ for t in range(nthresh):
                     raindset = dset
                     rainmod = name
                     rmoddct = moddct
-                    rys = moddct['futprrun']
+                    if future:
+                        rys = moddct['futprrun']
+                    else:
+                        rys=ys
                     rys_clim = ys_clim
 
                 rainname = rmoddct['prname']
