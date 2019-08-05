@@ -442,8 +442,11 @@ for t in range(nthresh):
                 colour = grcl
                 mk = grmr
 
-                if cnt == 0:
-                    zord=3
+                if ndset==2:
+                    if cnt == 0:
+                        zord=3
+                    else:
+                        zord=2
                 else:
                     zord=2
 

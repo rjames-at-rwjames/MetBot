@@ -39,6 +39,8 @@ xplots=2
 yplots=1
 nys=35.0 # This is now been standardised so all datasets have 35 years
 trendline=True
+future=True # note that this doesn't work well for this plot
+            # Froude and Angola Low indices are for 20th century
 
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
@@ -69,10 +71,15 @@ dom_b='contsub_nh'
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-txtdir=botdir+"histpaper_txt/"
-figdir=botdir+"histpaper_figs/scatter_intensity/"
+if future:
+    txtdir = botdir + "futpaper_txt/"
+    figdir=botdir+"futpaper_play/scatter_intensity/"
+    threshtxt = botdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+else:
+    txtdir=botdir+"histpaper_txt/"
+    figdir=botdir+"histpaper_figs/scatter_intensity/"
+    threshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 my.mkdir_p(figdir)
-threshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 ### Dsets
 dsets = 'spec'
@@ -80,7 +87,10 @@ mods = 'spec'
 if dsets == 'all':
     dsetnames = list(dsetdict.dset_deets)
 elif dsets == 'spec':
-    dsetnames = ['noaa', 'cmip5']
+    if future:
+        dsetnames = ['cmip5']
+    else:
+        dsetnames = ['noaa', 'cmip5']
 ndset = len(dsetnames)
 ndstr = str(ndset)
 
@@ -119,7 +129,10 @@ siz[0,:] = 10
 
 ### Loop threshs
 if threshtest:
-    thnames=['actual','lower','upper']
+    if future:
+        thnames = ['actual','lower','upper','hist_th']
+    else:
+        thnames=['actual','lower','upper']
 else:
     thnames=['actual']
 
@@ -202,342 +215,387 @@ for t in range(nthresh):
 
             ### TTT info for y axis
             ### Get threshold for TTTs
+            ### Get threshold for TTTs
             print 'Getting threshold for this model'
+            thcnt = 0
+            print 'getting threshold....'
             with open(threshtxt) as f:
                 for line in f:
                     if dset + '\t' + name in line:
                         thresh = line.split()[2]
                         print 'thresh=' + str(thresh)
+                        thcnt += 1
+                    # Once you have the threshold stop looping
+                    # this is important for MIROC-ESM - without this
+                    # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                    if thcnt > 0:
+                        break
+            thresh=int(thresh)
 
-            thresh = int(thresh)
+            # Only continue if the model is found
+            # ... if not it probably doesn't have data
+            if thcnt > 0:
 
-            if thnames[t]=='actual':
-                thisthresh=thresh
-            if thnames[t]=='lower':
-                thisthresh=thresh - 5
-            if thnames[t]=='upper':
-                thisthresh=thresh + 5
+                if thnames[t]=='actual':
+                    thisthresh=thresh
+                if thnames[t]=='lower':
+                    thisthresh=thresh - 5
+                if thnames[t]=='upper':
+                    thisthresh=thresh + 5
+                if thnames[t]=='hist_th':
+                    thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                    with open(thresh_hist_text) as f:
+                        for line in f:
+                            if dset + '\t' + name in line:
+                                hist_th = line.split()[2]
+                    hist_th = int(hist_th)
+                    thisthresh=hist_th
 
-            thre_str = str(thisthresh)
+                thre_str = str(thisthresh)
 
-            # Find TTT data
-            print 'Opening MetBot files...'
-            botpath = botdir + dset + '/' + name + '/'
-            outsuf = botpath + name + '_'
+                # Find TTT data
+                print 'Opening MetBot files...'
+                botpath = botdir + dset + '/' + name + '/'
+                outsuf = botpath + name + '_'
+                if future:
+                    outsuf = outsuf + 'fut_rcp85_'
 
-            mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
-            syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
+                mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
+                syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
 
-            s = sy.SynopticEvents((), [syfile], COL=False)
-            ks = s.events.keys();
-            ks.sort()  # all
-            refkey = s.mbskeys[0]
+                s = sy.SynopticEvents((), [syfile], COL=False)
+                ks = s.events.keys();
+                ks.sort()  # all
+                refkey = s.mbskeys[0]
 
-            refmbs, refmbt, refch = blb.mbopen(mbsfile)
+                refmbs, refmbt, refch = blb.mbopen(mbsfile)
 
-            # First do the processing that is going to apply to the whole figure
-            #   first day of event or all days? i.e. number of events or number of CBs
-            #   remove duplicate dates?
+                # First do the processing that is going to apply to the whole figure
+                #   first day of event or all days? i.e. number of events or number of CBs
+                #   remove duplicate dates?
 
-            # Get lots of info about event set
-            print 'Getting more info about each cloud band...'
-            dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
+                # Get lots of info about event set
+                print 'Getting more info about each cloud band...'
+                dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
 
-            # If wanting first day of event only, subset
-            print 'Subset by first day?...'
-            if from_event == 'first':
-                print 'Selecting first day of event only'
-                dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                    sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
-            else:
-                print 'Retaining all days from each event'
-                dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                    dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
-
-            # If you want to remove duplicate dates, subset
-            print 'Removing duplicate dates?'
-            if rm_samedates:
-                print 'Removing duplicate dates...'
-                dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                    sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
-
-            else:
-                print 'Retaining potential duplicate dates... note they may have 2 CBs'
-                dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                    dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
-
-            # Get details for rain
-            print 'Getting info on rain for this model'
-            moddct = dsetdict.dset_deets[dset][name]
-            labname = moddct['labname']
-            ys = moddct['yrfname']
-
-            ### Open rain data - historical
-            print 'Getting historical rain data'
-            globp = 'pr'
-            if dset == 'noaa':
-                raindset = 'trmm'
-                rainmod = 'trmm_3b42v7'
-                rmoddct = dsetdict.dset_deets[raindset][rainmod]
-                rys = rmoddct['yrfname']
-            else:
-                raindset = dset
-                rainmod = name
-                rmoddct = moddct
-                rys = ys
-
-            rainname = rmoddct['prname']
-            rainlabname= rmoddct['labname']
-            rainfile = botdir + raindset + "/" + rainmod + "." + globp + ".day.mean." + rys + ".nc"
-            print 'Selecting ' + rainfile
-
-            # Now looping to get info for diff domains
-            wlon_picks=[dom_a_wlon,dom_b_wlon]
-            elon_picks=[dom_a_elon,dom_b_elon]
-            seas_picks=[seas_a,seas_b]
-            ind_picks=[index_a,index_b]
-            dom_picks=[dom_a,dom_b]
-
-            ind_4_x=np.zeros(nplot,dtype=np.float32)
-            intensitys=np.zeros(nplot,dtype=np.float32)
-
-            for pt in range(nplot):
-                print 'Making calculations for plot '+figlabels[pt]
-
-                wlon=wlon_picks[pt]
-                elon=elon_picks[pt]
-                thseas=seas_picks[pt]
-                thind=ind_picks[pt]
-                thdom=dom_picks[pt]
-
-                ind_file = '../indices/' + thind + '_' + thseas + '_multimod.txt'
-
-                ## Seas information
-                if thseas == 'NDJFM':
-                    mons = [1, 2, 3, 11, 12]
-                    nmon = len(mons)
-                    mon1=11
-                    mon2=3
-                elif thseas == 'DJF':
-                    mons = [1, 2, 12]
-                    nmon = len(mons)
-                    mon1=12
-                    mon2=1
-                elif thseas == 'JF':
-                    mons = [1,2]
-                    nmon = len(mons)
-                    mon1=1
-                    mon2=2
-
-                # Subset the season
-                print 'Subsetting by season?'
-                print 'Selecting months for : ' + thseas
-                dates_se, cXs_se, cYs_se, degs_se, chs_se, keys_se, daynos_se, tworecdt_se = \
-                    sset.sel_seas(mons, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
-                                  tworecdt_dd)
-
-                # Then subset by longitude
-                print 'Subsetting by latitude?'
-                print 'Selecting CBs between '+str(wlon)+' and '+str(elon)
-                dates_ln, cXs_ln, cYs_ln, degs_ln, chs_ln, keys_ln, daynos_ln, tworecdt_ln = \
-                    sset.sel_cen_lon(wlon,elon,dates_se, cXs_se, cYs_se, degs_se, \
-                                     chs_se, keys_se, daynos_se, tworecdt_se)
-
-                print 'Calculating number of TTTs'
-                nttt=len(dates_ln)
-
-                # Getting intensity
-                print 'Now moving on to get data for the intensity'
-                rainout = mync.open_multi(rainfile, globp, rainmod, \
-                                      dataset=raindset, subs=thdom)
-
-                rdim = len(rainout)
-                if rdim == 5:
-                    rain, rtime, rlat, rlon, rdtime = rainout
-                elif rdim == 6:
-                    rain, rtime, rlat, rlon, rlev, rdtime = rainout
-                    rain = np.squeeze(rain)
+                # If wanting first day of event only, subset
+                print 'Subset by first day?...'
+                if from_event == 'first':
+                    print 'Selecting first day of event only'
+                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                        sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
                 else:
-                    print 'Check number of levels in ncfile'
-                rdtime[:, 3] = 0
-                nlat = len(rlat)
-                nlon = len(rlon)
+                    print 'Retaining all days from each event'
+                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                        dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
 
-                print 'Checking for duplicate timesteps'  # do retain this - IPSL A LR has double tsteps
-                tmp = np.ascontiguousarray(rdtime).view(np.dtype((np.void, rdtime.dtype.itemsize * rdtime.shape[1])))
-                _, idx = np.unique(tmp, return_index=True)
-                rdtime = rdtime[idx]
-                rain = rain[idx, :, :]
+                # If you want to remove duplicate dates, subset
+                print 'Removing duplicate dates?'
+                if rm_samedates:
+                    print 'Removing duplicate dates...'
+                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                        sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
 
-                # Get correct months
-                print 'Selecting the right months'
-                if thseas=='DJF' or thseas=='NDJFM':
-                    raindat2 = np.where((rdtime[:, 1] >= mon1) | (rdtime[:, 1] <= mon2))
-                elif thseas=='JF':
-                    raindat2 = np.where((rdtime[:, 1] >= mon1) & (rdtime[:, 1] <= mon2))
-                rain = np.squeeze(rain[raindat2, :, :])
-                rdtime = rdtime[raindat2]
-                totdays_hist = len(rdtime)
+                else:
+                    print 'Retaining potential duplicate dates... note they may have 2 CBs'
+                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                        dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
 
-                print 'Selecting TTTs from rain data'
-                indices = []
-                for dt in range(nttt):
-                    ix = my.ixdtimes(rdtime, [dates_ln[dt][0]], \
-                                     [dates_ln[dt][1]], [dates_ln[dt][2]], [0])
-                    if len(ix) >= 1:
-                        indices.append(ix)
+                # Get details for rain
+                print 'Getting info on rain for this model'
+                moddct = dsetdict.dset_deets[dset][name]
+                labname = moddct['labname']
 
-                indices = np.squeeze(np.asarray(indices))
-
-                print 'Selecting rain on TTT days'
-                rainsel = rain[indices, :, :]
-                ttt_rain_dates = rdtime[indices]
-
-                nttt4rain=len(ttt_rain_dates)
-
-                if under_of == 'under':
-
-                    print 'Selecting rain under TTTs'
-                    masked_rain = np.ma.zeros((nttt4rain, nlat, nlon), dtype=np.float32)
-                    rcnt=0
-                    for rdt in range(nttt):
-                        this_dt=dates_ln[rdt]
-                        ix = my.ixdtimes(ttt_rain_dates, [this_dt[0]], \
-                                         [this_dt[1]], [this_dt[2]], [0])
-                        if len(ix) >= 1:
-                            ind=ix[0]
-                            this_dt_rain=ttt_rain_dates[ind]
-                            print 'Checking dates correspond'
-                            print this_dt
-                            print this_dt_rain
-                            print 'Running poly to mask'
-                            chmask = my.poly2mask(rlon, rlat, chs_ln[rdt])
-                            print 'Finished running poly to mask'
-                            r = np.ma.MaskedArray(rainsel[ind, :, :], mask=~chmask)
-                            masked_rain[rcnt, :, :] = r
-                            rcnt+=1
-
-                elif under_of=='dayof':
-                    masked_rain=rainsel[:]
-
-                # Get a timeseries of mean TTT rain from each event
-                print 'Getting a rain value for each TTT event'
-                reg_ttt_sum = np.zeros((nttt4rain), dtype=np.float32)
-                reg_ttt_mean = np.zeros((nttt4rain), dtype=np.float32)
-
-                if weightlats:
-                    latr = np.deg2rad(rlat)
-                    weights = np.cos(latr)
-
-                for st in range(nttt4rain):
-                    if weightlats:
-                        zonmean_ttt = np.ma.mean(masked_rain[st, :, :], axis=1)
-                        regmean_ttt = np.ma.average(zonmean_ttt, weights=weights)
-                        reg_ttt_mean[st] = regmean_ttt
+                ### Open rain data - historical
+                print 'Getting historical rain data'
+                globp = 'pr'
+                if dset == 'noaa':
+                    raindset = 'trmm'
+                    rainmod = 'trmm_3b42v7'
+                    rmoddct = dsetdict.dset_deets[raindset][rainmod]
+                    rys = rmoddct['yrfname']
+                else:
+                    raindset = dset
+                    rainmod = name
+                    rmoddct = moddct
+                    if future:
+                        rys = moddct['futprrun']
                     else:
-                        reg_ttt_mean[st] = np.ma.mean(masked_rain[st, :, :])
+                        rys = rmoddct['yrfname']
 
-                # Getting a long term sum or mean
-                tottttrain=np.nansum(reg_ttt_mean)
-                rainperttt=np.nanmean(reg_ttt_mean)
-                per75rain=np.nanpercentile(reg_ttt_mean,75)
-
-                if raintype=='totrain':
-                    intensval=tottttrain
-                elif raintype=='rainperttt':
-                    intensval=rainperttt
-                elif raintype=='perc75':
-                    intensval=per75rain
-
-                intensitys[pt]=intensval
-
-                # OK moving onto x axis
-                print 'Getting '+thind+' indices for this model'
-                print 'if it exists...'
-
-                # Switch model if noaa
-                if dset=='noaa':
-                    name3='erai'
+                rainname = rmoddct['prname']
+                rainlabname= rmoddct['labname']
+                if future:
+                    rainfile = botdir + raindset + "/" + rainmod + "." + globp + ".day.mean.rcp85." + rys + ".nc"
                 else:
-                    name3=name
+                    rainfile = botdir + raindset + "/" + rainmod + "." + globp + ".day.mean." + rys + ".nc"
+                print 'Selecting ' + rainfile
 
-                indval=0
-                with open(ind_file) as f:
-                    for line in f:
-                        if name3 in line:
-                            indval = line.split()[1]
-                            print 'it exists! index=' + str(indval)
+                # Now looping to get info for diff domains
+                wlon_picks=[dom_a_wlon,dom_b_wlon]
+                elon_picks=[dom_a_elon,dom_b_elon]
+                seas_picks=[seas_a,seas_b]
+                ind_picks=[index_a,index_b]
+                dom_picks=[dom_a,dom_b]
 
-                if indval==0:
-                    print 'does not exist for this model'
+                ind_4_x=np.zeros(nplot,dtype=np.float32)
+                intensitys=np.zeros(nplot,dtype=np.float32)
 
-                ind_4_x[pt]=float(indval)
+                for pt in range(nplot):
+                    print 'Making calculations for plot '+figlabels[pt]
 
-            # Now looping by 2 to get plots
-            print 'Now we have calculated everything for 2 domains, entering 2 plots'
+                    wlon=wlon_picks[pt]
+                    elon=elon_picks[pt]
+                    thseas=seas_picks[pt]
+                    thind=ind_picks[pt]
+                    thdom=dom_picks[pt]
 
-            colour = grcl
-            mk = grmr
+                    ind_file = '../indices/' + thind + '_' + thseas + '_multimod.txt'
 
-            if cnt == 0:
-                zord=3
-                label = 'NCDR-OLR | TRMM | ERAI'
+                    ## Seas information
+                    if thseas == 'NDJFM':
+                        mons = [1, 2, 3, 11, 12]
+                        nmon = len(mons)
+                        mon1=11
+                        mon2=3
+                    elif thseas == 'DJF':
+                        mons = [1, 2, 12]
+                        nmon = len(mons)
+                        mon1=12
+                        mon2=1
+                    elif thseas == 'JF':
+                        mons = [1,2]
+                        nmon = len(mons)
+                        mon1=1
+                        mon2=2
+
+                    # Subset the season
+                    print 'Subsetting by season?'
+                    print 'Selecting months for : ' + thseas
+                    dates_se, cXs_se, cYs_se, degs_se, chs_se, keys_se, daynos_se, tworecdt_se = \
+                        sset.sel_seas(mons, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
+                                      tworecdt_dd)
+
+                    # Then subset by longitude
+                    print 'Subsetting by latitude?'
+                    print 'Selecting CBs between '+str(wlon)+' and '+str(elon)
+                    dates_ln, cXs_ln, cYs_ln, degs_ln, chs_ln, keys_ln, daynos_ln, tworecdt_ln = \
+                        sset.sel_cen_lon(wlon,elon,dates_se, cXs_se, cYs_se, degs_se, \
+                                         chs_se, keys_se, daynos_se, tworecdt_se)
+
+                    print 'Calculating number of TTTs'
+                    nttt=len(dates_ln)
+
+                    # Getting intensity
+                    print 'Now moving on to get data for the intensity'
+                    rainout = mync.open_multi(rainfile, globp, rainmod, \
+                                          dataset=raindset, subs=thdom)
+
+                    rdim = len(rainout)
+                    if rdim == 5:
+                        rain, rtime, rlat, rlon, rdtime = rainout
+                    elif rdim == 6:
+                        rain, rtime, rlat, rlon, rlev, rdtime = rainout
+                        rain = np.squeeze(rain)
+                    else:
+                        print 'Check number of levels in ncfile'
+                    rdtime[:, 3] = 0
+                    nlat = len(rlat)
+                    nlon = len(rlon)
+
+                    print 'Checking for duplicate timesteps'  # do retain this - IPSL A LR has double tsteps
+                    tmp = np.ascontiguousarray(rdtime).view(np.dtype((np.void, rdtime.dtype.itemsize * rdtime.shape[1])))
+                    _, idx = np.unique(tmp, return_index=True)
+                    rdtime = rdtime[idx]
+                    rain = rain[idx, :, :]
+
+                    if future:
+                        rain=rain*86400
+
+                    # Get correct months
+                    print 'Selecting the right months'
+                    if thseas=='DJF' or thseas=='NDJFM':
+                        raindat2 = np.where((rdtime[:, 1] >= mon1) | (rdtime[:, 1] <= mon2))
+                    elif thseas=='JF':
+                        raindat2 = np.where((rdtime[:, 1] >= mon1) & (rdtime[:, 1] <= mon2))
+                    rain = np.squeeze(rain[raindat2, :, :])
+                    rdtime = rdtime[raindat2]
+                    totdays_hist = len(rdtime)
+
+                    print 'Selecting TTTs from rain data'
+                    indices = []
+                    for dt in range(nttt):
+                        ix = my.ixdtimes(rdtime, [dates_ln[dt][0]], \
+                                         [dates_ln[dt][1]], [dates_ln[dt][2]], [0])
+                        if len(ix) >= 1:
+                            indices.append(ix)
+
+                    indices = np.squeeze(np.asarray(indices))
+
+                    print 'Selecting rain on TTT days'
+                    rainsel = rain[indices, :, :]
+                    ttt_rain_dates = rdtime[indices]
+
+                    nttt4rain=len(ttt_rain_dates)
+
+                    if under_of == 'under':
+
+                        print 'Selecting rain under TTTs'
+                        masked_rain = np.ma.zeros((nttt4rain, nlat, nlon), dtype=np.float32)
+                        rcnt=0
+                        for rdt in range(nttt):
+                            this_dt=dates_ln[rdt]
+                            ix = my.ixdtimes(ttt_rain_dates, [this_dt[0]], \
+                                             [this_dt[1]], [this_dt[2]], [0])
+                            if len(ix) >= 1:
+                                ind=ix[0]
+                                this_dt_rain=ttt_rain_dates[ind]
+                                print 'Checking dates correspond'
+                                print this_dt
+                                print this_dt_rain
+                                print 'Running poly to mask'
+                                chmask = my.poly2mask(rlon, rlat, chs_ln[rdt])
+                                print 'Finished running poly to mask'
+                                r = np.ma.MaskedArray(rainsel[ind, :, :], mask=~chmask)
+                                masked_rain[rcnt, :, :] = r
+                                rcnt+=1
+
+                    elif under_of=='dayof':
+                        masked_rain=rainsel[:]
+
+                    # Get a timeseries of mean TTT rain from each event
+                    print 'Getting a rain value for each TTT event'
+                    reg_ttt_sum = np.zeros((nttt4rain), dtype=np.float32)
+                    reg_ttt_mean = np.zeros((nttt4rain), dtype=np.float32)
+
+                    if weightlats:
+                        latr = np.deg2rad(rlat)
+                        weights = np.cos(latr)
+
+                    for st in range(nttt4rain):
+                        if weightlats:
+                            zonmean_ttt = np.ma.mean(masked_rain[st, :, :], axis=1)
+                            regmean_ttt = np.ma.average(zonmean_ttt, weights=weights)
+                            reg_ttt_mean[st] = regmean_ttt
+                        else:
+                            reg_ttt_mean[st] = np.ma.mean(masked_rain[st, :, :])
+
+                    # Getting a long term sum or mean
+                    tottttrain=np.nansum(reg_ttt_mean)
+                    rainperttt=np.nanmean(reg_ttt_mean)
+                    per75rain=np.nanpercentile(reg_ttt_mean,75)
+
+                    if raintype=='totrain':
+                        intensval=tottttrain
+                    elif raintype=='rainperttt':
+                        intensval=rainperttt
+                    elif raintype=='perc75':
+                        intensval=per75rain
+
+                    intensitys[pt]=intensval
+
+                    # OK moving onto x axis
+                    print 'Getting '+thind+' indices for this model'
+                    print 'if it exists...'
+
+                    # Switch model if noaa
+                    if dset=='noaa':
+                        name3='erai'
+                    else:
+                        name3=name
+
+                    indval=0
+                    with open(ind_file) as f:
+                        for line in f:
+                            if name3 in line:
+                                indval = line.split()[1]
+                                print 'it exists! index=' + str(indval)
+
+                    if indval==0:
+                        print 'does not exist for this model'
+
+                    ind_4_x[pt]=float(indval)
+
+                # Now looping by 2 to get plots
+                print 'Now we have calculated everything for 2 domains, entering 2 plots'
+
+                colour = grcl
+                mk = grmr
+
+                if ndset==2:
+                    if cnt == 0:
+                        zord=3
+                        label = 'NCDR-OLR | TRMM | ERAI'
+                    else:
+                        zord=2
+                        label = labname
+                else:
+                    zord = 2
+                    label = labname
+
+                # part a
+                fgn = 0
+                ax = plt.subplot(yplots, xplots, fgn + 1)
+
+                yvals[cnt, fgn] = intensitys[fgn]
+                if ind_4_x[fgn]!=0:
+                    xvals[cnt,fgn]=ind_4_x[fgn]
+
+                    ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
+                        color=colour, label=label, markeredgecolor=colour,\
+                            markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
+
+                else:
+                    xvals[cnt, fgn]=ma.masked
+                    yvals[cnt, fgn]=ma.masked
+                    siz[cnt, fgn]=ma.masked
+
+                if no_purp:
+                    if thisgroup==5:
+                        xvals[cnt, fgn] = ma.masked
+                        yvals[cnt, fgn] = ma.masked
+                        siz[cnt, fgn] = ma.masked
+
+                # part b
+                fgn=1
+                ax = plt.subplot(yplots, xplots, fgn+1)
+
+                yvals[cnt,fgn]=intensitys[fgn]
+                if ind_4_x[fgn]!=0:
+                    xvals[cnt,fgn]=ind_4_x[fgn]
+
+                    ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
+                        color=colour, label=label, markeredgecolor=colour,\
+                            markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
+
+                else:
+                    xvals[cnt, fgn]=ma.masked
+                    yvals[cnt, fgn]=ma.masked
+                    siz[cnt, fgn]=ma.masked
+
+                if no_purp:
+                    if thisgroup==5:
+                        xvals[cnt, fgn] = ma.masked
+                        yvals[cnt, fgn] = ma.masked
+                        siz[cnt, fgn] = ma.masked
+
+                print 'Now writing values to textfile for this model'
+                print 'Model name, Froude Number, intens ttt a, Angola Low, intens ttt b'
+                txtfile.write(label+ "\t" +str(round(ind_4_x[0],2))+ \
+                               "\t" +str(round(intensitys[0],2))+ \
+                               "\t" +str(round(ind_4_x[1],2))+ \
+                               "\t" + str(round(intensitys[1],2))+"\n")
+
             else:
-                zord=2
-                label = labname
 
-            # part a
-            fgn = 0
-            ax = plt.subplot(yplots, xplots, fgn + 1)
+                print 'No TTT threshold found for model ' + name
+                print '...OLR data missing for this model?'
 
-            yvals[cnt, fgn] = intensitys[fgn]
-            if ind_4_x[fgn]!=0:
-                xvals[cnt,fgn]=ind_4_x[fgn]
+                for fgn in range(nplot):
 
-                ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                    color=colour, label=label, markeredgecolor=colour,\
-                        markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
-
-            else:
-                xvals[cnt, fgn]=ma.masked
-                yvals[cnt, fgn]=ma.masked
-                siz[cnt, fgn]=ma.masked
-
-            if no_purp:
-                if thisgroup==5:
                     xvals[cnt, fgn] = ma.masked
                     yvals[cnt, fgn] = ma.masked
-                    siz[cnt, fgn] = ma.masked
 
-            # part b
-            fgn=1
-            ax = plt.subplot(yplots, xplots, fgn+1)
-
-            yvals[cnt,fgn]=intensitys[fgn]
-            if ind_4_x[fgn]!=0:
-                xvals[cnt,fgn]=ind_4_x[fgn]
-
-                ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                    color=colour, label=label, markeredgecolor=colour,\
-                        markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
-
-            else:
-                xvals[cnt, fgn]=ma.masked
-                yvals[cnt, fgn]=ma.masked
-                siz[cnt, fgn]=ma.masked
-
-            if no_purp:
-                if thisgroup==5:
-                    xvals[cnt, fgn] = ma.masked
-                    yvals[cnt, fgn] = ma.masked
-                    siz[cnt, fgn] = ma.masked
-
-            print 'Now writing values to textfile for this model'
-            print 'Model name, Froude Number, intens ttt a, Angola Low, intens ttt b'
-            txtfile.write(label+ "\t" +str(round(ind_4_x[0],2))+ \
-                           "\t" +str(round(intensitys[0],2))+ \
-                           "\t" +str(round(ind_4_x[1],2))+ \
-                           "\t" + str(round(intensitys[1],2))+"\n")
 
             cnt += 1
             mdcnt += 1

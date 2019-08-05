@@ -460,11 +460,15 @@ for t in range(nthresh):
                 colour = grcl
                 mk = grmr
 
-                if cnt == 0:
-                    zord=3
-                    label = 'NCDR-OLR | ERAI'
+                if ndset==2:
+                    if cnt == 0:
+                        zord=3
+                        label = 'NCDR-OLR | ERAI'
+                    else:
+                        zord=2
+                        label = labname
                 else:
-                    zord=2
+                    zord = 2
                     label = labname
 
                 # part b - plotting this first because need all handles for the legend
