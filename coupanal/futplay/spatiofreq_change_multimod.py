@@ -178,8 +178,8 @@ for t in range(nthresh):
 
             ys_h = moddct['yrfname']
 
-            year1_h = float(ys[0:4])
-            year2_h = float(ys[5:9])
+            year1_h = float(ys_h[0:4])
+            year2_h = float(ys_h[5:9])
             yrs_h=np.arange(year1_h,year2_h+1,1)
 
             yrs_f=np.arange(2065,2099+1,1)
