@@ -251,6 +251,14 @@ for t in range(nthresh):
                     thisthresh=thresh - 5
                 if thnames[t]=='upper':
                     thisthresh=thresh + 5
+                if thnames[t]=='hist_th':
+                    thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                    with open(thresh_hist_text) as f:
+                        for line in f:
+                            if dset + '\t' + name in line:
+                                hist_th = line.split()[2]
+                    hist_th = int(hist_th)
+                    thisthresh=hist_th
 
                 thre_str = str(thisthresh)
 
@@ -471,6 +479,10 @@ for t in range(nthresh):
 
                 print 'No TTT threshold found for model ' + name
                 print '...OLR data missing for this model?'
+
+                xvals[cnt, fgn] = ma.masked
+                yvals[cnt, fgn] = ma.masked
+                siz[cnt, fgn] = ma.masked
 
             cnt += 1
             mdcnt += 1
