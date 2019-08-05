@@ -486,7 +486,6 @@ for t in range(nthresh):
 
                     xvals[cnt, fgn] = ma.masked
                     yvals[cnt, fgn] = ma.masked
-                    siz[cnt, fgn] = ma.masked
 
             cnt += 1
             mdcnt += 1
