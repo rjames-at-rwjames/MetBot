@@ -30,8 +30,8 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 test_scr=False
-threshtest=True
-no_purp=True
+threshtest=False
+no_purp=False # to exclude the purple group from the trendline / r2 calc
 group=True
 alphord=False
 figdim=[14, 6]
