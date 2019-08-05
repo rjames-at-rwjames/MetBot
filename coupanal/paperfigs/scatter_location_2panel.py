@@ -30,7 +30,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 test_scr=False
-threshtest=True
+threshtest=False
 group=True
 alphord=False
 figdim=[14, 6]
@@ -38,6 +38,8 @@ xplots=2
 yplots=1
 nys=35.0 # This is now been standardised so all datasets have 35 years
 trendline=True
+future=True # note that this doesn't work well for this plot
+            # for part a it will be future, for part b it will be future TTT and historical Froude
 
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
@@ -72,10 +74,15 @@ ind_file = '../indices/' + index + '_' + seas_b + '_multimod.txt'
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-txtdir=botdir+"histpaper_txt/"
-figdir=botdir+"histpaper_figs/scatter_location/"
+if future:
+    txtdir = botdir + "futpaper_txt/"
+    figdir=botdir+"futpaper_play/scatter_location/"
+    threshtxt = botdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+else:
+    txtdir=botdir+"histpaper_txt/"
+    figdir=botdir+"histpaper_figs/scatter_location/"
+    threshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 my.mkdir_p(figdir)
-threshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 ### Dsets
 dsets = 'spec'
@@ -83,7 +90,10 @@ mods = 'spec'
 if dsets == 'all':
     dsetnames = list(dsetdict.dset_deets)
 elif dsets == 'spec':
-    dsetnames = ['noaa', 'cmip5']
+    if future:
+        dsetnames = ['cmip5']
+    else:
+        dsetnames = ['noaa', 'cmip5']
 ndset = len(dsetnames)
 ndstr = str(ndset)
 
@@ -122,7 +132,10 @@ siz[0,:] = 10
 
 ### Loop threshs
 if threshtest:
-    thnames=['actual','lower','upper']
+    if future:
+        thnames = ['actual','lower','upper','hist_th']
+    else:
+        thnames=['actual','lower','upper']
 else:
     thnames=['actual']
 
@@ -209,262 +222,295 @@ for t in range(nthresh):
             ### TTT info for y axis
             ### Get threshold for TTTs
             print 'Getting threshold for this model'
+            thcnt = 0
+            print 'getting threshold....'
             with open(threshtxt) as f:
                 for line in f:
                     if dset + '\t' + name in line:
                         thresh = line.split()[2]
                         print 'thresh=' + str(thresh)
+                        thcnt += 1
+                    # Once you have the threshold stop looping
+                    # this is important for MIROC-ESM - without this
+                    # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                    if thcnt > 0:
+                        break
+            thresh=int(thresh)
 
-            thresh = int(thresh)
+            # Only continue if the model is found
+            # ... if not it probably doesn't have data
+            if thcnt > 0:
 
-            if thnames[t]=='actual':
-                thisthresh=thresh
-            if thnames[t]=='lower':
-                thisthresh=thresh - 5
-            if thnames[t]=='upper':
-                thisthresh=thresh + 5
-
-            thre_str = str(thisthresh)
-
-            # Find TTT data
-            print 'Opening MetBot files...'
-            botpath = botdir + dset + '/' + name + '/'
-            outsuf = botpath + name + '_'
-
-            mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
-            syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
-
-            s = sy.SynopticEvents((), [syfile], COL=False)
-            ks = s.events.keys();
-            ks.sort()  # all
-            refkey = s.mbskeys[0]
-
-            refmbs, refmbt, refch = blb.mbopen(mbsfile)
-
-            # First do the processing that is going to apply to the whole figure
-            #   first day of event or all days? i.e. number of events or number of CBs
-            #   remove duplicate dates?
-
-            # Get lots of info about event set
-            print 'Getting more info about each cloud band...'
-            dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
-
-            # If wanting first day of event only, subset
-            print 'Subset by first day?...'
-            if from_event == 'first':
-                print 'Selecting first day of event only'
-                dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                    sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
-            else:
-                print 'Retaining all days from each event'
-                dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                    dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
-
-            # If you want to remove duplicate dates, subset
-            print 'Removing duplicate dates?'
-            if rm_samedates:
-                print 'Removing duplicate dates...'
-                dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                    sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
-
-            else:
-                print 'Retaining potential duplicate dates... note they may have 2 CBs'
-                dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                    dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
-
-            ### Convection information for x axis of part a
-            print 'Getting info on convection for this model'
-            # Switch variable if NOAA
-            if dset == 'noaa' and globv != 'olr':
-                if globv == 'pr':
-                    ds4noaa = 'trmm'
-                    mod4noaa = 'trmm_3b42v7'
-                else:
-                    ds4noaa = 'era'
-                    mod4noaa = 'erai'
-                dset2 = ds4noaa
-                name2 = mod4noaa
-            else:
-                dset2 = dset
-                name2 = name
-
-            # Get info
-            moddct = dsetdict.dset_deets[dset2][name2]
-            ys=moddct['yrfname']
-            labname = moddct['labname']
-
-            # Find ltmonmean file
-            meanfile = botdir + dset2 + '/' + name2 + '/' \
-                       + name2 + '.' + globv + '.mon.mean.' + ys + '.nc'
-
-            # Now looping to get info for diff domains
-            wlon_picks=[dom_a_wlon,dom_b_wlon]
-            elon_picks=[dom_a_elon,dom_b_elon]
-            seas_picks=[seas_a,seas_b]
-
-            perttts=np.zeros(nplot,dtype=np.float32)
-
-            for pt in range(nplot):
-                print 'Making calculations for plot '+figlabels[pt]
-
-                wlon=wlon_picks[pt]
-                elon=elon_picks[pt]
-                thseas=seas_picks[pt]
-
-                ## Seas information
-                if thseas == 'NDJFM':
-                    mons = [1, 2, 3, 11, 12]
-                    nmon = len(mons)
-                elif thseas == 'DJF':
-                    mons = [1, 2, 12]
-                    nmon = len(mons)
-                elif thseas == 'JF':
-                    mons = [1,2]
-                    nmon = len(mons)
-
-                # Subset the season
-                print 'Subsetting by season?'
-                print 'Selecting months for : ' + thseas
-                dates_se, cXs_se, cYs_se, degs_se, chs_se, keys_se, daynos_se, tworecdt_se = \
-                    sset.sel_seas(mons, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
-                                  tworecdt_dd)
-
-                # Then subset by longitude
-                print 'Subsetting by latitude?'
-                print 'Selecting CBs between '+str(wlon)+' and '+str(elon)
-                dates_ln, cXs_ln, cYs_ln, degs_ln, chs_ln, keys_ln, daynos_ln, tworecdt_ln = \
-                    sset.sel_cen_lon(wlon,elon,dates_se, cXs_se, cYs_se, degs_se, \
-                                     chs_se, keys_se, daynos_se, tworecdt_se)
-
-                print 'Calculating number of TTTs'
-                nttt=len(dates_ln)
-
-                per_ttt = float(nttt) / len(dates_se) * 100.0
-
-                perttts[pt]=per_ttt
-
-                # OK moving onto x axis
-                # for part a convection
-                if pt==0:
-                    thisdom=dom_a
-                    print 'Opening '+meanfile
-                    print 'for domain '+thisdom
-
-                    if levsel:
-                        ncout = mync.open_multi(meanfile, globv, name2, \
-                                                dataset=dset2, subs=thisdom, levsel=levc)
-                    else:
-                        ncout = mync.open_multi(meanfile, globv, name2, \
-                                                dataset=dset2, subs=thisdom)
-                    print '...file opened'
-                    ndim = len(ncout)
-                    if ndim == 5:
-                        meandata, time, lat, lon, dtime = ncout
-                    elif ndim == 6:
-                        meandata, time, lat, lon, lev, dtime = ncout
-                        meandata = np.squeeze(meandata)
-                    else:
-                        print 'Check number of dims in ncfile'
-                    dtime[:, 3] = 0
-
-                    # Remove duplicate timesteps
-                    print 'Checking for duplicate timesteps'
-                    tmp = np.ascontiguousarray(dtime).view(
-                        np.dtype((np.void, dtime.dtype.itemsize * dtime.shape[1])))
-                    _, idx = np.unique(tmp, return_index=True)
-                    dtime = dtime[idx]
-                    meandata = meandata[idx, :, :]
-
-                    nlat = len(lat)
-                    nlon = len(lon)
-
-                    # Select seasons and get mean
-                    thesemons = np.zeros((nmon, nlat, nlon), dtype=np.float32)
-                    for zz in range(len(mons)):
-                        thesemons[zz, :, :] = meandata[mons[zz] - 1, :, :]
-                    seasmean = np.nanmean(thesemons, 0)
-
-                    # Get regional mean
-                    if weightlats:
-                        latr = np.deg2rad(lat)
-                        weights = np.cos(latr)
-                        zonmean = np.nanmean(seasmean, axis=1)
-                        reg_mean = np.ma.average(zonmean, weights=weights)
-                    else:
-                        reg_mean = np.nanmean(seasmean)
-
-                    convmn_a = reg_mean
-
-                elif pt==1:
-
-                    print 'Getting '+index+' indices for this model'
-                    print 'if it exists...'
-
-                    # Switch model if noaa
-                    if dset=='noaa':
-                        name3='erai'
-                    else:
-                        name3=name
-
-                    ind=0
-                    with open(ind_file) as f:
+                if thnames[t]=='actual':
+                    thisthresh=thresh
+                if thnames[t]=='lower':
+                    thisthresh=thresh - 5
+                if thnames[t]=='upper':
+                    thisthresh=thresh + 5
+                if thnames[t]=='hist_th':
+                    thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+                    with open(thresh_hist_text) as f:
                         for line in f:
-                            if name3 in line:
-                                ind = line.split()[1]
-                                print 'it exists! index=' + str(ind)
+                            if dset + '\t' + name in line:
+                                hist_th = line.split()[2]
+                    hist_th = int(hist_th)
+                    thisthresh=hist_th
 
-                    if ind==0:
-                        print 'does not exist for this model'
+                thre_str = str(thisthresh)
+
+                # Find TTT data
+                print 'Opening MetBot files...'
+                botpath = botdir + dset + '/' + name + '/'
+                outsuf = botpath + name + '_'
+                if future:
+                    outsuf = outsuf + 'fut_rcp85_'
+
+                mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
+                syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
+
+                s = sy.SynopticEvents((), [syfile], COL=False)
+                ks = s.events.keys();
+                ks.sort()  # all
+                refkey = s.mbskeys[0]
+
+                refmbs, refmbt, refch = blb.mbopen(mbsfile)
+
+                # First do the processing that is going to apply to the whole figure
+                #   first day of event or all days? i.e. number of events or number of CBs
+                #   remove duplicate dates?
+
+                # Get lots of info about event set
+                print 'Getting more info about each cloud band...'
+                dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
+
+                # If wanting first day of event only, subset
+                print 'Subset by first day?...'
+                if from_event == 'first':
+                    print 'Selecting first day of event only'
+                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                        sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+                else:
+                    print 'Retaining all days from each event'
+                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                        dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
+
+                # If you want to remove duplicate dates, subset
+                print 'Removing duplicate dates?'
+                if rm_samedates:
+                    print 'Removing duplicate dates...'
+                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                        sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
+
+                else:
+                    print 'Retaining potential duplicate dates... note they may have 2 CBs'
+                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                        dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
+
+                ### Convection information for x axis of part a
+                print 'Getting info on convection for this model'
+                # Switch variable if NOAA
+                if dset == 'noaa' and globv != 'olr':
+                    if globv == 'pr':
+                        ds4noaa = 'trmm'
+                        mod4noaa = 'trmm_3b42v7'
+                    else:
+                        ds4noaa = 'era'
+                        mod4noaa = 'erai'
+                    dset2 = ds4noaa
+                    name2 = mod4noaa
+                else:
+                    dset2 = dset
+                    name2 = name
+
+                # Get info
+                moddct = dsetdict.dset_deets[dset2][name2]
+                if future:
+                    ys='2065_2099'
+                else:
+                    ys=moddct['yrfname']
+                labname = moddct['labname']
+
+                # Find ltmonmean file
+                meanfile = botdir + dset2 + '/' + name2 + '/' \
+                           + name2 + '.' + globv + '.mon.mean.' + ys + '.nc'
+
+                # Now looping to get info for diff domains
+                wlon_picks=[dom_a_wlon,dom_b_wlon]
+                elon_picks=[dom_a_elon,dom_b_elon]
+                seas_picks=[seas_a,seas_b]
+
+                perttts=np.zeros(nplot,dtype=np.float32)
+
+                for pt in range(nplot):
+                    print 'Making calculations for plot '+figlabels[pt]
+
+                    wlon=wlon_picks[pt]
+                    elon=elon_picks[pt]
+                    thseas=seas_picks[pt]
+
+                    ## Seas information
+                    if thseas == 'NDJFM':
+                        mons = [1, 2, 3, 11, 12]
+                        nmon = len(mons)
+                    elif thseas == 'DJF':
+                        mons = [1, 2, 12]
+                        nmon = len(mons)
+                    elif thseas == 'JF':
+                        mons = [1,2]
+                        nmon = len(mons)
+
+                    # Subset the season
+                    print 'Subsetting by season?'
+                    print 'Selecting months for : ' + thseas
+                    dates_se, cXs_se, cYs_se, degs_se, chs_se, keys_se, daynos_se, tworecdt_se = \
+                        sset.sel_seas(mons, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
+                                      tworecdt_dd)
+
+                    # Then subset by longitude
+                    print 'Subsetting by latitude?'
+                    print 'Selecting CBs between '+str(wlon)+' and '+str(elon)
+                    dates_ln, cXs_ln, cYs_ln, degs_ln, chs_ln, keys_ln, daynos_ln, tworecdt_ln = \
+                        sset.sel_cen_lon(wlon,elon,dates_se, cXs_se, cYs_se, degs_se, \
+                                         chs_se, keys_se, daynos_se, tworecdt_se)
+
+                    print 'Calculating number of TTTs'
+                    nttt=len(dates_ln)
+
+                    per_ttt = float(nttt) / len(dates_se) * 100.0
+
+                    perttts[pt]=per_ttt
+
+                    # OK moving onto x axis
+                    # for part a convection
+                    if pt==0:
+                        thisdom=dom_a
+                        print 'Opening '+meanfile
+                        print 'for domain '+thisdom
+
+                        if levsel:
+                            ncout = mync.open_multi(meanfile, globv, name2, \
+                                                    dataset=dset2, subs=thisdom, levsel=levc)
+                        else:
+                            ncout = mync.open_multi(meanfile, globv, name2, \
+                                                    dataset=dset2, subs=thisdom)
+                        print '...file opened'
+                        ndim = len(ncout)
+                        if ndim == 5:
+                            meandata, time, lat, lon, dtime = ncout
+                        elif ndim == 6:
+                            meandata, time, lat, lon, lev, dtime = ncout
+                            meandata = np.squeeze(meandata)
+                        else:
+                            print 'Check number of dims in ncfile'
+                        dtime[:, 3] = 0
+
+                        # Remove duplicate timesteps
+                        print 'Checking for duplicate timesteps'
+                        tmp = np.ascontiguousarray(dtime).view(
+                            np.dtype((np.void, dtime.dtype.itemsize * dtime.shape[1])))
+                        _, idx = np.unique(tmp, return_index=True)
+                        dtime = dtime[idx]
+                        meandata = meandata[idx, :, :]
+
+                        nlat = len(lat)
+                        nlon = len(lon)
+
+                        # Select seasons and get mean
+                        thesemons = np.zeros((nmon, nlat, nlon), dtype=np.float32)
+                        for zz in range(len(mons)):
+                            thesemons[zz, :, :] = meandata[mons[zz] - 1, :, :]
+                        seasmean = np.nanmean(thesemons, 0)
+
+                        # Get regional mean
+                        if weightlats:
+                            latr = np.deg2rad(lat)
+                            weights = np.cos(latr)
+                            zonmean = np.nanmean(seasmean, axis=1)
+                            reg_mean = np.ma.average(zonmean, weights=weights)
+                        else:
+                            reg_mean = np.nanmean(seasmean)
+
+                        convmn_a = reg_mean
+
+                    elif pt==1:
+
+                        print 'Getting '+index+' indices for this model'
+                        print 'if it exists...'
+
+                        # Switch model if noaa
+                        if dset=='noaa':
+                            name3='erai'
+                        else:
+                            name3=name
+
+                        ind=0
+                        with open(ind_file) as f:
+                            for line in f:
+                                if name3 in line:
+                                    ind = line.split()[1]
+                                    print 'it exists! index=' + str(ind)
+
+                        if ind==0:
+                            print 'does not exist for this model'
 
 
-            # Now looping by 2 to get plots
-            print 'Now we have calculated everything for 2 domains, entering 2 plots'
+                # Now looping by 2 to get plots
+                print 'Now we have calculated everything for 2 domains, entering 2 plots'
 
-            colour = grcl
-            mk = grmr
+                colour = grcl
+                mk = grmr
 
-            if cnt == 0:
-                zord=3
-                label = 'NCDR-OLR | ERAI'
-            else:
-                zord=2
-                label = labname
+                if cnt == 0:
+                    zord=3
+                    label = 'NCDR-OLR | ERAI'
+                else:
+                    zord=2
+                    label = labname
 
-            # part b - plotting this first because need all handles for the legend
-                # and Froude has missing values
-            fgn=1
-            ax = plt.subplot(yplots, xplots, fgn+1)
+                # part b - plotting this first because need all handles for the legend
+                    # and Froude has missing values
+                fgn=1
+                ax = plt.subplot(yplots, xplots, fgn+1)
 
-            yvals[cnt,fgn]=perttts[1]
-            if ind!=0:
-                xvals[cnt,fgn]=float(ind)
+                yvals[cnt,fgn]=perttts[1]
+                if ind!=0:
+                    xvals[cnt,fgn]=float(ind)
+
+                    ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
+                        color=colour, label=label, markeredgecolor=colour,\
+                            markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
+
+                else:
+                    xvals[cnt, fgn]=ma.masked
+                    yvals[cnt, fgn]=ma.masked
+                    siz[cnt, fgn]=ma.masked
+
+                # part a
+                fgn = 0
+                ax = plt.subplot(yplots, xplots, fgn + 1)
+
+                xvals[cnt, fgn] = convmn_a
+                yvals[cnt, fgn] = perttts[0]
 
                 ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
                     color=colour, label=label, markeredgecolor=colour,\
                         markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
 
+                print 'Now writing values to textfile for this model'
+                print 'Model name, convmn dom a, per ttt a, froude number, per ttt b'
+                txtfile.write(label+ "\t" +str(round(convmn_a,2))+ \
+                               "\t" +str(round(perttts[0],2))+ \
+                               "\t" +str(round(float(ind),2))+ \
+                               "\t" + str(round(perttts[1],2))+"\n")
+
             else:
-                xvals[cnt, fgn]=ma.masked
-                yvals[cnt, fgn]=ma.masked
-                siz[cnt, fgn]=ma.masked
 
-            # part a
-            fgn = 0
-            ax = plt.subplot(yplots, xplots, fgn + 1)
+                print 'No TTT threshold found for model ' + name
+                print '...OLR data missing for this model?'
 
-            xvals[cnt, fgn] = convmn_a
-            yvals[cnt, fgn] = perttts[0]
-
-            ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                color=colour, label=label, markeredgecolor=colour,\
-                    markersize=siz[cnt, fgn], linestyle='None',zorder=zord)
-
-            print 'Now writing values to textfile for this model'
-            print 'Model name, convmn dom a, per ttt a, froude number, per ttt b'
-            txtfile.write(label+ "\t" +str(round(convmn_a,2))+ \
-                           "\t" +str(round(perttts[0],2))+ \
-                           "\t" +str(round(float(ind),2))+ \
-                           "\t" + str(round(perttts[1],2))+"\n")
+                xvals[cnt, fgn] = ma.masked
+                yvals[cnt, fgn] = ma.masked
+                siz[cnt, fgn] = ma.masked
 
             cnt += 1
             mdcnt += 1
