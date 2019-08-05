@@ -27,13 +27,13 @@ import MetBot.MetBlobs as blb
 test_scr=False
 xplots = 4
 yplots = 7
-seas='NDJFM'
+seas='DJF'
 spec_col=True
 alphord=True
 group=False
 
-globv='omega'
-levsel=True
+globv='pr'
+levsel=False
 if levsel:
     choosel='500'
 else:
