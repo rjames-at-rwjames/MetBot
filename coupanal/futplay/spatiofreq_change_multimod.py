@@ -265,7 +265,7 @@ for t in range(nthresh):
                     print 'opening metbot files...'
                     outsuf = botpath + name + '_'
                     if this_c=='fut':
-                        outsuf_fut = outsuf + 'fut_rcp85_'
+                        outsuf = outsuf + 'fut_rcp85_'
 
                     syfile = outsuf + th_thr_str + '_' + dset + '-OLR.synop'
                     s = sy.SynopticEvents((), [syfile], COL=False)
