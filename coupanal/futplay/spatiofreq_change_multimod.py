@@ -1,6 +1,6 @@
 # To plot all CMIP5 models in multi-panel plot
-# gridpoint frequency maps / spatiofrequency
-# outlines coloured according to groups
+# gridpoint frequency maps / spatiofrequency - future change in
+# Option for outlines coloured according to groups
 
 import os
 import sys
@@ -26,24 +26,17 @@ import coupanal.group_dict as dset_grp
 import MetBot.mynetcdf as mync
 
 
-
 ### Running options
-test_scr=False
+test_scr=True
 threshtest=False
-future=True
 plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
                 # SA_TR works much more nicely because can see it clearly and runs quickly
-seas='NDJFM'
-rate='cbs' # if rate='year' it will plot cbs per year
+rate='year' # if rate='year' it will plot cbs per year
             # if cbs it will plot for that models total number of CBs
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
-group=True
-bias=False # for models, plot bias relative to obs
-nos4cbar = (20, 50, 3)
-if bias:
-    nos4bias=(-16, 16, 2)
+group=False
 
 res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
@@ -60,6 +53,10 @@ if res=='make':
         ln1=7.5
         ln2=99.0
 
+# Season and appropriate colourbar
+seas='NDJFM'
+nos4cbar = (-10.0, 10.0, 2.0)
+
 xplots = 4
 yplots = 7
 if plotdom=='SA':
@@ -69,16 +66,11 @@ elif plotdom=='SA_TR':
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
-if future:
-    figdir = bkdir + "/futpaper_play/spatiofreq_multimod/"
-else:
-    figdir=bkdir+"/histpaper_figs/spatiofreq_multimod/"
+figdir = bkdir + "/futpaper_play/spatiofreq_change_multimod/"
 my.mkdir_p(figdir)
 
-if future:
-    threshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
-else:
-    threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+futthreshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+histthreshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 if group:
     grcls=['fuchsia','gold','darkblue','r','blueviolet','springgreen']
@@ -92,8 +84,6 @@ wplotdraw='edges' # which plot to draw latitude and longitude
                     # 'edges' for just the sides
 
 if seas=='NDJFM':
-    mon1=11
-    mon2=3
     months=[1,2,3,11,12]
     nmon=len(months)
 
@@ -108,10 +98,7 @@ elif res=='native':
 
 ### Loop threshs
 if threshtest:
-    if future:
-        thnames = ['actual','lower','upper','hist_th']
-    else:
-        thnames=['actual','lower','upper']
+    thnames = ['actual','lower','upper','hist_th']
 else:
     thnames = ['actual']
 
@@ -131,10 +118,7 @@ for t in range(nthresh):
     if dsets == 'all':
         dsetnames = list(dsetdict.dset_deets)
     elif dsets == 'spec':
-        if future:
-            dsetnames = ['cmip5']
-        else:
-            dsetnames = ['noaa', 'cmip5']
+        dsetnames = ['cmip5']
     ndset = len(dsetnames)
     ndstr = str(ndset)
 
@@ -189,12 +173,16 @@ for t in range(nthresh):
 
             botpath = bkdir + dset + '/' + name + '/'
             moddct = dsetdict.dset_deets[dset][name]
-            ys = moddct['yrfname']
+
             labname = moddct['labname']
 
-            year1 = float(ys[0:4])
-            year2 = float(ys[5:9])
-            yrs=np.arange(year1,year2+1,1)
+            ys_h = moddct['yrfname']
+
+            year1_h = float(ys[0:4])
+            year2_h = float(ys[5:9])
+            yrs_h=np.arange(year1_h,year2_h+1,1)
+
+            yrs_f=np.arange(2065,2099+1,1)
 
             # if resolution is native open OLR file to get lat and lon grid
             if res=='native':
@@ -214,10 +202,10 @@ for t in range(nthresh):
                 lat4sf=lat
                 lon4sf=lon
 
-            # Get threshold
+            # Get thresholds
             thcnt = 0
-            print 'getting threshold....'
-            with open(threshtxt) as f:
+            print 'getting hist threshold....'
+            with open(histthreshtxt) as f:
                 for line in f:
                     if dset + '\t' + name in line:
                         thresh = line.split()[2]
@@ -228,84 +216,112 @@ for t in range(nthresh):
                     # MIROC-ESM will get threshold for MIROC-ESM-CHEM
                     if thcnt > 0:
                         break
-            thresh=int(thresh)
+            hist_thresh=int(thresh)
+
+            thcnt = 0
+            print 'getting fut threshold....'
+            with open(futthreshtxt) as f:
+                for line in f:
+                    if dset + '\t' + name in line:
+                        thresh = line.split()[2]
+                        print 'thresh=' + str(thresh)
+                        thcnt += 1
+                    # Once you have the threshold stop looping
+                    # this is important for MIROC-ESM - without this
+                    # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                    if thcnt > 0:
+                        break
+            fut_thresh=int(thresh)
 
             # Only continue if the model is found
             # ... if not it probably doesn't have data
             if thcnt > 0:
 
                 if thname=='actual':
-                    thisthresh=thresh
+                    thth_h = hist_thresh
+                    thth_f = fut_thresh
                 elif thname=='lower':
-                    thisthresh=thresh-5
+                    thth_h = hist_thresh - 5
+                    thth_f = fut_thresh - 5
                 elif thname=='upper':
-                    thisthresh=thresh+5
+                    thth_h = hist_thresh + 5
+                    thth_f = fut_thresh + 5
                 elif thname == 'hist_th':
-                    thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
-                    with open(thresh_hist_text) as f:
-                        for line in f:
-                            if dset + '\t' + name in line:
-                                hist_th = line.split()[2]
-                    hist_th = int(hist_th)
-                    thisthresh = hist_th
+                    thth_h = hist_thresh
+                    thth_f = hist_thresh
 
-                thre_str = str(int(thisthresh))
 
-                print 'opening metbot files...'
-                outsuf = botpath + name + '_'
-                if future:
-                    outsuf = outsuf + 'fut_rcp85_'
-                syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
-                s = sy.SynopticEvents((), [syfile], COL=False)
-                ks = s.events.keys();
-                ks.sort()  # all
-                refkey = s.mbskeys[0]
+                # Looping historical and future
+                print 'Looping historical and future to process TTT event set'
+                cents=['hist','fut']
+                ths=[thth_h,thth_f]
 
-                mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
-                refmbs, refmbt, refch = blb.mbopen(mbsfile)
+                for cent in range(len(cents)):
 
-                # Get lots of info about event set
-                print 'Getting more info about each cloud band...'
-                dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
+                    this_c=cents[cent]
+                    this_thresh=ths[cent]
+                    th_thr_str=str(this_thresh)
 
-                numleft = len(dates)
-                print 'Now with ' + str(numleft) + ' dates'
+                    print 'opening metbot files...'
+                    outsuf = botpath + name + '_'
+                    if this_c=='fut':
+                        outsuf_fut = outsuf + 'fut_rcp85_'
 
-                # If wanting first day of event only, subset
-                print 'Subset by first day?...'
-                if from_event == 'first':
-                    print 'Selecting first day of event only'
-                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                        sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
-                else:
-                    print 'Retaining all days from each event'
-                    dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                        dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
+                    syfile = outsuf + th_thr_str + '_' + dset + '-OLR.synop'
+                    s = sy.SynopticEvents((), [syfile], COL=False)
+                    ks = s.events.keys();
+                    ks.sort()  # all
 
-                numleft = len(dates_d)
-                print 'Now with ' + str(numleft) + ' dates'
+                    mbsfile = outsuf + th_thr_str + '_' + dset + "-olr-0-0.mbs"
+                    refmbs, refmbt, refch = blb.mbopen(mbsfile)
 
-                # If you want to remove duplicate dates, subset
-                print 'Removing duplicate dates?'
-                if rm_samedates:
-                    print 'Removing duplicate dates...'
-                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                        sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
+                    # Get lots of info about event set
+                    print 'Getting more info about each cloud band...'
+                    dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
 
-                else:
-                    print 'Retaining potential duplicate dates... note they may have 2 CBs'
-                    dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                        dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
+                    numleft = len(dates)
+                    print 'Now with ' + str(numleft) + ' dates'
 
-                numleft = len(dates_dd)
-                print 'Now with ' + str(numleft) + ' dates'
+                    # If wanting first day of event only, subset
+                    print 'Subset by first day?...'
+                    if from_event == 'first':
+                        print 'Selecting first day of event only'
+                        dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                            sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+                    else:
+                        print 'Retaining all days from each event'
+                        dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                            dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
 
-                # selecting a specific season, subset
-                print 'Selecting months for : ' + seas
-                dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
-                    sset.sel_seas(months, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd)
-                numleft = len(dates_ddm)
-                print 'Now with ' + str(numleft) + ' dates'
+                    numleft = len(dates_d)
+                    print 'Now with ' + str(numleft) + ' dates'
+
+                    # If you want to remove duplicate dates, subset
+                    print 'Removing duplicate dates?'
+                    if rm_samedates:
+                        print 'Removing duplicate dates...'
+                        dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                            sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
+
+                    else:
+                        print 'Retaining potential duplicate dates... note they may have 2 CBs'
+                        dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                            dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
+
+                    numleft = len(dates_dd)
+                    print 'Now with ' + str(numleft) + ' dates'
+
+                    # selecting a specific season, subset
+                    print 'Selecting months for : ' + seas
+                    dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
+                        sset.sel_seas(months, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd)
+                    numleft = len(dates_ddm)
+                    print 'Now with ' + str(numleft) + ' dates'
+
+                    if this_c=='hist':
+                        chs_hist=chs_ddm
+                    elif this_c=='fut':
+                        chs_fut=chs_ddm
 
                 # Plot
                 print "Plotting for model " + name
@@ -330,38 +346,23 @@ for t in range(nthresh):
                         m = blb.AfrBasemap2(lat4sf, lon4sf, latsp, lonsp, drawstuff=True, prj='cyl', rsltn='l', \
                                             fontdict={'fontsize': 8, 'fontweight': 'normal'}, onlyedge='lon')
 
-                if not bias:
-                    allmask, img = plbl.spatiofreq6(m, chs_ddm, name, lat4sf, lon4sf, yrs, per=rate, clim=nos4cbar, \
-                                                savefig=False, \
-                                                col='bw', cbar='none', title=labname)
-                elif bias:
-                    allmask = plbl.spatiofreq_noplt(chs_ddm, lat4sf, lon4sf, yrs, per=rate)
 
-                    if cnt==1:
-                        refmask = allmask[:]
-                    else:
-                        biasmask = allmask - refmask
+                allmask_hist = plbl.spatiofreq_noplt(chs_hist, lat4sf, lon4sf, yrs_h, per=rate)
 
-                    if cnt==1:
-                        clim = nos4cbar
-                        cm = plt.cm.gist_gray_r
-                        std_mask = allmask[:]
-                        cstd_mask = np.where(std_mask > clim[1], clim[1], std_mask)
-                        cstd_mask = np.where(cstd_mask < clim[0], clim[0], cstd_mask)
-                        # Plot pcolor
-                        pcolmap = m.pcolormesh(lon4sf, lat4sf, cstd_mask, cmap=cm, zorder=1)
-                        plt.clim(clim[0], clim[1])  # sets color limits of current image
-                    else:
-                        clim2 = nos4bias
+                allmask_fut = plbl.spatiofreq_noplt(chs_fut, lat4sf, lon4sf, yrs_f, per=rate)
 
-                        bstd_mask = np.where(biasmask > clim2[1], clim2[1], biasmask)
-                        bstd_mask = np.where(biasmask < clim2[0], clim2[0], biasmask)
-                        cm = plt.cm.bwr_r
-                        pcolmap = m.pcolormesh(lon4sf, lat4sf, bstd_mask, cmap=cm, zorder=1)
-                        plt.clim(clim2[0], clim2[1])  # sets color limits of current image
 
-                    img = plt.gci()  # gets a reference for the image
-                    plt.title(labname, fontsize=8, fontweight='demibold')
+                changemask = allmask_fut - allmask_hist
+
+                clim2 = nos4cbar
+                bstd_mask = np.where(changemask > clim2[1], clim2[1], changemask)
+                bstd_mask = np.where(changemask < clim2[0], clim2[0], changemask)
+                cm = plt.cm.bwr_r
+                pcolmap = m.pcolormesh(lon4sf, lat4sf, bstd_mask, cmap=cm, zorder=1)
+                plt.clim(clim2[0], clim2[1])  # sets color limits of current image
+
+                img = plt.gci()  # gets a reference for the image
+                plt.title(labname, fontsize=8, fontweight='demibold')
 
                 m.drawcountries(color='k')
                 m.drawcoastlines(color='k')
@@ -380,19 +381,13 @@ for t in range(nthresh):
 
     # Plot cbar
     axcl = g.add_axes([0.94, 0.15, 0.01, 0.6])
-    if bias:
-        clim=nos4bias[:]
-    else:
-        clim=nos4cbar[:]
+    clim=nos4cbar[:]
     bounds=np.arange(clim[0],clim[1]+clim[2],clim[2])
     cbar = plt.colorbar(img, cax=axcl, boundaries=bounds, extend='both')
     my.ytickfonts(fontsize=8.)
 
     # Final stuff
-    if bias:
-        figsuf = 'bias.'
-    else:
-        figsuf = ''
+    figsuf = ''
 
     if group:
         figsuf=figsuf +'grouped.'

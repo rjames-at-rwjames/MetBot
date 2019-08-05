@@ -92,8 +92,6 @@ wplotdraw='edges' # which plot to draw latitude and longitude
                     # 'edges' for just the sides
 
 if seas=='NDJFM':
-    mon1=11
-    mon2=3
     months=[1,2,3,11,12]
     nmon=len(months)
 
@@ -249,7 +247,7 @@ for t in range(nthresh):
                     hist_th = int(hist_th)
                     thisthresh = hist_th
 
-                thre_str = str(int(thisthresh))
+                thre_str = str(thisthresh)
 
                 print 'opening metbot files...'
                 outsuf = botpath + name + '_'
@@ -259,7 +257,6 @@ for t in range(nthresh):
                 s = sy.SynopticEvents((), [syfile], COL=False)
                 ks = s.events.keys();
                 ks.sort()  # all
-                refkey = s.mbskeys[0]
 
                 mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
                 refmbs, refmbt, refch = blb.mbopen(mbsfile)
