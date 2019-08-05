@@ -12,6 +12,8 @@ if runoffline==True:
 
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.ma as ma
+
 import scipy
 
 cwd=os.getcwd()
