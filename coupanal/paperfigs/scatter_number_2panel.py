@@ -27,8 +27,8 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-test_scr=False
-threshtest=True
+test_scr=True
+threshtest=False
 group=True
 alphord=False
 figdim=[14, 6]
@@ -36,6 +36,7 @@ xplots=2
 yplots=1
 nys=35.0 # This is now been standardised so all datasets have 35 years
 trendline=True
+future=True
 
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
@@ -77,10 +78,15 @@ dom_b=1
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-txtdir=botdir+"histpaper_txt/"
-figdir=botdir+"histpaper_figs/scatter_number/"
+if future:
+    txtdir = botdir + "futpaper_txt/"
+    figdir=botdir+"futpaper_play/scatter_number/"
+    threshtxt = botdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+else:
+    txtdir=botdir+"histpaper_txt/"
+    figdir=botdir+"histpaper_figs/scatter_number/"
+    threshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 my.mkdir_p(figdir)
-threshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 ### Dsets
 dsets = 'spec'
@@ -88,7 +94,10 @@ mods = 'spec'
 if dsets == 'all':
     dsetnames = list(dsetdict.dset_deets)
 elif dsets == 'spec':
-    dsetnames = ['noaa', 'cmip5']
+    if future:
+        dsetnames = ['cmip5']
+    else:
+        dsetnames = ['noaa', 'cmip5']
 ndset = len(dsetnames)
 ndstr = str(ndset)
 
@@ -127,7 +136,10 @@ siz[0] = 10
 
 ### Loop threshs
 if threshtest:
-    thnames=['actual','lower','upper']
+    if future:
+        thnames = ['actual','lower','upper','hist_th']
+    else:
+        thnames=['actual','lower','upper']
 else:
     thnames=['actual']
 
@@ -235,6 +247,8 @@ for t in range(nthresh):
             print 'Opening MetBot files...'
             botpath = botdir + dset + '/' + name + '/'
             outsuf = botpath + name + '_'
+            if future:
+                outsuf = outsuf + 'fut_rcp85_'
 
             mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
             syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
@@ -295,7 +309,10 @@ for t in range(nthresh):
 
             # Get info
             moddct = dsetdict.dset_deets[dset2][name2]
-            ys=moddct['yrfname']
+            if future:
+                ys='2065_2099'
+            else:
+                ys=moddct['yrfname']
             labname = moddct['labname']
 
             # Find ltmonmean file
