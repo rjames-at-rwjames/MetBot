@@ -31,13 +31,13 @@ yplots = 7
 seas='NDJFM'
 spec_col=True
 future=False
-bias=False # for models, plot bias relative to obs
+bias=True # for models, plot bias relative to obs
 biasper=False  # bias as a percentage of reference data mean
                 # to get this "bias" must also be True
 group=True
 
-globv='pr'
-levsel=False
+globv='omega'
+levsel=True
 if levsel:
     choosel='500'
 else:
