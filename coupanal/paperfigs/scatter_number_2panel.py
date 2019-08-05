@@ -482,9 +482,11 @@ for t in range(nthresh):
                 print 'No TTT threshold found for model ' + name
                 print '...OLR data missing for this model?'
 
-                xvals[cnt, fgn] = ma.masked
-                yvals[cnt, fgn] = ma.masked
-                siz[cnt, fgn] = ma.masked
+                for fgn in range(nplot):
+
+                    xvals[cnt, fgn] = ma.masked
+                    yvals[cnt, fgn] = ma.masked
+                    siz[cnt, fgn] = ma.masked
 
             cnt += 1
             mdcnt += 1
