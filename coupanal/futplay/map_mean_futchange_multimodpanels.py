@@ -32,8 +32,8 @@ spec_col=True
 alphord=True
 group=False
 
-globv='pr'
-levsel=False
+globv='omega'
+levsel=True
 if levsel:
     choosel='500'
 else:
