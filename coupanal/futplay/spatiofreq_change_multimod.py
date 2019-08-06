@@ -27,7 +27,7 @@ import MetBot.mynetcdf as mync
 
 
 ### Running options
-test_scr=True
+test_scr=False
 threshtest=False
 plotdom='SA_TR' # which area to include in the plot - SA (with tropics and extratrops)
                 # or SA_TR (which is the domain over which the blobs are identified)
@@ -54,7 +54,7 @@ if res=='make':
         ln2=99.0
 
 # Season or months
-tstep='seas' # 'seas' or 'mon'
+tstep='mon' # 'seas' or 'mon'
 if tstep == 'mon':
     mon_ints = np.arange(1, 13, 1) # adjust if you want less than 12 months
 elif tstep == 'seas':
@@ -134,7 +134,6 @@ for t in range(nthresh):
                 elif tname == 'DJF':
                     nos4cbar = (-7.5, 7.5, 1.5)
 
-        nmon = len(months)
         if rate == 'cbs':
             nos4cbar = (-10.0, 10.0, 2.0)
 
