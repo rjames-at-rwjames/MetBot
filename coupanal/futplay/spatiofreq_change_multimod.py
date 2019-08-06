@@ -114,7 +114,7 @@ for t in range(nthresh):
     for st in range(nstep):
 
         if tstep == 'mon':
-            months=mon_ints[st]
+            months=[mon_ints[st]]
             tname=str(mon_ints[st])
 
             if rate == 'year':
