@@ -41,8 +41,7 @@ rm_samedates=False # to prune event set for matching dates - does not currently 
 group=True
 bias=False # for models, plot bias relative to obs
 alphord=True
-if bias:
-    nos4bias=(-16, 16, 2)
+
 
 # Season or months
 tstep='seas' # 'seas' or 'mon'
@@ -134,7 +133,9 @@ for t in range(nthresh):
             tname=str(mon_ints[st])
 
             if rate == 'year':
-                nos4cbar = (0, 6.0, 0.25)
+                nos4cbar = (1, 9, 1)
+                if bias:
+                    nos4bias = (-5, 5, 1)
 
         elif tstep == 'seas':
             if snames[st] == 'NDJFM':
@@ -146,12 +147,16 @@ for t in range(nthresh):
 
             if rate == 'year':
                 if tname == 'NDJFM':
-                    nos4cbar = (0, 10.0, 1.0)
+                    nos4cbar = (0, 45, 5)
+                    nos4bias = (-25, -25, 5)
                 elif tname == 'DJF':
-                    nos4cbar = (0, 7.5, 0.75)
+                    nos4cbar = (0, 27, 3)
+                    nos4bias = (-16, 16, 2)
 
         if rate == 'cbs':
             nos4cbar = (20, 50, 3)
+            if bias:
+                nos4bias = (-16, 16, 2)
 
         # Set up plot
         print "Setting up plot..."

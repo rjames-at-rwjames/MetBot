@@ -205,7 +205,7 @@ def sel_seas(mons, dates, cXs, cYs, degs, chs, keys, daynos, tworecdt):
 
     mons must be the list of months required as integers
     e.g. mons[11,12,1,2,3]
-    or can be just one month
+    or can be just one month (if in square brackets!)
     e.g. mons[1]
 
     read in and out dates, centroids, angles, cb outlines, and keys etc.
