@@ -97,12 +97,7 @@ wplotdraw='edges' # which plot to draw latitude and longitude
                     # 'all' for all
                     # 'edges' for just the sides
 
-if seas=='NDJFM':
-    months=[1,2,3,11,12]
-elif seas=='DJF':
-    months=[1,2,12]
 
-nmon=len(months)
 
 # Make grid
 if res=='make':
