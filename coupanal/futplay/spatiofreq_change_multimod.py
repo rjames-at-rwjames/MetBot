@@ -37,6 +37,7 @@ rate='year' # if rate='year' it will plot cbs per year
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 group=False
+alphord=True
 
 res='make'              # Option to plot at 'native' res or 'make' to create own grid
 if res=='make':
@@ -173,18 +174,21 @@ for t in range(nthresh):
             nmstr = str(nmod)
 
             if dset == 'cmip5':
-                if group:
-                    mnames = np.zeros(nmod, dtype=object)
-
-                    for mo in range(nmod):
-                        name = mnames_tmp[mo]
-                        print name
-                        groupdct = dset_grp.dset_deets[dset][name]
-                        thisord = int(groupdct['ord']) - 2  # minus 2 because cdr already used
-                        mnames[thisord] = name
-
+                if alphord:
+                    mnames = sorted(mnames_tmp, key=lambda s: s.lower())
                 else:
-                    mnames = mnames_tmp
+                    if group:
+                        mnames = np.zeros(nmod, dtype=object)
+
+                        for mo in range(nmod):
+                            name = mnames_tmp[mo]
+                            print name
+                            groupdct = dset_grp.dset_deets[dset][name]
+                            thisord = int(groupdct['ord']) - 2  # minus 2 because cdr already used
+                            mnames[thisord] = name
+
+                    else:
+                        mnames = mnames_tmp
             else:
                 mnames = mnames_tmp
 
