@@ -68,6 +68,7 @@ dom_b=1
 
 mons = np.arange(1, 13, 1)
 nmons = len(mons)
+nys=35.0
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
@@ -338,9 +339,9 @@ for t in range(nthresh):
                         scycle_count = anal.seas_cycle_count(mons,dates_ln)
 
                         if this_c == 'hist':
-                            hist_sc[:,do] = scycle_count
+                            hist_sc[:,do] = scycle_count/nys
                         elif this_c == 'fut':
-                            fut_sc[:,do] = scycle_count
+                            fut_sc[:,do] = scycle_count/nys
 
                 # Now calculating change
                 print 'Now we have calculated everything for 2 domains, and two time periods, calculate change'
