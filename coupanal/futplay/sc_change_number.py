@@ -34,7 +34,7 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-test_scr=True
+test_scr=False
 threshtest=False
 group=True
 figdim=[14, 6]
@@ -114,7 +114,7 @@ if not group:
         "*","*","*","*","*","*","*",\
         "d","d","d","d","d","d","d"]
 elif group:
-    grcls = ['gold', 'darkblue', 'r', 'blueviolet', 'springgreen']
+    grcls = ['fuchsia','gold', 'darkblue', 'r', 'blueviolet', 'springgreen']
     grmrs=["o","^","*","d","+","v","h",">"]
 
 siz = np.full((nallmod), 8)
