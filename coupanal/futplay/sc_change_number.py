@@ -54,10 +54,12 @@ labpos=np.array([(0.01,0.95),(0.44,0.95)])
 # full domain
 fulldom_wlon=7.5
 fulldom_elon=100.0
+fulldom_name='SICZ'
 
 # cont domain
 contdom_wlon=7.5
 contdom_elon=55.0
+contdom_name='Continental'
 
 # Info for each plot
 # 0 is full domain, 1 is continental domain
@@ -66,7 +68,16 @@ dom_a=0
 # part b
 dom_b=1
 
-mons = np.arange(1, 13, 1)
+doms = [dom_a, dom_b]
+dnames = [fulldom_name, contdom_name]
+ndoms = len(doms)
+wlon_picks = [fulldom_wlon, contdom_wlon]
+elon_picks = [fulldom_elon, contdom_elon]
+
+# Time info
+monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
+            'Mar', 'Apr', 'May', 'Jun', 'Jul']
+mons=[8,9,10,11,12,1,2,3,4,5,6,7]
 nmons = len(mons)
 nys=35.0
 
@@ -129,14 +140,6 @@ nthresh=len(thnames)
 
 for t in range(nthresh):
     thname=thnames[t]
-
-    print 'Opening txtfile'
-    if test_scr:
-        txtname=txtdir + "/sc_change_number.thresh_"+thnames[t]+".testmodels.txt"
-    else:
-        txtname=txtdir + "/sc_change_number.thresh_"+thnames[t]+".txt"
-
-    txtfile = open(txtname, "w")
 
     print "Setting up plot..."
     g = plt.figure(figsize=figdim)
@@ -257,12 +260,6 @@ for t in range(nthresh):
                 cents = ['hist', 'fut']
                 ths = [thth_h, thth_f]
 
-                doms=[dom_a,dom_b]
-                ndoms = len(doms)
-                wlon_picks=[fulldom_wlon,contdom_wlon]
-                elon_picks=[fulldom_elon,contdom_elon]
-
-
                 hist_sc=np.zeros((nmons,ndoms),dtype=np.float32)
                 fut_sc=np.zeros((nmons,ndoms),dtype=np.float32)
 
@@ -370,12 +367,6 @@ for t in range(nthresh):
                         color=colour, label=label, markeredgecolor=colour,\
                             markersize=siz[cnt], linestyle='None')
 
-                # print 'Now writing values to textfile for this model'
-                # print 'Model name, convmn dom 1, convmn dom 2, num ttt dom 1, num ttt dom 2'
-                # txtfile.write(label+ "\t" +str(round(convmn_doms[0],2))+ "\t" +str(round(convmn_doms[1],2))+ \
-                #               "\t" +str(round(nttts_doms[0],2))+ "\t"\
-                #               + str(round(nttts_doms[1],2))+"\n")
-
 
             else:
 
@@ -392,11 +383,12 @@ for t in range(nthresh):
     for fg in range(len(figlabels)):
         ax=plt.subplot(yplots,xplots,fg+1)
 
-        xlab = 'months'
-        ylab = 'Change in number of TTTs'
+        plt.xticks(np.arange(1, 13), monthstr, fontsize=14.0)
 
-        plt.xlabel(xlab, fontsize=10, fontweight='demibold')
+        ylab = 'Change in number of '+dnames[fg]+' TTTs'
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')
+
+        ax.plot([1,13],[0,0],color='k',linestyle='-',zorder=20)
 
 
     plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.1, wspace=0.2, hspace=0.5)
@@ -420,7 +412,7 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    scatterfig=figdir+'/sc_change_number_2panel.'+figsuf+'.thresh_'+thnames[t]+'.png'
+    scatterfig=figdir+'/sc_change_number_2panel.a_'+fulldom_name+'.b_'+contdom_name+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
