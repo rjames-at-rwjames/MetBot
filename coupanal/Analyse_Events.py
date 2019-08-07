@@ -18,7 +18,7 @@ def seas_cycle_count(mons, dates):
     scycle_count = np.zeros(12)
     nmons=len(mons)
     for mn in range(nmons):
-        thismon=mons(mn)
+        thismon=mons[mn]
         print thismon
         mn_inds = np.where(dates[:,1] == thismon)[0]
         scycle_count[mn] = len(mn_inds)
