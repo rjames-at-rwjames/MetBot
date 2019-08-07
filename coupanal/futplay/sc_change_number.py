@@ -76,8 +76,8 @@ txtdir = botdir + "futpaper_txt/"
 figdir=botdir+"futpaper_play/sc_change_number/"
 my.mkdir_p(figdir)
 
-futthreshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
-histthreshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+futthreshtxt = botdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+histthreshtxt = botdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 ### Dsets
 dsets = 'spec'
