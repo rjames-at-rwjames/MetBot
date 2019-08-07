@@ -361,9 +361,11 @@ for t in range(nthresh):
                     fgn=do
                     ax = plt.subplot(yplots, xplots, fgn + 1)
 
+
+                    xvals=np.arange(1,13,1)
                     yvals[cnt, :, fgn] = change_sc[:,do]
 
-                    ax.plot(mons, yvals[cnt,:,fgn], marker=mk, \
+                    ax.plot(xvals, yvals[cnt,:,fgn], marker=mk, \
                         color=colour, label=label, markeredgecolor=colour,\
                             markersize=siz[cnt], linestyle='None')
 
@@ -384,9 +386,11 @@ for t in range(nthresh):
         ax=plt.subplot(yplots,xplots,fg+1)
 
         plt.xticks(np.arange(1, 13), monthstr, fontsize=14.0)
+        plt.xlim(0,13)
 
         ylab = 'Change in number of '+dnames[fg]+' TTTs'
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')
+        plt.ylim(-12,4)
 
         ax.plot([1,13],[0,0],color='k',linestyle='-',zorder=20)
 
