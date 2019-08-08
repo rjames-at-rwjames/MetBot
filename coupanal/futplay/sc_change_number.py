@@ -37,7 +37,7 @@ import coupanal.group_dict as dset_grp
 test_scr=False
 threshtest=False
 group=True
-figdim=[14, 6]
+figdim=[16, 6]
 xplots=2
 yplots=1
 nys=35.0 # This is now been standardised so all datasets have 35 years
@@ -388,11 +388,13 @@ for t in range(nthresh):
         plt.xticks(np.arange(1, 13), monthstr, fontsize=14.0)
         plt.xlim(0,13)
 
-        ylab = 'Change in number of '+dnames[fg]+' TTTs'
+        ylab = 'change in number of TTTs'
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')
-        plt.ylim(-12,4)
+        plt.ylim(-14,6)
+        plt.title(dnames[fg],fontsize=12, fontweight='demibold', loc='center')
 
-        ax.plot([1,13],[0,0],color='k',linestyle='-',zorder=20)
+
+        ax.plot([0,13],[0,0],color='k',linestyle='-',zorder=20)
 
 
     plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.1, wspace=0.2, hspace=0.5)
@@ -416,7 +418,7 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    scatterfig=figdir+'/sc_change_number_2panel.a_'+fulldom_name+'.b_'+contdom_name+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+    scatterfig=figdir+'/sc_change_number_2panel.a_'+fulldom_name+'.b_'+contdom_name+'_'+contdom_elon+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
