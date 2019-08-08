@@ -57,9 +57,9 @@ fulldom_elon=100.0
 fulldom_name='SICZ'
 
 # cont domain
-contdom_wlon=7.5
-contdom_elon=55.0
-contdom_name='Continental'
+contdom_wlon=45.0
+contdom_elon=70.0
+contdom_name='Madagascan'
 
 # Info for each plot
 # 0 is full domain, 1 is continental domain
@@ -418,7 +418,8 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    scatterfig=figdir+'/sc_change_number_2panel.a_'+fulldom_name+'.b_'+contdom_name+'_'+contdom_elon+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+    scatterfig=figdir+'/sc_change_number_2panel.a_'+fulldom_name+'.b_'/\
+               +contdom_name+'_'+contdom_wlon+'_'+contdom_elon+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
