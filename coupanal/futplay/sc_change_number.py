@@ -419,7 +419,7 @@ for t in range(nthresh):
         figsuf=figsuf+'_testmodels'
 
     scatterfig=figdir+'/sc_change_number_2panel.a_'+fulldom_name+'.b_'/\
-               +contdom_name+'_'+contdom_wlon+'_'+contdom_elon+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+               +contdom_name+'_'+str(contdom_wlon)+'_'+str(contdom_elon)+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
