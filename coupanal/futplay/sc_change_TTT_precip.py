@@ -401,11 +401,10 @@ for t in range(nthresh):
                     for do in range(ndoms):
 
                         thisdom = doms[do]
-                        wlon = wlon_picks[do]
-                        elon = elon_picks[do]
-                        this_sub = domsubs[do]
 
                         if whplot == 'meanpr':
+
+                            this_sub = domsubs[do]
 
                             rys_clim = rys_clims[cent]
 
@@ -451,6 +450,9 @@ for t in range(nthresh):
                                     fut_sc[mn,do] = rain4mon
 
                         if whplot != 'meanpr':
+
+                            wlon = wlon_picks[do]
+                            elon = elon_picks[do]
 
                             # Then subset by longitude
                             print 'Subsetting by latitude?'
