@@ -672,7 +672,7 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    if whplot!='number':
+    if whplot!='meanpr':
         figsuf=figsuf+'_dom2_'+str(contdom_wlon)+'_'+str(contdom_elon)
     if whplot!='number':
         figsuf=figsuf+'_dom2_'+dom_cont
