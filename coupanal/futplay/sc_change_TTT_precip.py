@@ -435,19 +435,20 @@ for t in range(nthresh):
                             if weightlats:
                                 latr = np.deg2rad(rlat)
                                 weights = np.cos(latr)
-                                zonmean = np.nanmean(rain, axis=1)
-                                reg_mean = np.ma.average(zonmean, weights=weights)
+                                zonmean = np.nanmean(rain, axis=2)
 
-                            for mn in mons:
+                                for mn in mons:
 
-                                print 'month = ' + str(mn)
-                                locmon = np.where(rainmons[:] == mn)
-                                rain4mon = reg_mean[locmon]
+                                    print 'month = ' + str(mn)
+                                    locmon = np.where(rainmons[:] == mn)[0][0]
 
-                                if this_c == 'hist':
-                                    hist_sc[mn,do] = rain4mon
-                                elif this_c == 'fut':
-                                    fut_sc[mn,do] = rain4mon
+                                    zmean_thismon = zonmean[locmon,:]
+                                    rain4mon = np.ma.average(zmean_thismon, weights=weights)
+
+                                    if this_c == 'hist':
+                                        hist_sc[mn-1,do] = rain4mon
+                                    elif this_c == 'fut':
+                                        fut_sc[mn-1,do] = rain4mon
 
                         if whplot != 'meanpr':
 
