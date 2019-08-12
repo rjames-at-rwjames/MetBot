@@ -441,7 +441,7 @@ for t in range(nthresh):
 
                                     thismon=mons[mn]
 
-                                    print 'month = ' + thismon
+                                    print 'month = ' + str(thismon)
                                     locmon = np.where(rainmons[:] == thismon)[0][0]
 
                                     zmean_thismon = zonmean[locmon,:]
@@ -513,7 +513,7 @@ for t in range(nthresh):
 
                                     thismon=mons[mn]
 
-                                    print 'month' +thismon
+                                    print 'month' +str(thismon)
 
                                     raindat=np.where(rdtime[:,1] == thismon)
                                     rain = np.squeeze(rain[raindat, :, :])
