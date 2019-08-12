@@ -437,18 +437,20 @@ for t in range(nthresh):
                                 weights = np.cos(latr)
                                 zonmean = np.nanmean(rain, axis=2)
 
-                                for mn in mons:
+                                for mn in range(len(mons)):
 
-                                    print 'month = ' + str(mn)
-                                    locmon = np.where(rainmons[:] == mn)[0][0]
+                                    thismon=mons[mn]
+
+                                    print 'month = ' + thismon
+                                    locmon = np.where(rainmons[:] == thismon)[0][0]
 
                                     zmean_thismon = zonmean[locmon,:]
                                     rain4mon = np.ma.average(zmean_thismon, weights=weights)
 
                                     if this_c == 'hist':
-                                        hist_sc[mn-1,do] = rain4mon
+                                        hist_sc[mn,do] = rain4mon
                                     elif this_c == 'fut':
-                                        fut_sc[mn-1,do] = rain4mon
+                                        fut_sc[mn,do] = rain4mon
 
                         if whplot != 'meanpr':
 
@@ -507,11 +509,13 @@ for t in range(nthresh):
 
                                 # Loop by month
                                 print 'Looping months to get intensity'
-                                for mn in mons:
+                                for mn in range(len(mons):
 
-                                    print 'month' +str(mn)
+                                    thismon=mons[mn]
 
-                                    raindat=np.where(rdtime[:,1] == mn)
+                                    print 'month' +thismon
+
+                                    raindat=np.where(rdtime[:,1] == thismon)
                                     rain = np.squeeze(rain[raindat, :, :])
                                     rdtime = rdtime[raindat]
 
