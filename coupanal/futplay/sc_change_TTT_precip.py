@@ -646,6 +646,7 @@ for t in range(nthresh):
             plt.ylim(-14,6)
         elif whplot=='meanpr':
             ylab = 'change in mean precip'
+            plt.ylim(-1.5,1.5)
         elif whplot=='intens':
             ylab = 'change in intensity of TTTs'
 
