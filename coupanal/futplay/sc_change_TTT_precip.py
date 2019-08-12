@@ -336,7 +336,6 @@ for t in range(nthresh):
                     rys_clims =[rys_hist_clim,rys_fut_clim]
 
                 if whplot == 'intens':
-                    ryears = [rys_hist,rys_fut]
                     rainfiles = [rainfile_hist,rainfile_fut]
 
                 for cent in range(len(cents)):
@@ -477,6 +476,8 @@ for t in range(nthresh):
                                     fut_sc[:,do] = scycle_count/nys
 
                             elif whplot == 'intens':
+
+                                this_sub = domsubs[do]
 
                                 rainfile=rainfiles[cent]
 
