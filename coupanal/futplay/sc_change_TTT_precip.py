@@ -42,7 +42,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 whplot='meanpr' # 'number' , 'meanpr', 'intens'
-test_scr=True
+test_scr=False
 group=True
 figdim=[16, 6]
 xplots=2
