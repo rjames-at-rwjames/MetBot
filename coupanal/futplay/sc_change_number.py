@@ -26,7 +26,6 @@ sys.path.append(cwd+'/../..')
 import MetBot.dset_dict as dsetdict
 import MetBot.mytools as my
 import MetBot.MetBlobs as blb
-import MetBot.mynetcdf as mync
 import MetBot.SynopticAnatomy as sy
 import coupanal.Subset_Events as sset
 import coupanal.Analyse_Events as anal
@@ -34,7 +33,7 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-test_scr=False
+test_scr=True
 threshtest=False
 group=True
 figdim=[16, 6]
@@ -418,7 +417,7 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    scatterfig=figdir+'/sc_change_number_2panel.a_'+fulldom_name+'.b_'/\
+    scatterfig=figdir+'/sc_change_number_2panel.a_'+fulldom_name+'.b_'\
                +contdom_name+'_'+str(contdom_wlon)+'_'+str(contdom_elon)+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
