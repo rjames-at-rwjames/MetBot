@@ -509,7 +509,7 @@ for t in range(nthresh):
 
                                 # Loop by month
                                 print 'Looping months to get intensity'
-                                for mn in range(len(mons):
+                                for mn in range(len(mons)):
 
                                     thismon=mons[mn]
 
