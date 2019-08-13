@@ -78,18 +78,18 @@ if whplot != 'meanpr':
     fulldom_elon=100.0
 
 # cont domain
-dom2='mada' # cont or mada
+dom2='cont' # cont or mada
 if dom2=='cont':
     contdom_name='Continental'
     if whplot!='number':
-        dom_cont = 'contsub_nh'
+        dom_cont = 'CONT_PR'
     if whplot != 'meanpr':
         contdom_wlon=7.5
         contdom_elon=55.0
 elif dom2=='mada':
     contdom_name='Madagascar'
     if whplot!='number':
-        dom_cont = 'madasub_nh'
+        dom_cont = 'MADA_PR'
     if whplot != 'meanpr':
         contdom_wlon=45.0
         contdom_elon=70.0
