@@ -41,7 +41,8 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-whplot='meanpr' # 'number' , 'meanpr', 'intens'
+whplot='intens' # 'number' , 'meanpr', 'intens'
+dom2='cont'
 test_scr=False
 group=True
 figdim=[16, 6]
@@ -325,10 +326,14 @@ for t in range(nthresh):
                             break
                 fut_thresh = int(thresh)
 
+                print 'Checking if threshold exists for this model'
+
                 if thcnt == 0:
                     modmiss=True
+                    print 'it is missing'
                 else:
                     modmiss=False
+                    print 'it exists'
 
             if not modmiss:
 
@@ -422,8 +427,6 @@ for t in range(nthresh):
 
                     # Looping by domains
                     for do in range(ndoms):
-
-                        thisdom = doms[do]
 
                         if whplot == 'meanpr':
 
@@ -541,13 +544,13 @@ for t in range(nthresh):
                                     print 'month' +str(thismon)
 
                                     raindat=np.where(rdtime[:,1] == thismon)
-                                    rain = np.squeeze(rain[raindat, :, :])
-                                    rdtime = rdtime[raindat]
+                                    rain_thmon = np.squeeze(rain[raindat, :, :])
+                                    rdtime_thmon = rdtime[raindat]
 
                                     print 'Selecting TTTs from rain data'
                                     indices = []
                                     for dt in range(nttt):
-                                        ix = my.ixdtimes(rdtime, [dates_ln[dt][0]], \
+                                        ix = my.ixdtimes(rdtime_thmon, [dates_ln[dt][0]], \
                                                          [dates_ln[dt][1]], [dates_ln[dt][2]], [0])
                                         if len(ix) >= 1:
                                             indices.append(ix)
@@ -555,8 +558,8 @@ for t in range(nthresh):
                                     indices = np.squeeze(np.asarray(indices))
 
                                     print 'Selecting rain on TTT days'
-                                    rainsel = rain[indices, :, :]
-                                    ttt_rain_dates = rdtime[indices]
+                                    rainsel = rain_thmon[indices, :, :]
+                                    ttt_rain_dates = rdtime_thmon[indices]
 
                                     nttt4rain=len(ttt_rain_dates)
 
