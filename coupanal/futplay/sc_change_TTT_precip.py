@@ -78,7 +78,7 @@ if whplot != 'meanpr':
     fulldom_elon=100.0
 
 # cont domain
-dom2='cont' # cont or mada
+dom2='tanz' # cont or mada
 if dom2=='cont':
     contdom_name='Continental'
     if whplot!='number':
@@ -93,6 +93,21 @@ elif dom2=='mada':
     if whplot != 'meanpr':
         contdom_wlon=45.0
         contdom_elon=70.0
+elif dom2=='tanz':
+    contdom_name='Rufiji'
+    if whplot!='number':
+        dom_cont = 'rufiji'
+    if whplot != 'meanpr':
+        contdom_wlon=45.0
+        contdom_elon=70.0
+elif dom2=='mala':
+    contdom_name='Malawi'
+    if whplot!='number':
+        dom_cont = 'malawi'
+    if whplot != 'meanpr':
+        contdom_wlon=45.0
+        contdom_elon=70.0
+
 
 # Info for each plot
 # 0 is full domain, 1 is continental domain
