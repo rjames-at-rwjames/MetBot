@@ -563,6 +563,9 @@ for t in range(nthresh):
                                         nottts=True
                                     elif tcnt==1:
                                         onlyone=True
+                                    else:
+                                        onlyone=False
+                                        nottts=False
 
                                     if not nottts:
                                         print 'Selecting rain on TTT days'
