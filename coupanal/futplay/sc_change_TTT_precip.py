@@ -627,9 +627,9 @@ for t in range(nthresh):
                                         per75rain=np.nanpercentile(reg_ttt_mean,75)
 
                                     elif nottts:
-                                        tottttrain=0
-                                        rainperttt=0
-                                        per75rain=0
+                                        tottttrain=ma.masked
+                                        rainperttt=ma.masked
+                                        per75rain=ma.masked
 
                                     if raintype=='totrain':
                                         intensval=tottttrain
