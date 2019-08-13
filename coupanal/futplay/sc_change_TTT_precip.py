@@ -41,8 +41,8 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-whplot='intens' # 'number' , 'meanpr', 'intens'
-test_scr=True
+whplot='meanpr' # 'number' , 'meanpr', 'intens'
+test_scr=False
 group=True
 figdim=[16, 6]
 xplots=2
@@ -78,12 +78,21 @@ if whplot != 'meanpr':
     fulldom_elon=100.0
 
 # cont domain
-contdom_name='Continental'
-if whplot!='number':
-    dom_cont = 'contsub_nh'
-if whplot != 'meanpr':
-    contdom_wlon=7.5
-    contdom_elon=55.0
+dom2='mada' # cont or mada
+if dom2=='cont':
+    contdom_name='Continental'
+    if whplot!='number':
+        dom_cont = 'contsub_nh'
+    if whplot != 'meanpr':
+        contdom_wlon=7.5
+        contdom_elon=55.0
+elif dom2=='mada':
+    contdom_name='Madagascar'
+    if whplot!='number':
+        dom_cont = 'madasub_nh'
+    if whplot != 'meanpr':
+        contdom_wlon=45.0
+        contdom_elon=70.0
 
 # Info for each plot
 # 0 is full domain, 1 is continental domain
