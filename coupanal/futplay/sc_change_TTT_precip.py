@@ -548,67 +548,85 @@ for t in range(nthresh):
                                     rdtime_thmon = rdtime[raindat]
 
                                     print 'Selecting TTTs from rain data'
+                                    tcnt=0
                                     indices = []
                                     for dt in range(nttt):
                                         ix = my.ixdtimes(rdtime_thmon, [dates_ln[dt][0]], \
                                                          [dates_ln[dt][1]], [dates_ln[dt][2]], [0])
                                         if len(ix) >= 1:
                                             indices.append(ix)
+                                            tcnt+=1
 
                                     indices = np.squeeze(np.asarray(indices))
 
-                                    print 'Selecting rain on TTT days'
-                                    rainsel = rain_thmon[indices, :, :]
-                                    ttt_rain_dates = rdtime_thmon[indices]
+                                    if tcnt==0:
+                                        nottts=True
+                                    elif tcnt==1:
+                                        onlyone=True
 
-                                    nttt4rain=len(ttt_rain_dates)
+                                    if not nottts:
+                                        print 'Selecting rain on TTT days'
+                                        rainsel = rain_thmon[indices, :, :]
+                                        ttt_rain_dates = rdtime_thmon[indices]
 
-                                    if under_of == 'under':
-
-                                        print 'Selecting rain under TTTs'
-                                        masked_rain = np.ma.zeros((nttt4rain, nlat, nlon), dtype=np.float32)
-                                        rcnt=0
-                                        for rdt in range(nttt):
-                                            this_dt=dates_ln[rdt]
-                                            ix = my.ixdtimes(ttt_rain_dates, [this_dt[0]], \
-                                                             [this_dt[1]], [this_dt[2]], [0])
-                                            if len(ix) >= 1:
-                                                ind=ix[0]
-                                                this_dt_rain=ttt_rain_dates[ind]
-                                                print 'Checking dates correspond'
-                                                print this_dt
-                                                print this_dt_rain
-                                                print 'Running poly to mask'
-                                                chmask = my.poly2mask(rlon, rlat, chs_ln[rdt])
-                                                print 'Finished running poly to mask'
-                                                r = np.ma.MaskedArray(rainsel[ind, :, :], mask=~chmask)
-                                                masked_rain[rcnt, :, :] = r
-                                                rcnt+=1
-
-                                    elif under_of=='dayof':
-                                        masked_rain=rainsel[:]
-
-                                    # Get a timeseries of mean TTT rain from each event
-                                    print 'Getting a rain value for each TTT event'
-                                    reg_ttt_sum = np.zeros((nttt4rain), dtype=np.float32)
-                                    reg_ttt_mean = np.zeros((nttt4rain), dtype=np.float32)
-
-                                    if weightlats:
-                                        latr = np.deg2rad(rlat)
-                                        weights = np.cos(latr)
-
-                                    for st in range(nttt4rain):
-                                        if weightlats:
-                                            zonmean_ttt = np.ma.mean(masked_rain[st, :, :], axis=1)
-                                            regmean_ttt = np.ma.average(zonmean_ttt, weights=weights)
-                                            reg_ttt_mean[st] = regmean_ttt
+                                        if onlyone:
+                                            nttt4rain=1
+                                            rainsel = np.expand_dims(rainsel,axis=0)
+                                            ttt_rain_dates = np.expand_dims(ttt_rain_dates,axis=0)
                                         else:
-                                            reg_ttt_mean[st] = np.ma.mean(masked_rain[st, :, :])
+                                            nttt4rain=len(ttt_rain_dates)
 
-                                    # Getting a long term sum or mean
-                                    tottttrain=np.nansum(reg_ttt_mean)
-                                    rainperttt=np.nanmean(reg_ttt_mean)
-                                    per75rain=np.nanpercentile(reg_ttt_mean,75)
+                                        if under_of == 'under':
+
+                                            print 'Selecting rain under TTTs'
+                                            masked_rain = np.ma.zeros((nttt4rain, nlat, nlon), dtype=np.float32)
+                                            rcnt=0
+                                            for rdt in range(nttt):
+                                                this_dt=dates_ln[rdt]
+                                                ix = my.ixdtimes(ttt_rain_dates, [this_dt[0]], \
+                                                                 [this_dt[1]], [this_dt[2]], [0])
+                                                if len(ix) >= 1:
+                                                    ind=ix[0]
+                                                    this_dt_rain=ttt_rain_dates[ind]
+                                                    print 'Checking dates correspond'
+                                                    print this_dt
+                                                    print this_dt_rain
+                                                    print 'Running poly to mask'
+                                                    chmask = my.poly2mask(rlon, rlat, chs_ln[rdt])
+                                                    print 'Finished running poly to mask'
+                                                    r = np.ma.MaskedArray(rainsel[ind, :, :], mask=~chmask)
+                                                    masked_rain[rcnt, :, :] = r
+                                                    rcnt+=1
+
+                                        elif under_of=='dayof':
+                                            masked_rain=rainsel[:]
+
+                                        # Get a timeseries of mean TTT rain from each event
+                                        print 'Getting a rain value for each TTT event'
+                                        reg_ttt_sum = np.zeros((nttt4rain), dtype=np.float32)
+                                        reg_ttt_mean = np.zeros((nttt4rain), dtype=np.float32)
+
+                                        if weightlats:
+                                            latr = np.deg2rad(rlat)
+                                            weights = np.cos(latr)
+
+                                        for st in range(nttt4rain):
+                                            if weightlats:
+                                                zonmean_ttt = np.ma.mean(masked_rain[st, :, :], axis=1)
+                                                regmean_ttt = np.ma.average(zonmean_ttt, weights=weights)
+                                                reg_ttt_mean[st] = regmean_ttt
+                                            else:
+                                                reg_ttt_mean[st] = np.ma.mean(masked_rain[st, :, :])
+
+                                        # Getting a long term sum or mean
+                                        tottttrain=np.nansum(reg_ttt_mean)
+                                        rainperttt=np.nanmean(reg_ttt_mean)
+                                        per75rain=np.nanpercentile(reg_ttt_mean,75)
+
+                                    elif nottts:
+                                        tottttrain=0
+                                        rainperttt=0
+                                        per75rain=0
 
                                     if raintype=='totrain':
                                         intensval=tottttrain
