@@ -730,6 +730,8 @@ for t in range(nthresh):
         figsuf=figsuf+'_dom2_'+str(contdom_wlon)+'_'+str(contdom_elon)
     if whplot!='number':
         figsuf=figsuf+'_dom2_'+dom_cont
+    if whplot=='intens':
+        figsuf=figsuf+'_'+under_of+'_'+raintype
 
     scatterfig=figdir+'/sc_change_'+whplot+'_2panel.a_'+fulldom_name+'.b_'\
                +contdom_name+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
