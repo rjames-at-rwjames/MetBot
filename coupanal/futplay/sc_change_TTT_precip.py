@@ -63,7 +63,7 @@ if whplot != 'number':
 
 if whplot == 'intens':
     under_of='dayof'
-    raintype='totttt'
+    raintype='totrain'
 
 figlabels=['a','b']
 nplot=len(figlabels)
