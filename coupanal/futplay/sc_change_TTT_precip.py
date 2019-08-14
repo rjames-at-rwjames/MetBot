@@ -63,7 +63,12 @@ if whplot != 'number':
 
 if whplot == 'intens':
     under_of='dayof'
-    raintype='rainperttt'
+    raintype='pertttrain' # options
+                            # 'totrain' - mean rain on each TTT day, added for whole time period
+                            # 'rainperttt' - mean rain on each TTT day, averaged over all days
+                            # 'perc75' - mean rain on each TTT day, 75th percentile of all days
+                            # 'pertttrain' - percentage of rain from TTT days
+
 
 figlabels=['a','b']
 nplot=len(figlabels)
@@ -547,6 +552,13 @@ for t in range(nthresh):
                                     rain_thmon = np.squeeze(rain[raindat, :, :])
                                     rdtime_thmon = rdtime[raindat]
 
+                                    print 'Summing all rain for per TTT rain calc'
+                                    ndays=len(rdtime_thmon)
+                                    reg_all_sum = np.zeros((ndays), dtype=np.float32)
+                                    for st in range(ndays):
+                                        reg_all_sum = np.ma.sum(rain_thmon[st, :, :])
+                                    tottot_allrain=np.nansum(reg_all_sum)
+
                                     print 'Selecting TTTs from rain data'
                                     tcnt=0
                                     indices = []
@@ -620,13 +632,16 @@ for t in range(nthresh):
                                                 reg_ttt_mean[st] = regmean_ttt
                                             else:
                                                 reg_ttt_mean[st] = np.ma.mean(masked_rain[st, :, :])
+                                            reg_ttt_sum=np.ma.sum(masked_rain[st,:,:])
 
                                         # Getting a long term sum or mean
+                                        tottot_tttrain= np.nansum(reg_ttt_sum)
                                         tottttrain=np.nansum(reg_ttt_mean)
                                         rainperttt=np.nanmean(reg_ttt_mean)
                                         per75rain=np.nanpercentile(reg_ttt_mean,75)
 
                                     elif nottts:
+                                        tottot_tttrain=0
                                         tottttrain=0
                                         rainperttt=ma.masked
                                         per75rain=ma.masked
@@ -637,6 +652,8 @@ for t in range(nthresh):
                                         intensval=rainperttt
                                     elif raintype=='perc75':
                                         intensval=per75rain
+                                    elif raintype=='pertttrain':
+                                        intensval=(reg_ttt_sum/reg_all_sum)*100.0
 
                                     if this_c == 'hist':
                                         hist_sc[mn, do] = intensval
