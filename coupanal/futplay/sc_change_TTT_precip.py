@@ -42,7 +42,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 whplot='intens' # 'number' , 'meanpr', 'intens'
-dom2='cont'
+dom2='mada'
 test_scr=False
 group=True
 figdim=[16, 6]
@@ -63,7 +63,7 @@ if whplot != 'number':
 
 if whplot == 'intens':
     under_of='dayof'
-    raintype='totrain'
+    raintype='rainperttt'
 
 figlabels=['a','b']
 nplot=len(figlabels)
