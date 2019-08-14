@@ -63,7 +63,7 @@ if whplot != 'number':
 
 if whplot == 'intens':
     under_of='dayof'
-    raintype='rainperttt'
+    raintype='totttt'
 
 figlabels=['a','b']
 nplot=len(figlabels)
@@ -627,7 +627,7 @@ for t in range(nthresh):
                                         per75rain=np.nanpercentile(reg_ttt_mean,75)
 
                                     elif nottts:
-                                        tottttrain=ma.masked
+                                        tottttrain=0
                                         rainperttt=ma.masked
                                         per75rain=ma.masked
 
