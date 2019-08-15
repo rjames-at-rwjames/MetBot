@@ -41,8 +41,8 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-whplot='intens' # 'number' , 'meanpr', 'intens'
-dom2='mada'
+whplot='number' # 'number' , 'meanpr', 'intens'
+dom2='cont'
 test_scr=False
 group=True
 figdim=[16, 6]
@@ -68,6 +68,10 @@ if whplot == 'intens':
                             # 'rainperttt' - mean rain on each TTT day, averaged over all days
                             # 'perc75' - mean rain on each TTT day, 75th percentile of all days
                             # 'pertttrain' - percentage of rain from TTT days
+if whplot=='number':
+    relative=True           # An option to calculate change in proportion of TTTs in dom2
+                            # Will plot number of TTTs in dom1, in part a
+                            # and proportion of TTTs in dom2 relative to dom2, in part b
 
 
 figlabels=['a','b']
@@ -208,10 +212,6 @@ for t in range(nthresh):
     yvals = np.ma.zeros((nallmod,nmons,nplot), dtype=np.float32)
     cnt = 0
     grcnt=np.zeros(7,dtype=np.int8)
-
-    if test_scr:
-        ndset=1
-        dsetnames=['cmip5']
 
     print "Looping datasets"
     for d in range(ndset):
@@ -502,10 +502,33 @@ for t in range(nthresh):
                                 # Get seasonal cycle
                                 scycle_count = anal.seas_cycle_count(mons,dates_ln)
 
-                                if this_c == 'hist':
-                                    hist_sc[:,do] = scycle_count/nys
-                                elif this_c == 'fut':
-                                    fut_sc[:,do] = scycle_count/nys
+                                if relative:
+                                    if do==0:
+                                        print 'Saving seasonal cycle over dom1, to calculate relative TTTs in dom2'
+                                        scycle_count_d1 = scycle_count
+                                    if do==1:
+                                        print 'Calculating relative TTTs in dom2'
+                                        scycle_count_d2 = scycle_count
+                                        rel_this_dom = (scycle_count_d2 / scycle_count_d1) *100.0
+
+                                if relative:
+                                    if do==1:
+                                        if this_c == 'hist':
+                                            hist_sc[:, do] = rel_this_dom
+                                        elif this_c == 'fut':
+                                            fut_sc[:, do] = rel_this_dom
+                                    else:
+                                        if this_c == 'hist':
+                                            hist_sc[:,do] = scycle_count/nys
+                                        elif this_c == 'fut':
+                                            fut_sc[:,do] = scycle_count/nys
+                                else:
+                                    if this_c == 'hist':
+                                        hist_sc[:, do] = scycle_count / nys
+                                    elif this_c == 'fut':
+                                        fut_sc[:, do] = scycle_count / nys
+
+
 
                             elif whplot == 'intens':
 
@@ -708,8 +731,16 @@ for t in range(nthresh):
         plt.xlim(0,13)
 
         if whplot=='number':
-            ylab = 'change in number of TTTs'
-            plt.ylim(-14,6)
+            if not relative:
+                ylab = 'change in number of TTTs'
+                plt.ylim(-14,6)
+            else:
+                if fg==0:
+                    ylab = 'change in number of TTTs'
+                    plt.ylim(-14, 6)
+                else:
+                    ylab = 'change in % of TTTs in this domain'
+
         elif whplot=='meanpr':
             ylab = 'change in mean precip'
             plt.ylim(-1.5,1.5)

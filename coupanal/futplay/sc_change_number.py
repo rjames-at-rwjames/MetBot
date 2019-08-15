@@ -5,6 +5,9 @@
 # Options:
         # each model has a dot
 
+# THIS ONLY WORKS FOR CHANGE IN NUMBER
+# IT WAS ADAPTED TO OTHER VARIABLES AS sc_change_TTT_precip.py
+
 
 import os
 import sys
