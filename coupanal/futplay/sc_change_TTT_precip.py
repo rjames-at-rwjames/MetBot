@@ -42,7 +42,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 whplot='number' # 'number' , 'meanpr', 'intens'
-dom2='cont'
+dom2='ocean'
 test_scr=False
 group=True
 figdim=[16, 6]
@@ -117,6 +117,13 @@ elif dom2=='mala':
     if whplot != 'meanpr':
         contdom_wlon=45.0
         contdom_elon=70.0
+elif dom2=='ocean':
+    contdom_name='Ocean_e70'
+    if whplot!='number':
+        dom_cont = 'subt'
+    if whplot != 'meanpr':
+        contdom_wlon=70.0
+        contdom_elon=100.0
 
 
 # Info for each plot
