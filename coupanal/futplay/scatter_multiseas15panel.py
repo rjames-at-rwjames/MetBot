@@ -43,7 +43,7 @@ test_scr=True   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
-figdim=[9, 12]
+figdim=[11, 11]
 xplots=3
 yplots=5
 nys=35.0 # This is now been standardised so all datasets have 35 years
@@ -690,12 +690,12 @@ for t in range(nthresh):
 
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
         if pt <=11:
-            tname=mons[pt]
+            tname=monthstr[pt]
         else:
             tname=seas[pt-12]
         plt.title(tname, loc='center', fontweight='demibold')
 
-    plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.05, wspace=0.2, hspace=0.5)
+    plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
     handles, labels = ax.get_legend_handles_labels()
     legloc='center right'
