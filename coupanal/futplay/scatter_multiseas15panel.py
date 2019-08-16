@@ -625,18 +625,6 @@ for t in range(nthresh):
                             fut_yvals[loc4arr] = meanprval
 
 
-
-
-
-
-
-                # hist_xvals = np.zeros(nplot, dtype=np.float32)
-                # fut_xvals = np.zeros(nplot, dtype=np.float32)
-                #
-                # hist_yvals = np.zeros(nplot, dtype=np.float32)
-                # fut_yvals = np.zeros(nplot, dtype=np.float32)
-
-
                 # Now looping by 4 to get plots
                 print 'Now we have calculated everything for 2 timeperiods and 15 seasons, calc change'
 
@@ -647,6 +635,10 @@ for t in range(nthresh):
 
                     change_xvals[pt]=fut_xvals[pt]-hist_xvals[pt]
                     change_yvals[pt]=fut_yvals[pt]-hist_yvals[pt]
+
+                # Save data for calculating rsquared
+                xvals[cnt,:] = change_xvals
+                yvals[cnt,:] = change_yvals
 
                 colour = grcl
                 mk = grmr
@@ -664,10 +656,6 @@ for t in range(nthresh):
                         color=colour, label=label, markeredgecolor=colour,\
                             markersize=std_mkr, linestyle='None')
 
-                # ax.set_xlim(20,160)
-                # ax.set_ylim(-0.2,1.4)
-
-
                 cnt += 1
                 mdcnt += 1
 
@@ -682,11 +670,11 @@ for t in range(nthresh):
 
         ax=plt.subplot(yplots,xplots,pt+1)
 
-        grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(change_xvals[pt], change_yvals[pt])
+        grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(xvals[:,pt], yvals[:,pt])
         rsquared = r_value ** 2
         if trendline:
             if rsquared > 0.4:
-                ax.plot(change_xvals[pt], (grad * change_xvals[pt] + inter), '-', color='k')
+                ax.plot(xvals[:,pt], (grad * xvals[:,pt] + inter), '-', color='k')
 
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
         if pt <=11:
@@ -694,6 +682,11 @@ for t in range(nthresh):
         else:
             tname=seas[pt-12]
         plt.title(tname, loc='center', fontweight='demibold')
+
+        if charac=='number':
+            plt.xlim(-14, 6)
+
+        plt.ylim(-1.5,1.5)
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
