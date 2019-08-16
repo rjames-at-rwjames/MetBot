@@ -70,6 +70,7 @@ pr_dom='subt'
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
             'Mar', 'Apr', 'May', 'Jun', 'Jul']
 mons=[8,9,10,11,12,1,2,3,4,5,6,7]
+mons=np.asarray(mons)
 nmons = len(mons)
 seas=['Annual','NDJFM','DJF']
 
