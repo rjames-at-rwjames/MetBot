@@ -41,8 +41,8 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-whplot='intens' # 'number' , 'meanpr', 'intens'
-dom2='cont'
+whplot='number' # 'number' , 'meanpr', 'intens'
+dom2='mada'
 test_scr=False
 group=True
 figdim=[16, 6]
