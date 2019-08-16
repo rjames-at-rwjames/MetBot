@@ -586,7 +586,7 @@ for t in range(nthresh):
                                     ndays=len(rdtime_thmon)
                                     reg_all_sum = np.zeros((ndays), dtype=np.float32)
                                     for st in range(ndays):
-                                        reg_all_sum = np.ma.sum(rain_thmon[st, :, :])
+                                        reg_all_sum[st] = np.ma.sum(rain_thmon[st, :, :])
                                     tottot_allrain=np.nansum(reg_all_sum)
 
                                     print 'Selecting TTTs from rain data'
@@ -662,7 +662,7 @@ for t in range(nthresh):
                                                 reg_ttt_mean[st] = regmean_ttt
                                             else:
                                                 reg_ttt_mean[st] = np.ma.mean(masked_rain[st, :, :])
-                                            reg_ttt_sum=np.ma.sum(masked_rain[st,:,:])
+                                            reg_ttt_sum[st]=np.ma.sum(masked_rain[st,:,:])
 
                                         # Getting a long term sum or mean
                                         tottot_tttrain= np.nansum(reg_ttt_sum)
@@ -683,7 +683,7 @@ for t in range(nthresh):
                                     elif raintype=='perc75':
                                         intensval=per75rain
                                     elif raintype=='pertttrain':
-                                        intensval=(reg_ttt_sum/reg_all_sum)*100.0
+                                        intensval=(tottot_tttrain/tottot_allrain)*100.0
 
                                     if this_c == 'hist':
                                         hist_sc[mn, do] = intensval
@@ -753,8 +753,7 @@ for t in range(nthresh):
             plt.ylim(-1.5,1.5)
         elif whplot=='intens':
             ylab = 'change in intensity of TTTs'
-            if raintype=='pertttrain':
-                plt.ylim(-100,100)
+
 
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')
         plt.title(dnames[fg],fontsize=12, fontweight='demibold', loc='center')
