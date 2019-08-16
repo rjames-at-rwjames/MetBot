@@ -41,8 +41,8 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-whplot='number' # 'number' , 'meanpr', 'intens'
-dom2='mada'
+whplot='intens' # 'number' , 'meanpr', 'intens'
+dom2='cont'
 test_scr=False
 group=True
 figdim=[16, 6]
@@ -88,7 +88,6 @@ if whplot != 'meanpr':
     fulldom_elon=100.0
 
 # cont domain
-dom2='cont' # cont or mada
 if dom2=='cont':
     contdom_name='Continental'
     if whplot!='number':
@@ -287,7 +286,9 @@ for t in range(nthresh):
                 rys_hist = moddct['yrfname']
                 rys_fut = moddct['futprrun']
                 rys_hist_clim = rys_hist
-                rys_fut_clim = '2065_2099'
+                fyear1='2065'
+                fyear2='2099'
+                rys_fut_clim = fyear1+'_'+fyear2
 
                 rainname = rmoddct['prname']
                 rainlabname= rmoddct['labname']
@@ -569,6 +570,12 @@ for t in range(nthresh):
                                 # If future change unit
                                 if cent==1:
                                     rain=rain*86400
+                                    print 'Selecting years ' + fyear1 + ' to ' + fyear2
+                                    inds = np.where((rdtime[:, 0] >= int(fyear1)) & (dtime[:, 0] <= int(fyear2)))[0]
+                                    rdtime = rdtime[inds]
+                                    rtime = rtime[inds]
+                                    rain = rain[inds, :, :]
+
 
                                 # Loop by month
                                 print 'Looping months to get intensity'
