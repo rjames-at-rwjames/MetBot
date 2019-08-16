@@ -357,7 +357,7 @@ for t in range(nthresh):
                     else:
                         print 'Check number of levels in ncfile'
                     rdtime_monmn[:, 3] = 0
-                    rainmons = rdtime[:, 1]
+                    rainmons = rdtime_monmn[:, 1]
 
                     if weightlats:
                         latr = np.deg2rad(rlat)
