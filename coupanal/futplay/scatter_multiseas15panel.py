@@ -576,11 +576,11 @@ for t in range(nthresh):
                         loc4arr=s+12
 
                         # Specify months for each season
-                        if seas=='DJF':
+                        if seas[s]=='DJF':
                             mon4seas=[12,1,2]
-                        elif seas=='NDJFM':
+                        elif seas[s]=='NDJFM':
                             mon4seas=[11,12,1,2,3]
-                        elif seas=='Annual':
+                        elif seas[s]=='Annual':
                             mon4seas=np.arange(1,13,1)
 
                         # Count number of months for this season
@@ -659,7 +659,7 @@ for t in range(nthresh):
 
                     ax = plt.subplot(yplots, xplots, pt+1)
 
-                    ax.plot(chaange_xvals[pt], change_yvals[pt], marker=mk, \
+                    ax.plot(change_xvals[pt], change_yvals[pt], marker=mk, \
                         color=colour, label=label, markeredgecolor=colour,\
                             markersize=std_mkr, linestyle='None')
 
