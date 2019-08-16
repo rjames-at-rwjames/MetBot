@@ -39,7 +39,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=True   # will run on only 1 model
+test_scr=False   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -695,7 +695,7 @@ for t in range(nthresh):
             tname=seas[pt-12]
         plt.title(tname, loc='center', fontweight='demibold')
 
-    plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
+    plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
     handles, labels = ax.get_legend_handles_labels()
     legloc='center right'
