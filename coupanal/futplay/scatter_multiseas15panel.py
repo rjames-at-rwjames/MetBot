@@ -3,11 +3,11 @@
 # for multiple seasons and months
 # where change 1 and change 2 can be specified from a selection of variables
 # and seas/month layout is:
+#   a       s       o
+#   n       d       J
+#   f       m       a
+#   m       j       j
 #   ann     ndjfm   djf
-#   o       n       d
-#   j       f       m
-#   a       m       j
-#   j       a       s
 
 # at the moment this is designed to work where
 # change 1 is a TTT related change
@@ -23,6 +23,7 @@ if runoffline==True:
 
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.ma as ma
 import scipy
 
 cwd=os.getcwd()
@@ -263,8 +264,8 @@ for t in range(nthresh):
                 rys_hist_clim = rys_hist
                 rys_fut_clim = '2065_2099'
 
-                rainfile_hist = botdir + raindset + "/" + rainmod + "." + globp + ".day.mean." + rys_hist + ".nc"
-                rainfile_fut = botdir + raindset + "/" + rainmod + "." + globp + ".day.mean.rcp85." + rys_fut + ".nc"
+                rainfile_hist = botdir + dset + "/" + name + "." + globp + ".day.mean." + rys_hist + ".nc"
+                rainfile_fut = botdir + dset + "/" + name + "." + globp + ".day.mean.rcp85." + rys_fut + ".nc"
 
                 rys_clims = [rys_hist_clim, rys_fut_clim]
                 rainfiles = [rainfile_hist, rainfile_fut]
@@ -338,25 +339,30 @@ for t in range(nthresh):
                     # Second get info for mean rain
                     rys_clim = rys_clims[cent]
 
-                    rainmeanfile = botdir + raindset + '/' + rainmod + '/' \
-                                   + rainmod + '.' + globp + '.mon.mean.' + rys_clim + '.nc'
+                    rainmeanfile = botdir + dset + '/' + name + '/' \
+                                   + name + '.' + globp + '.mon.mean.' + rys_clim + '.nc'
 
                     print 'Opening ' + rainmeanfile
                     print 'for domain ' + pr_dom
 
-                    rainmean = mync.open_multi(rainmeanfile, globp, rainmod, \
-                                               dataset=raindset, subs=pr_dom)
+                    rainmean = mync.open_multi(rainmeanfile, globp, name, \
+                                               dataset=dset, subs=pr_dom)
 
                     rdim = len(rainmean)
                     if rdim == 5:
-                        rain_monmn, rtime, rlat, rlon, rdtime_monmn = rainmean
+                        rain_monmn, rtime, rlat_mn, rlon, rdtime_monmn = rainmean
                     elif rdim == 6:
-                        rain, rtime, rlat, rlon, rlev, rdtime_monmn = rainmean
+                        rain, rtime, rlat_mn, rlon, rlev, rdtime_monmn = rainmean
                         rain_monmn = np.squeeze(rain)
                     else:
                         print 'Check number of levels in ncfile'
                     rdtime_monmn[:, 3] = 0
+                    rainmons = rdtime[:, 1]
 
+                    if weightlats:
+                        latr = np.deg2rad(rlat)
+                        weights = np.cos(latr)
+                        zonmean = np.nanmean(rain_monmn, axis=2)
 
                     # Finally get rain file for intensity
                     if charac=='intens' or charac=='tttpr':
@@ -365,8 +371,8 @@ for t in range(nthresh):
 
                         # Getting intensity
                         print 'Now moving on to get data for the intensity'
-                        rainout = mync.open_multi(rainfile, globp, rainmod, \
-                                                  dataset=raindset, subs=ttt_dom)
+                        rainout = mync.open_multi(rainfile, globp, name, \
+                                                  dataset=dset, subs=ttt_dom)
 
                         rdim = len(rainout)
                         if rdim == 5:
@@ -391,134 +397,275 @@ for t in range(nthresh):
                         if cent == 1:
                             rain = rain * 86400
 
+                    # Now loop mons and seasons to get the values you want!
+
+                    print 'Now looping mons to calculate data for each month'
+                    for mn in range(len(mons)):
+                        thismon = mons[mn]
+                        print 'month = ' + str(thismon)
+
+                        print 'Getting TTTs for this month'
+                        months4ttt=[thismon]
+                        # selecting a specific season, subset
+                        print 'Selecting month '+str(thismon)
+                        dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
+                            sset.sel_seas(months4ttt, dates_ln, cXs_ln, cYs_ln, degs_ln, chs_ln, keys_ln, daynos_ln, tworecdt_ln)
+                        num4mon = len(dates_ddm)
+                        print 'For this mont there are ' + str(num4mon) + ' TTT dates'
+
+                        if charac=='number':
+                            print 'Saving number of TTTs in this month per year'
+                            count_peryear=num4mon/nys
+
+                            if this_c == 'hist':
+                                hist_xvals[mn] = count_peryear
+                            elif this_c == 'fut':
+                                fut_xvals[mn] = count_peryear
+
+                        elif charac=='relative':
+                            print 'Calculating relative number of TTTs in this domain for this month'
+
+                            print 'First counting number of all TTTs in this month'
+                            # selecting a specific season, subset
+                            print 'Selecting month ' + str(thismon)
+                            dates_dam, cXs_dam, cYs_dam, degs_dam, chs_dam, keys_dam, daynos_dam, tworecdt_dam = \
+                                sset.sel_seas(months4ttt, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,\
+                                              tworecdt_dd)
+                            totnum4mon = len(dates_dam)
+                            print 'For this mont there are ' + str(totnum4mon) + ' TTT dates altogether'
+
+                            rel_thismon = (num4mon / totnum4mon) * 100.0
+
+                            if this_c == 'hist':
+                                hist_xvals[mn] = rel_thismon
+                            elif this_c == 'fut':
+                                fut_xvals[mn] = rel_thismon
+
+                        else:
+                            print 'Getting TTT rain for this month'
+
+                            raindat = np.where(rdtime[:, 1] == thismon)
+                            rain_thmon = np.squeeze(rain[raindat, :, :])
+                            rdtime_thmon = rdtime[raindat]
+
+                            print 'Summing all rain for per TTT rain calc'
+                            ndays = len(rdtime_thmon)
+                            reg_all_sum = np.zeros((ndays), dtype=np.float32)
+                            for st in range(ndays):
+                                reg_all_sum[st] = np.ma.sum(rain_thmon[st, :, :])
+                            tottot_allrain = np.nansum(reg_all_sum)
+
+                            print 'Selecting TTTs from rain data'
+                            tcnt = 0
+                            indices = []
+                            for dt in range(num4mon):
+                                ix = my.ixdtimes(rdtime_thmon, [dates_ddm[dt][0]], \
+                                                 [dates_ddm[dt][1]], [dates_ddm[dt][2]], [0])
+                                if len(ix) >= 1:
+                                    indices.append(ix)
+                                    tcnt += 1
+
+                            indices = np.squeeze(np.asarray(indices))
+
+                            if tcnt == 0:
+                                nottts = True
+                            elif tcnt == 1:
+                                onlyone = True
+                            else:
+                                onlyone = False
+                                nottts = False
+
+                            if not nottts:
+                                print 'Selecting rain on TTT days'
+                                rainsel = rain_thmon[indices, :, :]
+                                ttt_rain_dates = rdtime_thmon[indices]
+
+                                if onlyone:
+                                    nttt4rain = 1
+                                    rainsel = np.expand_dims(rainsel, axis=0)
+                                    ttt_rain_dates = np.expand_dims(ttt_rain_dates, axis=0)
+                                else:
+                                    nttt4rain = len(ttt_rain_dates)
+
+                                if under_of == 'under':
+
+                                    print 'Selecting rain under TTTs'
+                                    masked_rain = np.ma.zeros((nttt4rain, nlat, nlon), dtype=np.float32)
+                                    rcnt = 0
+                                    for rdt in range(num4mon):
+                                        this_dt = dates_ddm[rdt]
+                                        ix = my.ixdtimes(ttt_rain_dates, [this_dt[0]], \
+                                                         [this_dt[1]], [this_dt[2]], [0])
+                                        if len(ix) >= 1:
+                                            ind = ix[0]
+                                            this_dt_rain = ttt_rain_dates[ind]
+                                            print 'Checking dates correspond'
+                                            print this_dt
+                                            print this_dt_rain
+                                            print 'Running poly to mask'
+                                            chmask = my.poly2mask(rlon, rlat, chs_ln[rdt])
+                                            print 'Finished running poly to mask'
+                                            r = np.ma.MaskedArray(rainsel[ind, :, :], mask=~chmask)
+                                            masked_rain[rcnt, :, :] = r
+                                            rcnt += 1
+
+                                elif under_of == 'dayof':
+                                    masked_rain = rainsel[:]
+
+                                # Get a timeseries of mean TTT rain from each event
+                                print 'Getting a rain value for each TTT event'
+                                reg_ttt_sum = np.zeros((nttt4rain), dtype=np.float32)
+                                reg_ttt_mean = np.zeros((nttt4rain), dtype=np.float32)
+
+                                if weightlats:
+                                    latr = np.deg2rad(rlat)
+                                    weights = np.cos(latr)
+
+                                for st in range(nttt4rain):
+                                    if weightlats:
+                                        zonmean_ttt = np.ma.mean(masked_rain[st, :, :], axis=1)
+                                        regmean_ttt = np.ma.average(zonmean_ttt, weights=weights)
+                                        reg_ttt_mean[st] = regmean_ttt
+                                    else:
+                                        reg_ttt_mean[st] = np.ma.mean(masked_rain[st, :, :])
+                                    reg_ttt_sum[st] = np.ma.sum(masked_rain[st, :, :])
+
+                                # Getting a long term sum or mean
+                                tottot_tttrain = np.nansum(reg_ttt_sum)
+                                tottttrain = np.nansum(reg_ttt_mean)
+                                rainperttt = np.nanmean(reg_ttt_mean)
+                                per75rain = np.nanpercentile(reg_ttt_mean, 75)
+
+                            elif nottts:
+                                tottot_tttrain = 0
+                                tottttrain = 0
+                                rainperttt = ma.masked
+                                per75rain = ma.masked
+
+                            if charac=='intens':
+
+                                if this_c == 'hist':
+                                    hist_xvals[mn] = rainperttt
+                                elif this_c == 'fut':
+                                    fut_xvals[mn] = rainperttt
+
+                            elif charac=='tttpr':
+
+                                if this_c == 'hist':
+                                    hist_xvals[mn] = tottttrain
+                                elif this_c == 'fut':
+                                    fut_xvals[mn] = tottttrain
 
 
-                # Now loop mons and seasons to get the values you want!
+                        # For mean rainfall
+                        print 'Calculating mean rainfall for this cent'
+                        locmon = np.where(rainmons[:] == thismon)[0][0]
+
+                        zmean_thismon = zonmean[locmon, :]
+                        rain4mon = np.ma.average(zmean_thismon, weights=weights)
+
+                        if this_c == 'hist':
+                            hist_yvals[mn] = rain4mon
+                        elif this_c == 'fut':
+                            fut_yvals[mn] = rain4mon
+
+                    print 'Now looping seasons to get the aggregate values from those calculated by month'
+                    for s in range(len(seas)):
+
+                        # Find location in 15 plots where this one goes
+                        loc4arr=s+12
+
+                        # Specify months for each season
+                        if seas=='DJF':
+                            mon4seas=[12,1,2]
+                        elif seas=='NDJFM':
+                            mon4seas=[11,12,1,2,3]
+                        elif seas=='Annual':
+                            mon4seas=np.arange(1,13,1)
+
+                        # Count number of months for this season
+                        nm4s=len(mon4seas)
+
+                        # Get the values for these months from previous calculations
+                        col4ag_x=np.zeros(nm4s,dtype=np.float32)
+                        col4ag_y=np.zeros(nm4s,dtype=np.float32)
+                        for ms in range(nm4s):
+
+                            print 'Check that you have the right index for this month'
+                            ind = np.where(mons == mon4seas[ms])[0]
+
+                            print mons[ind]
+                            print mon4seas[ms]
+                            print 'the above two should match'
+
+                            if this_c == 'hist':
+                                col4ag_x[ms]=hist_xvals[ind]
+                                col4ag_y[ms]=hist_yvals[ind]
+                            if this_c == 'fut':
+                                col4ag_x[ms]=fut_xvals[ind]
+                                col4ag_y[ms]=fut_yvals[ind]
+
+                        if charac=='number' or charac=='tttpr':
+                            print 'Summing values over months'
+                            xvals4seas=np.sum(col4ag_x)
+
+                        elif charac=='intens' or charac=='relative':
+                            print 'Averaging values over months'
+                            xvals4seas=np.mean(col4ag_x)
+
+                        print 'Calculate mean precip for this month'
+                        meanprval=np.mean(col4ag_y)
+
+                        if this_c == 'hist':
+                            hist_xvals[loc4arr] = xvals4seas
+                            hist_yvals[loc4arr] = meanprval
+                        elif this_c == 'fut':
+                            fut_xvals[loc4arr] = xvals4seas
+                            fut_yvals[loc4arr] = meanprval
 
 
 
+
+
+
+
+                # hist_xvals = np.zeros(nplot, dtype=np.float32)
+                # fut_xvals = np.zeros(nplot, dtype=np.float32)
+                #
+                # hist_yvals = np.zeros(nplot, dtype=np.float32)
+                # fut_yvals = np.zeros(nplot, dtype=np.float32)
 
 
                 # Now looping by 4 to get plots
-                print 'Now we have calculated everything for 2 domains, entering 4 plots'
+                print 'Now we have calculated everything for 2 timeperiods and 15 seasons, calc change'
 
-                if colscheme=='groupall':
-                    colour = grcl
-                    mk = grmr
-                elif colscheme=='grouplast':
-                    if dset=='noaa':
-                        colour='fuchsia'
-                    else:
-                        colour = 'k'
-                    mk = 'o'
+                change_xvals=np.zeros(nplot,dtype=np.float32)
+                change_yvals=np.zeros(nplot,dtype=np.float32)
 
-                if cnt == 0:
-                    label = labname + ' | ' + rainlabname
-                    zord=3
-                else:
-                    label = labname
-                    zord=2
+                for pt in range(nplot):
 
-                std_mkr=8 # standard marker size
-
-                # part a
-                fgn=0
-                ax = plt.subplot(yplots, xplots, fgn+1)
-
-                xvals[cnt,fgn]=nttts_doms[dom_a]
-                yvals[cnt,fgn]=biases_doms[dom_a]
-                sizes[cnt,fgn]=std_mkr
-
-                ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                    color=colour, label=label, markeredgecolor=colour,\
-                        markersize=sizes[cnt,fgn], linestyle='None',zorder=zord)
-
-                # Highlight area with less than 1/3 of observed
-                if cnt==0:
-                    if colscheme=='grouplast':
-                        ax.axvspan(20,49,alpha=0.1,color='springgreen',zorder=1)
-                    elif colscheme=='groupall':
-                        ax.plot([49,49],[-0.2,1.4],color='springgreen',lw=3,alpha=0.5,zorder=1)
-                ax.set_xlim(20,160)
-                ax.set_ylim(-0.2,1.4)
-
-                # part b
-                fgn=1
-                ax = plt.subplot(yplots, xplots, fgn+1)
-
-                xvals[cnt,fgn]=pttts_doms[dom_b]
-                yvals[cnt,fgn]=biases_doms[dom_b]
-                sizes[cnt,fgn]=std_mkr
-                ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                    color=colour, label=label, markeredgecolor=colour,\
-                        markersize=sizes[cnt,fgn], linestyle='None',zorder=zord)
-
-                # Highlight high and low regions
-                if cnt==0:
-                    if colscheme=='grouplast':
-                        ax.axvspan(10,50,alpha=0.1,color='blueviolet',zorder=1)
-                        ax.axvspan(80,90,alpha=0.1,color='r',zorder=1)
-                    elif colscheme=='groupall':
-                        ax.plot([50,50],[-1.0,2.5],color='blueviolet',lw=3,alpha=0.5,zorder=1)
-                        ax.plot([80,80],[-1.0,2.5],color='r',lw=3,zorder=1)
-                ax.set_xlim(10,90)
-                ax.set_ylim(-1.0,2.5)
-
-
-
-                # part c
-                fgn=2
-                ax = plt.subplot(yplots, xplots, fgn+1)
-
-                xvals[cnt,fgn]=intens_doms[dom_c]
-                yvals[cnt,fgn]=biases_doms[dom_c]
-                sizes[cnt,fgn]=std_mkr
-
-                ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                    color=colour, label=label, markeredgecolor=colour,\
-                        markersize=sizes[cnt,fgn], linestyle='None',zorder=zord)
-
-
-                # Highlight high and low regions
-                if cnt==0:
-                    if colscheme=='grouplast':
-                        ax.axvspan(2.0,4.0,alpha=0.1,color='gold',zorder=1)
-                        ax.axvspan(4.0,6.0,alpha=0.1,color='darkblue',zorder=1)
-                    elif colscheme=='groupall':
-                        ax.plot([4.0,4.0],[-1.0,2.5],color='gold',lw=3,zorder=1)
-                        ax.plot([4.05,4.05],[-1.0,2.5],color='darkblue',lw=3,alpha=0.5,zorder=1)
-                ax.set_xlim(2.0,6.0)
-                ax.set_ylim(-1.0,2.5)
-
-
-                # part d
-                fgn=3
-                ax = plt.subplot(yplots, xplots, fgn+1)
+                    change_xvals[pt]=fut_xvals[pt]-hist_xvals[pt]
+                    change_yvals[pt]=fut_yvals[pt]-hist_yvals[pt]
 
                 colour = grcl
                 mk = grmr
 
-                xvals[cnt,fgn]=nttts_doms[dom_d_xaxis]
-                yvals[cnt,fgn]=pttts_doms[dom_d_yaxis]
+                label = labname
 
-                if under_of=='dayof':
-                    mult=3
-                elif under_of=='under':
-                    multi=1.25
+                std_mkr=8 # standard marker size
 
-                sizes[cnt,fgn]=intens_doms[dom_d_size]*mult
+                print 'Loop 15 seasons and plot'
+                for pt in range(nplot):
 
-                ax.plot(xvals[cnt,fgn], yvals[cnt,fgn], marker=mk, \
-                    color=colour, label=label, markeredgecolor=colour,\
-                        markersize=sizes[cnt,fgn], linestyle='None',zorder=zord)
-                ax.set_xlim(20,160)
+                    ax = plt.subplot(yplots, xplots, pt+1)
 
+                    ax.plot(chaange_xvals[pt], change_yvals[pt], marker=mk, \
+                        color=colour, label=label, markeredgecolor=colour,\
+                            markersize=std_mkr, linestyle='None')
 
-                print 'Now writing values to textfile for this model'
-                print 'Model name, tot num ttt, tot num cont ttt, per ttt cont, intensity fulldom, intensity contdom'
-                txtfile.write(label+ "\t" +str(round(nttts_doms[0],2))+ "\t" +str(round(nttts_doms[1],2))+ \
-                              "\t" +str(round(pttts_doms[1],2))+ "\t"\
-                              + str(round(intens_doms[0],2))+ "\t" + str(round(intens_doms[1],2))+"\n")
+                # ax.set_xlim(20,160)
+                # ax.set_ylim(-0.2,1.4)
+
 
                 cnt += 1
                 mdcnt += 1
@@ -529,52 +676,30 @@ for t in range(nthresh):
                 print '...OLR data missing for this model?'
 
     # Set up plot
-    print 'Looping 4 figure parts'
-    for fg in range(len(figlabels)):
-        ax=plt.subplot(yplots,xplots,fg+1)
+    print 'Looping 15 figure parts'
+    for pt in range(nplot):
 
-        grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(xvals[:,fg], yvals[:,fg])
+        ax=plt.subplot(yplots,xplots,pt+1)
+
+        grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(change_xvals[pt], change_yvals[pt])
         rsquared = r_value ** 2
         if trendline:
             if rsquared > 0.4:
-                ax.plot(xvals[:,fg], (grad * xvals[:,fg] + inter), '-', color='k')
+                ax.plot(change_xvals[pt], (grad * change_xvals[pt] + inter), '-', color='k')
 
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
-
-
-        if (fg==0) or (fg==3):
-            xlab='Number of TTTs in NDJFM'
-        elif fg==1:
-            xlab='Proportion of TTTs over continent'
-        elif fg==2:
-            xlab='Mean precipitation on TTT Days'
-
-        if fg==3:
-            ylab='Proportion of TTTs over continent'
-        elif fg==0:
-            ylab='Precipitation bias in subtropics'
+        if pt <=11:
+            tname=mons[pt]
         else:
-            ylab='Precipitation bias over southern Africa'
-
-        plt.xlabel(xlab, fontsize=10, fontweight='demibold')
-        plt.ylabel(ylab, fontsize=10, fontweight='demibold')
+            tname=seas[pt+12]
+        plt.title(tname, loc='center', fontweight='demibold')
 
     plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.05, wspace=0.2, hspace=0.5)
 
     handles, labels = ax.get_legend_handles_labels()
-    if colscheme=='grouplast':
-        legloc='lower right'
-    elif colscheme=='groupall':
-        legloc='center right'
+    legloc='center right'
 
     g.legend(handles, labels, loc=legloc,fontsize='x-small',markerscale=0.5,numpoints=1)
-
-    # Plot labels a to d
-    for lab in range(len(figlabels)):
-        xloc=labpos[lab,0]
-        yloc=labpos[lab,1]
-        thislab=figlabels[lab]
-        plt.figtext(xloc,yloc,thislab,fontsize=14,fontweight='bold')
 
     figsuf=""
 
@@ -583,12 +708,11 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    txtfile.close()
-    print 'saving txtfile as ' + txtname
+    if charac=='intens' or charac=='tttpr':
+        figsuf=figsuf+'under_of'
 
-
-    scatterfig=figdir+'/scatter_4panel.'+colscheme+'.a_nTTT_rnbias.fulldom.b_perTTT_rnbias.contdom.'\
-               +'c_intensTTT_rnbias.'+under_of+'.d_allcriteria.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.'+seas+'.png'
+    scatterfig=figdir+'/scatter_15panel.a_TTT_'+charac+'_'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'.'\
+               +'b_'+globp+'+'+pr_dom+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
