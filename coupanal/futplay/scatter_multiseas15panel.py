@@ -360,7 +360,7 @@ for t in range(nthresh):
                     rainmons = rdtime_monmn[:, 1]
 
                     if weightlats:
-                        latr = np.deg2rad(rlat)
+                        latr = np.deg2rad(rlat_mn)
                         weights = np.cos(latr)
                         zonmean = np.nanmean(rain_monmn, axis=2)
 
