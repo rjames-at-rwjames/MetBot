@@ -41,8 +41,8 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-whplot='number' # 'number' , 'meanpr', 'intens'
-dom2='ocean'
+whplot='intens' # 'number' , 'meanpr', 'intens'
+dom2='cont'
 test_scr=False
 group=True
 figdim=[16, 6]
@@ -753,6 +753,8 @@ for t in range(nthresh):
             plt.ylim(-1.5,1.5)
         elif whplot=='intens':
             ylab = 'change in intensity of TTTs'
+            if raintype=='pertttrain':
+                plt.ylim(-100,100)
 
         plt.ylabel(ylab, fontsize=10, fontweight='demibold')
         plt.title(dnames[fg],fontsize=12, fontweight='demibold', loc='center')
