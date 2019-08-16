@@ -571,7 +571,7 @@ for t in range(nthresh):
                                 if cent==1:
                                     rain=rain*86400
                                     print 'Selecting years ' + fyear1 + ' to ' + fyear2
-                                    inds = np.where((rdtime[:, 0] >= int(fyear1)) & (dtime[:, 0] <= int(fyear2)))[0]
+                                    inds = np.where((rdtime[:, 0] >= int(fyear1)) & (rdtime[:, 0] <= int(fyear2)))[0]
                                     rdtime = rdtime[inds]
                                     rtime = rtime[inds]
                                     rain = rain[inds, :, :]
