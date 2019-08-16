@@ -692,7 +692,7 @@ for t in range(nthresh):
         if pt <=11:
             tname=mons[pt]
         else:
-            tname=seas[pt+12]
+            tname=seas[pt-12]
         plt.title(tname, loc='center', fontweight='demibold')
 
     plt.subplots_adjust(left=0.05, right=0.85, top=0.90, bottom=0.05, wspace=0.2, hspace=0.5)
