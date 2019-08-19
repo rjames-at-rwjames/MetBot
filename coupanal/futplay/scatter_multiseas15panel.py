@@ -39,7 +39,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=False   # will run on only 1 model
+test_scr=True   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -58,13 +58,15 @@ weightlats=True
 # Info for change 1 (x axis)
 charac='number' # options: 'number', 'relative', 'intens', 'tttpr'
 wlon=7.5
-elon=100.0
-ttt_dom='subt' # domain for averaging TTT precip
+elon=55.0
+#ttt_dom=='subt'
+ttt_dom='contsub_nh' # domain for averaging TTT precip
 under_of='day_of'
 
 # Info for change 2 (y axis)
 globp='pr'
-pr_dom='subt'
+#pr_dom='subt'
+pr_dom='contsub_nh'
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -684,7 +686,7 @@ for t in range(nthresh):
         plt.title(tname, loc='center', fontweight='demibold')
 
         if charac=='number':
-            if ttt_dom=='subt':
+            if ttt_dom=='subt' or ttt_dom='contsub_nh':
                 if pt<=11:
                     x1=-11
                     x2=3
