@@ -73,7 +73,7 @@ ttt_dom='subt'
 
 # ttt_dom='rufiji'
 # ttt_dom='malawi'
-under_of='day_of'
+under_of='dayof'
 
 # Info for change 2 (y axis)
 globp='pr'
