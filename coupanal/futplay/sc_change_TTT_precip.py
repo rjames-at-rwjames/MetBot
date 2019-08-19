@@ -42,7 +42,7 @@ import coupanal.group_dict as dset_grp
 
 # Running options
 whplot='intens' # 'number' , 'meanpr', 'intens'
-dom2='cont'
+dom2='mada'
 test_scr=False
 group=True
 figdim=[16, 6]
@@ -63,7 +63,7 @@ if whplot != 'number':
 
 if whplot == 'intens':
     under_of='dayof'
-    raintype='pertttrain' # options
+    raintype='rainperttt' # options
                             # 'totrain' - mean rain on each TTT day, added for whole time period
                             # 'rainperttt' - mean rain on each TTT day, averaged over all days
                             # 'perc75' - mean rain on each TTT day, 75th percentile of all days
@@ -98,7 +98,7 @@ if dom2=='cont':
 elif dom2=='mada':
     contdom_name='Madagascar'
     if whplot!='number':
-        dom_cont = 'MADA_PR'
+        dom_cont = 'madasub_nh'
     if whplot != 'meanpr':
         contdom_wlon=45.0
         contdom_elon=70.0
