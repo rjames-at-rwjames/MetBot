@@ -686,17 +686,32 @@ for t in range(nthresh):
         if charac=='number':
             if ttt_dom=='subt':
                 if pt<=11:
-                    plt.xlim(-11, 3)
+                    x1=-11
+                    x2=3
                 if pt==12:
-                    plt.xlim(-70,5)
+                    x1=-70
+                    x2=5
                 if pt==13:
-                    plt.xlim(-35,5)
+                    x1=-35
+                    x2=5
                 if pt==14:
-                    plt.xlim(-18,3)
+                    x1=-18
+                    x2=3
+
+            plt.xlim(x1,x2)
+
+            print 'Plot y=0 line'
+            ax.plot([x1,x2],[0,0],color='k',linestyle='--',zorder=20)
 
 
         if pr_dom=='subt':
-            plt.ylim(-0.6,0.5)
+            y1==0.6
+            y2=0.5
+            plt.ylim(y1,y2)
+
+            print 'Plot x=0 line'
+            ax.plot([0,0],[y1,y2],color='k',linestyle='--',zorder=20)
+
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
