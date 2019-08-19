@@ -684,9 +684,19 @@ for t in range(nthresh):
         plt.title(tname, loc='center', fontweight='demibold')
 
         if charac=='number':
-            plt.xlim(-14, 6)
+            if ttt_dom=='subt':
+                if pt<=11:
+                    plt.xlim(-11, 3)
+                if pt==12:
+                    plt.xlim(-70,5)
+                if pt==13:
+                    plt.xlim(-35,5)
+                if pt==14:
+                    plt.xlim(-18,3)
 
-        plt.ylim(-1.5,1.5)
+
+        if pr_dom=='subt':
+            plt.ylim(-0.6,0.5)
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
