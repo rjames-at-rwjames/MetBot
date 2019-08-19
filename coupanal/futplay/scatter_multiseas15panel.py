@@ -686,7 +686,7 @@ for t in range(nthresh):
         plt.title(tname, loc='center', fontweight='demibold')
 
         if charac=='number':
-            if ttt_dom=='subt' or ttt_dom='contsub_nh':
+            if ttt_dom=='subt' or ttt_dom=='contsub_nh':
                 if pt<=11:
                     x1=-11
                     x2=3
