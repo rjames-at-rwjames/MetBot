@@ -673,7 +673,7 @@ for t in range(nthresh):
         grad, inter, r_value, p_value, std_err = scipy.stats.mstats.linregress(xvals[:,pt], yvals[:,pt])
         rsquared = r_value ** 2
         if trendline:
-            if rsquared > 0.4:
+            if rsquared > 0.3:
                 ax.plot(xvals[:,pt], (grad * xvals[:,pt] + inter), '-', color='k')
 
         plt.title('$r^2$ '+str(round(rsquared,2)),fontsize=10, loc='right')
@@ -705,7 +705,7 @@ for t in range(nthresh):
 
 
         if pr_dom=='subt':
-            y1==0.6
+            y1=0.6
             y2=0.5
             plt.ylim(y1,y2)
 
