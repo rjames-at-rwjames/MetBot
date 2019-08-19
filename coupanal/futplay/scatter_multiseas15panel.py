@@ -57,18 +57,20 @@ weightlats=True
 
 # Info for change 1 (x axis)
 charac='number' # options: 'number', 'relative', 'intens', 'tttpr'
-wlon=45.0
-elon=70.0
+wlon=7.5
+elon=55.0
+# wlon=45.0
+# elon=70.0
 #ttt_dom=='subt'
-#ttt_dom='contsub_nh' # domain for averaging TTT precip
-ttt_dom='madasub_nh'
+ttt_dom='contsub_nh' # domain for averaging TTT precip
+#ttt_dom='madasub_nh'
 under_of='day_of'
 
 # Info for change 2 (y axis)
 globp='pr'
 #pr_dom='subt'
-#pr_dom='contsub_nh'
-pr_dom='madasub_nh'
+pr_dom='contsub_nh'
+#pr_dom='madasub_nh'
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -688,7 +690,7 @@ for t in range(nthresh):
         plt.title(tname, loc='center', fontweight='demibold')
 
         if charac=='number':
-            if ttt_dom=='subt' or ttt_dom=='contsub_nh' or ttt_dom=='madasub_nh':
+            if ttt_dom=='subt':
                 if pt<=11:
                     x1=-11
                     x2=3
@@ -701,6 +703,19 @@ for t in range(nthresh):
                 if pt==14:
                     x1=-18
                     x2=3
+            elif ttt_dom == 'contsub_nh' or ttt_dom == 'madasub_nh':
+                if pt<=11:
+                    x1=-8
+                    x2=5
+                if pt==12:
+                    x1=-50
+                    x2=5
+                if pt==13:
+                    x1=-25
+                    x2=5
+                if pt==14:
+                    x1=-18
+                    x2=5
 
             plt.xlim(x1,x2)
 
