@@ -39,7 +39,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=True   # will run on only 1 model
+test_scr=False   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -702,8 +702,8 @@ for t in range(nthresh):
 
             plt.xlim(x1,x2)
 
-            print 'Plot y=0 line'
-            ax.plot([x1,x2],[0,0],color='k',linestyle='--',zorder=20)
+            #Plot y=0 line
+            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=20)
 
 
         if pr_dom=='subt':
@@ -717,8 +717,8 @@ for t in range(nthresh):
 
         plt.ylim(y1,y2)
 
-        print 'Plot x=0 line'
-        ax.plot([0,0],[y1,y2],color='k',linestyle='--',zorder=20)
+        #Plot x=0 line
+        ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=20)
 
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
@@ -739,7 +739,7 @@ for t in range(nthresh):
         figsuf=figsuf+'under_of'
 
     scatterfig=figdir+'/scatter_15panel.a_TTT_'+charac+'_'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'.'\
-               +'b_'+globp+'+'+pr_dom+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+               +'b_'+globp+'_'+pr_dom+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
