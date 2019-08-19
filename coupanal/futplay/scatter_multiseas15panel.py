@@ -59,7 +59,7 @@ weightlats=True
 charac='tttpr' # options: 'number', 'relative', 'intens', 'tttpr'
 wlon = 7.5
 elon = 100.0
-ttt_dom=='subt'
+ttt_dom='subt'
 
 
 # wlon=7.5
