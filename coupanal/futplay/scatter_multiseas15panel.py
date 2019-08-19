@@ -56,21 +56,23 @@ weightlats=True
 
 
 # Info for change 1 (x axis)
-charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
-wlon=7.5
-elon=55.0
-# wlon=45.0
-# elon=70.0
+charac='number' # options: 'number', 'relative', 'intens', 'tttpr'
+#wlon=7.5
+#elon=55.0
+wlon=45.0
+elon=70.0
 #ttt_dom=='subt'
-ttt_dom='contsub_nh' # domain for averaging TTT precip
+#ttt_dom='contsub_nh' # domain for averaging TTT precip
 #ttt_dom='madasub_nh'
+ttt_dom='rufiji'
 under_of='day_of'
 
 # Info for change 2 (y axis)
 globp='pr'
 #pr_dom='subt'
-pr_dom='contsub_nh'
+#pr_dom='contsub_nh'
 #pr_dom='madasub_nh'
+pr_dom='rufiji'
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -447,7 +449,7 @@ for t in range(nthresh):
                                 rel_thismon = rel_calc * 100.0
                             else:
                                 rel_thismon = ma.masked
-                            
+
 
                             if this_c == 'hist':
                                 hist_xvals[mn] = rel_thismon
@@ -723,10 +725,25 @@ for t in range(nthresh):
                     x1=-18
                     x2=5
 
+            else:
+                if pt<=11:
+                    x1=-8
+                    x2=5
+                if pt==12:
+                    x1=-50
+                    x2=5
+                if pt==13:
+                    x1=-25
+                    x2=5
+                if pt==14:
+                    x1=-18
+                    x2=5
+
+
             plt.xlim(x1,x2)
 
             #Plot y=0 line
-            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=20)
+            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
 
         if pr_dom=='subt':
@@ -736,12 +753,14 @@ for t in range(nthresh):
         elif pr_dom=='contsub_nh' or pr_dom=='madasub_nh':
             y1=-1.2
             y2=1.2
-
+        else:
+            y1=-1.2
+            y2=1.2
 
         plt.ylim(y1,y2)
 
         #Plot x=0 line
-        ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=20)
+        ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
 
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
