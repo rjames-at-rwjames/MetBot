@@ -57,13 +57,13 @@ weightlats=True
 
 # Info for change 1 (x axis)
 charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
-#wlon=7.5
-#elon=55.0
-wlon=45.0
-elon=70.0
+wlon=7.5
+elon=55.0
+# wlon=45.0
+# elon=70.0
 #ttt_dom=='subt'
-#ttt_dom='contsub_nh' # domain for averaging TTT precip
-ttt_dom='madasub_nh'
+ttt_dom='contsub_nh' # domain for averaging TTT precip
+#ttt_dom='madasub_nh'
 #ttt_dom='rufiji'
 #ttt_dom='malawi'
 under_of='day_of'
@@ -71,8 +71,8 @@ under_of='day_of'
 # Info for change 2 (y axis)
 globp='pr'
 #pr_dom='subt'
-#pr_dom='contsub_nh'
-pr_dom='madasub_nh'
+pr_dom='contsub_nh'
+#pr_dom='madasub_nh'
 #pr_dom='rufiji'
 #pr_dom='malawi'
 
@@ -445,9 +445,9 @@ for t in range(nthresh):
                             totnum4mon = len(dates_dam)
                             print 'For this mont there are ' + str(totnum4mon) + ' TTT dates altogether'
 
-                            rel_calc = (num4mon / totnum4mon)
+                            if totnum4mon != 0:
 
-                            if rel_calc != 0:
+                                rel_calc = (num4mon / totnum4mon)
                                 rel_thismon = rel_calc * 100.0
                             else:
                                 rel_thismon = ma.masked
