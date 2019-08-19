@@ -39,7 +39,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=True   # will run on only 1 model
+test_scr=False   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -56,7 +56,7 @@ weightlats=True
 
 
 # Info for change 1 (x axis)
-charac='number' # options: 'number', 'relative', 'intens', 'tttpr'
+charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
 wlon=7.5
 elon=55.0
 # wlon=45.0
@@ -441,7 +441,13 @@ for t in range(nthresh):
                             totnum4mon = len(dates_dam)
                             print 'For this mont there are ' + str(totnum4mon) + ' TTT dates altogether'
 
-                            rel_thismon = (num4mon / totnum4mon) * 100.0
+                            rel_calc = (num4mon / totnum4mon)
+
+                            if rel_calc != 0:
+                                rel_thismon = rel_calc * 100.0
+                            else:
+                                rel_thismon = ma.masked
+                            
 
                             if this_c == 'hist':
                                 hist_xvals[mn] = rel_thismon
