@@ -39,7 +39,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=False   # will run on only 1 model
+test_scr=True   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -56,25 +56,32 @@ weightlats=True
 
 
 # Info for change 1 (x axis)
-charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
+charac='tttpr' # options: 'number', 'relative', 'intens', 'tttpr'
+wlon = 7.5
+elon = 100.0
+ttt_dom=='subt'
+
+
 # wlon=7.5
 # elon=55.0
-wlon=45.0
-elon=70.0
-#ttt_dom=='subt'
+# elon=45.0
 # ttt_dom='contsub_nh' # domain for averaging TTT precip
-ttt_dom='madasub_nh'
-#ttt_dom='rufiji'
-#ttt_dom='malawi'
+
+# wlon=45.0
+# elon=70.0
+# ttt_dom='madasub_nh'
+
+# ttt_dom='rufiji'
+# ttt_dom='malawi'
 under_of='day_of'
 
 # Info for change 2 (y axis)
 globp='pr'
-#pr_dom='subt'
+pr_dom='subt'
 # pr_dom='contsub_nh'
-pr_dom='madasub_nh'
-#pr_dom='rufiji'
-#pr_dom='malawi'
+# pr_dom='madasub_nh'
+# pr_dom='rufiji'
+# pr_dom='malawi'
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
