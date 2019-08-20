@@ -56,16 +56,16 @@ weightlats=True
 
 
 # Info for change 1 (x axis)
-charac='tttpr' # options: 'number', 'relative', 'intens', 'tttpr'
-wlon = 7.5
-elon = 100.0
-ttt_dom='subt'
+charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
+# wlon = 7.5
+# elon = 100.0
+# ttt_dom='subt'
 
 
-# wlon=7.5
-# elon=55.0
-# elon=45.0
-# ttt_dom='contsub_nh' # domain for averaging TTT precip
+wlon=7.5
+elon=55.0
+#elon=45.0
+ttt_dom='contsub_nh' # domain for averaging TTT precip
 
 # wlon=45.0
 # elon=70.0
@@ -77,8 +77,8 @@ under_of='dayof'
 
 # Info for change 2 (y axis)
 globp='pr'
-pr_dom='subt'
-# pr_dom='contsub_nh'
+#pr_dom='subt'
+pr_dom='contsub_nh'
 # pr_dom='madasub_nh'
 # pr_dom='rufiji'
 # pr_dom='malawi'
@@ -429,7 +429,7 @@ for t in range(nthresh):
                         dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
                             sset.sel_seas(months4ttt, dates_ln, cXs_ln, cYs_ln, degs_ln, chs_ln, keys_ln, daynos_ln, tworecdt_ln)
                         num4mon = len(dates_ddm)
-                        print 'For this mont there are ' + str(num4mon) + ' TTT dates'
+                        print 'For this month there are ' + str(num4mon) + ' TTT dates'
 
                         if charac=='number':
                             print 'Saving number of TTTs in this month per year'
@@ -454,7 +454,7 @@ for t in range(nthresh):
 
                             if totnum4mon != 0:
 
-                                rel_calc = (num4mon / totnum4mon)
+                                rel_calc = (float(num4mon) / float(totnum4mon))
                                 rel_thismon = rel_calc * 100.0
                             else:
                                 rel_thismon = ma.masked
