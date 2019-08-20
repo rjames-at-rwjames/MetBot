@@ -814,6 +814,12 @@ for t in range(nthresh):
                     x2=600
                     xtks=[-3000,-1500,0]
 
+        elif charac=='relative':
+
+            x1=-50
+            x2=50
+            xtks=[-50,-25,0,25,50]
+
         elif charac=='intens':
 
             if ttt_dom=='subt':
@@ -825,14 +831,11 @@ for t in range(nthresh):
                 x2=2.5
                 xtks=[-2.0,-1.0,0,1.0,2.0]
 
+        plt.xlim(x1,x2)
+        plt.xticks(xtks)
 
-        if charac !='relative':
-
-            plt.xlim(x1,x2)
-            plt.xticks(xtks)
-
-            #Plot y=0 line
-            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
+        #Plot y=0 line
+        ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
         if pr_dom=='subt':
             y1=-0.6
