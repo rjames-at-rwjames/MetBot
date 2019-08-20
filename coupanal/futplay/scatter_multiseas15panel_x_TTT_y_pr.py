@@ -57,31 +57,35 @@ weightlats=True
 
 # Info for change 1 (x axis)
 charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
-# wlon = 7.5
-# elon = 100.0
-# ttt_dom='subt'
 
-
-wlon=7.5
-elon=55.0
-#elon=45.0
-ttt_dom='contsub_nh' # domain for averaging TTT precip
-
-# wlon=45.0
-# elon=70.0
-# ttt_dom='madasub_nh'
-
-# ttt_dom='rufiji'
-# ttt_dom='malawi'
 under_of='dayof'
 
 # Info for change 2 (y axis)
 globp='pr'
-#pr_dom='subt'
-pr_dom='contsub_nh'
-# pr_dom='madasub_nh'
-# pr_dom='rufiji'
-# pr_dom='malawi'
+
+# Which domain?
+dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
+
+# dom info
+if dom=='SICZ':
+    wlon = 7.5
+    elon = 100.0
+    ttt_dom='subt'
+    pr_dom='subt'
+
+elif dom=='Cont':
+    wlon=7.5
+    elon=55.0
+    #elon=45.0
+    ttt_dom='contsub_nh' # domain for averaging TTT precip
+    pr_dom='contsub_nh'
+
+elif dom=='Mada':
+    wlon=45.0
+    elon=70.0
+    ttt_dom='madasub_nh'
+    pr_dom='madasub_nh'
+
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
