@@ -748,12 +748,71 @@ for t in range(nthresh):
                     x1=-18
                     x2=5
 
+            plt.xlim(x1,x2)
+
+            #Plot y=0 line
+            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
+
+        elif charac=='tttpr':
+            if ttt_dom=='subt':
+                if pt <=11:
+                    x1=-1000
+                    x2=600
+                elif pt==12:
+                    x1=-5000
+                    x2=1000
+                elif pt==13:
+                    x1=-3000
+                    x2=1000
+                elif pt==14:
+                    x1=-1400
+                    x2=400
+            elif ttt_dom=='contsub_nh' or ttt_dom=='madasub_nh':
+                if pt <=11:
+                    x1=-1400
+                    x2=1000
+                elif pt==12:
+                    x1=-6000
+                    x2=1000
+                elif pt==13:
+                    x1=-5000
+                    x2=1000
+                elif pt==14:
+                    x1=-3000
+                    x2=600
+
+            else:
+                if pt <=11:
+                    x1=-1400
+                    x2=1000
+                elif pt==12:
+                    x1=-6000
+                    x2=1000
+                elif pt==13:
+                    x1=-5000
+                    x2=1000
+                elif pt==14:
+                    x1=-3000
+                    x2=600
 
             plt.xlim(x1,x2)
 
             #Plot y=0 line
             ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
+        elif charac=='intens':
+
+            if ttt_dom=='subt':
+                x1=-1.0
+                x2=1.0
+            elif ttt_dom=='contsub_nh' or ttt_dom=='madasub_nh':
+                x1=-2.5
+                x2=2.5
+
+            plt.xlim(x1,x2)
+
+            #Plot y=0 line
+            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
         if pr_dom=='subt':
             y1=-0.6
