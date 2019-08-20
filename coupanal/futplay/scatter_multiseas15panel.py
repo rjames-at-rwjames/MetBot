@@ -711,105 +711,125 @@ for t in range(nthresh):
                 if pt<=11:
                     x1=-11
                     x2=3
+                    xtks=[-10,-5,0]
                 if pt==12:
                     x1=-70
                     x2=5
+                    xtks=[-50,-25,0]
                 if pt==13:
                     x1=-35
                     x2=5
+                    xtks=[-30,-20,-10,0]
                 if pt==14:
                     x1=-18
                     x2=3
+                    xtks=[-16,-12,-8,-4,0]
             elif ttt_dom == 'contsub_nh' or ttt_dom == 'madasub_nh':
                 if pt<=11:
                     x1=-8
                     x2=5
+                    xtks=[-8,-4,0,4]
                 if pt==12:
                     x1=-50
                     x2=5
+                    xtks=[-40,-20,0]
                 if pt==13:
                     x1=-25
                     x2=5
+                    xtks=[-20,-10,0]
                 if pt==14:
                     x1=-18
                     x2=5
+                    xtks=[-15,-10,-5,0,5]
 
             else:
                 if pt<=11:
                     x1=-8
                     x2=5
+                    xtks=[-8,-4,0,4]
                 if pt==12:
                     x1=-50
                     x2=5
+                    xtks=[-40,-20,0]
                 if pt==13:
                     x1=-25
                     x2=5
+                    xtks=[-20,-10,0]
                 if pt==14:
                     x1=-18
                     x2=5
-
-            plt.xlim(x1,x2)
-
-            #Plot y=0 line
-            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
+                    xtks=[-15,-10,-5,0,5]
 
         elif charac=='tttpr':
             if ttt_dom=='subt':
                 if pt <=11:
                     x1=-1000
                     x2=600
+                    xtks=[-1000,-500,0,500]
                 elif pt==12:
                     x1=-5000
                     x2=1000
+                    xtks=[-5000,-2500,0]
                 elif pt==13:
                     x1=-3000
                     x2=1000
+                    xtks=[-3000,-1500,0]
                 elif pt==14:
                     x1=-1400
                     x2=400
+                    xtks=[-1000,-500,0]
             elif ttt_dom=='contsub_nh' or ttt_dom=='madasub_nh':
                 if pt <=11:
                     x1=-1400
                     x2=1000
+                    xtks=[-1000,-500,0,500,1000]
                 elif pt==12:
                     x1=-6000
                     x2=1000
+                    xtks=[-5000,-2500,0]
                 elif pt==13:
                     x1=-5000
                     x2=1000
+                    xtks=[-5000,-2500,0]
                 elif pt==14:
                     x1=-3000
                     x2=600
+                    xtks=[-3000,-1500,0]
 
             else:
                 if pt <=11:
                     x1=-1400
                     x2=1000
+                    xtks=[-1000,-500,0,500,1000]
                 elif pt==12:
                     x1=-6000
                     x2=1000
+                    xtks=[-5000,-2500,0]
                 elif pt==13:
                     x1=-5000
                     x2=1000
+                    xtks=[-5000,-2500,0]
                 elif pt==14:
                     x1=-3000
                     x2=600
-
-            plt.xlim(x1,x2)
-
-            #Plot y=0 line
-            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
+                    xtks=[-3000,-1500,0]
 
         elif charac=='intens':
 
             if ttt_dom=='subt':
                 x1=-1.0
                 x2=1.0
+                xtks=[-1.0,-0.5,0,0.5,1]
             elif ttt_dom=='contsub_nh' or ttt_dom=='madasub_nh':
                 x1=-2.5
                 x2=2.5
+                xtks=[-2.0,-1.0,0,1.0,2.0]
+
+
+        if charac !='relative':
 
             plt.xlim(x1,x2)
+            plt.xticks(xtks)
 
             #Plot y=0 line
             ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
