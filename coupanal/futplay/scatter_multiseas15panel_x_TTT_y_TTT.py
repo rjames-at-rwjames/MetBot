@@ -300,7 +300,9 @@ for t in range(nthresh):
                 rys_hist = moddct['yrfname']
                 rys_fut = moddct['futprrun']
                 rys_hist_clim = rys_hist
-                rys_fut_clim = '2065_2099'
+                fyear1='2065'
+                fyear2='2099'
+                rys_fut_clim = fyear1+'_'+fyear2
 
                 rainfile_hist = botdir + dset + "/" + name + "." + globp + ".day.mean." + rys_hist + ".nc"
                 rainfile_fut = botdir + dset + "/" + name + "." + globp + ".day.mean.rcp85." + rys_fut + ".nc"
@@ -434,6 +436,11 @@ for t in range(nthresh):
                         # If future change unit
                         if cent == 1:
                             rain = rain * 86400
+                            print 'Selecting years ' + fyear1 + ' to ' + fyear2
+                            inds = np.where((rdtime[:, 0] >= int(fyear1)) & (rdtime[:, 0] <= int(fyear2)))[0]
+                            rdtime = rdtime[inds]
+                            rtime = rtime[inds]
+                            rain = rain[inds, :, :]
 
                     # Now loop mons and seasons to get the values you want!
 

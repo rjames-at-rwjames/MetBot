@@ -63,7 +63,7 @@ if whplot != 'number':
 
 if whplot == 'intens':
     under_of='dayof'
-    raintype='rainperttt' # options
+    raintype='pertttrain' # options
                             # 'totrain' - mean rain on each TTT day, added for whole time period
                             # 'rainperttt' - mean rain on each TTT day, averaged over all days
                             # 'perc75' - mean rain on each TTT day, 75th percentile of all days
