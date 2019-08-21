@@ -56,19 +56,20 @@ weightlats=True
 
 
 # Which characs do you need?
-number=False
+number=True
 relative=False
-tttpr=True
-intensity=True
+tttpr=False
+intensity=False
+pertttrain=True
 
 # Which domain?
 dom='SICZ' # Options 'SICZ', 'Cont', 'Mada'
 
 # Info for x axis
-x_charac='intens' # options: 'number', 'relative', 'intens', 'tttpr'
+x_charac='number' # options: 'number', 'relative', 'intens', 'tttpr', 'pertttrain'
 
 # Info for y axis
-y_charac='tttpr'
+y_charac='pertttrain'
 
 # dom info
 if dom=='SICZ':
@@ -290,6 +291,8 @@ for t in range(nthresh):
                     tttpr_collect=np.zeros((nplot,2), dtype=np.float32)
                 if intensity:
                     intens_collect=np.zeros((nplot,2), dtype=np.float32)
+                if pertttrain:
+                    perttt_collect=np.zeros((nplot,2), dtype=np.float32)
 
                 meanpr_collect=np.zeros((nplot,2), dtype=np.float32)
 
@@ -400,7 +403,7 @@ for t in range(nthresh):
                         zonmean = np.nanmean(rain_monmn, axis=2)
 
                     # Finally get rain file for intensity
-                    if intensity or tttpr:
+                    if intensity or tttpr or pertttrain:
 
                         rainfile = rainfiles[cent]
 
@@ -476,7 +479,7 @@ for t in range(nthresh):
 
                             rel_collect[mn,cent] = rel_thismon
 
-                        if tttpr or intensity:
+                        if tttpr or intensity or pertttrain:
                             print 'Getting TTT rain for this month'
 
                             raindat = np.where(rdtime[:, 1] == thismon)
@@ -585,6 +588,10 @@ for t in range(nthresh):
 
                                 tttpr_collect[mn,cent] = tottttrain
 
+                            if pertttrain:
+
+                                perttt_collect[mn,cent] = (tottot_tttrain / tottot_allrain) * 100.0
+
 
                         # For mean rainfall
                         print 'Calculating mean rainfall for this cent'
@@ -621,6 +628,8 @@ for t in range(nthresh):
                             tttcol_4mon = np.zeros(nm4s,dtype=np.float32)
                         if intensity:
                             intcol_4mon = np.zeros(nm4s,dtype=np.float32)
+                        if pertttrain:
+                            percol_4mon = np.zeros(nm4s,dtype=np.float32)
                         mnprcol_4mon = np.zeros(nm4s,dtype=np.float32)
 
                         # add options for each charac
@@ -641,6 +650,8 @@ for t in range(nthresh):
                                 tttcol_4mon[ms] = tttpr_collect[ind,cent]
                             if intensity:
                                 intcol_4mon[ms] = intens_collect[ind,cent]
+                            if pertttrain:
+                                percol_4mon[ms] = perttt_collect[ind,cent]
 
                             mnprcol_4mon[ms] = meanpr_collect[ind,cent]
 
@@ -657,6 +668,9 @@ for t in range(nthresh):
                         if intensity:
                             intval4seas = np.mean(intcol_4mon)
                             intens_collect[loc4arr,cent] = intval4seas
+                        if pertttrain:
+                            perval4seas = np.mean(percol_4mon)
+                            perttt_collect[loc4arr,cent] = perval4seas
 
                         print 'Calculate mean precip for this month'
                         meanprval=np.mean(mnprcol_4mon)
@@ -687,6 +701,10 @@ for t in range(nthresh):
                     elif y_charac=='relative':
                         y_hist=rel_collect[pt,0]
                         y_fut=rel_collect[pt,1]
+                    elif y_charac=='pertttrain':
+                        y_hist=perttt_collect[pt,0]
+                        y_fut=perttt_collect[pt,1]
+
 
                     change_yvals[pt]=y_fut-y_hist
 
@@ -867,6 +885,11 @@ for t in range(nthresh):
             y2=50
             ytks=[-50,-25,0,25,50]
 
+        elif y_charac=='pertttrain':
+            y1=-40
+            y2=20
+            ytks=[-40,-20,0,20]
+
         plt.ylim(y1,y2)
         plt.yticks(ytks)
 
@@ -888,7 +911,7 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    if intensity or tttpr:
+    if intensity or tttpr or pertttrain:
         figsuf=figsuf+under_of
 
     scatterfig=figdir+'/scatter_15panel.a_'+x_charac+'.b_'+y_charac+'.'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'_'\
