@@ -9,9 +9,9 @@
 #   m       j       j
 #   ann     ndjfm   djf
 
-# at the moment this is designed to work where
+# This script is designed to work where
 # change 1 is a TTT related change
-# change 2 is a mean precip related change
+# change 2 is a TTT related change
 
 import os
 import sys
@@ -55,33 +55,44 @@ peryear = True # counts cbs per year
 weightlats=True
 
 
-# Info for change 1 (x axis)
-charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
-# wlon = 7.5
-# elon = 100.0
-# ttt_dom='subt'
+# Which characs do you need?
+number=False
+relative=False
+tttpr=True
+intensity=True
 
+# Which domain?
+dom='SICZ' # Options 'SICZ', 'Cont', 'Mada'
 
-wlon=7.5
-elon=55.0
-#elon=45.0
-ttt_dom='contsub_nh' # domain for averaging TTT precip
+# Info for x axis
+x_charac='intens' # options: 'number', 'relative', 'intens', 'tttpr'
 
-# wlon=45.0
-# elon=70.0
-# ttt_dom='madasub_nh'
+# Info for y axis
+y_charac='tttpr'
 
-# ttt_dom='rufiji'
-# ttt_dom='malawi'
+# dom info
+if dom=='SICZ':
+    wlon = 7.5
+    elon = 100.0
+    ttt_dom='subt'
+    pr_dom='subt'
+
+elif dom=='Cont':
+    wlon=7.5
+    elon=55.0
+    #elon=45.0
+    ttt_dom='contsub_nh' # domain for averaging TTT precip
+    pr_dom='contsub_nh'
+
+elif dom=='Mada':
+    wlon=45.0
+    elon=70.0
+    ttt_dom='madasub_nh'
+    pr_dom='madasub_nh'
+
+# precip info
 under_of='dayof'
-
-# Info for change 2 (y axis)
 globp='pr'
-#pr_dom='subt'
-pr_dom='contsub_nh'
-# pr_dom='madasub_nh'
-# pr_dom='rufiji'
-# pr_dom='malawi'
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -94,7 +105,7 @@ seas=['Annual','NDJFM','DJF']
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-figdir=botdir+"futpaper_play/scatter_multiseas15panel_TTT"+charac+"_"+globp+"/"
+figdir=botdir+"futpaper_play/scatter_multiseas15panel_TTT"+x_charac+"_"+y_charac+"/"
 my.mkdir_p(figdir)
 
 futthreshtxt = botdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
@@ -271,11 +282,17 @@ for t in range(nthresh):
                 print 'Preparing to loop historical and future for this model'
                 cents = ['hist', 'fut']
                 ths = [thth_h, thth_f]
-                hist_xvals = np.zeros(nplot, dtype=np.float32)
-                fut_xvals = np.zeros(nplot, dtype=np.float32)
+                if number:
+                    num_collect=np.zeros((nplot,2), dtype=np.float32)
+                if relative:
+                    rel_collect=np.zeros((nplot,2), dtype=np.float32)
+                if tttpr:
+                    tttpr_collect=np.zeros((nplot,2), dtype=np.float32)
+                if intensity:
+                    intens_collect=np.zeros((nplot,2), dtype=np.float32)
 
-                hist_yvals = np.zeros(nplot, dtype=np.float32)
-                fut_yvals = np.zeros(nplot, dtype=np.float32)
+                meanpr_collect=np.zeros((nplot,2), dtype=np.float32)
+
 
                 rys_hist = moddct['yrfname']
                 rys_fut = moddct['futprrun']
@@ -383,7 +400,7 @@ for t in range(nthresh):
                         zonmean = np.nanmean(rain_monmn, axis=2)
 
                     # Finally get rain file for intensity
-                    if charac=='intens' or charac=='tttpr':
+                    if intensity or tttpr:
 
                         rainfile = rainfiles[cent]
 
@@ -431,16 +448,13 @@ for t in range(nthresh):
                         num4mon = len(dates_ddm)
                         print 'For this month there are ' + str(num4mon) + ' TTT dates'
 
-                        if charac=='number':
+                        if number:
                             print 'Saving number of TTTs in this month per year'
                             count_peryear=num4mon/nys
 
-                            if this_c == 'hist':
-                                hist_xvals[mn] = count_peryear
-                            elif this_c == 'fut':
-                                fut_xvals[mn] = count_peryear
+                            num_collect[mn,cent] = count_peryear
 
-                        elif charac=='relative':
+                        if relative:
                             print 'Calculating relative number of TTTs in this domain for this month'
 
                             print 'First counting number of all TTTs in this month'
@@ -460,12 +474,9 @@ for t in range(nthresh):
                                 rel_thismon = ma.masked
 
 
-                            if this_c == 'hist':
-                                hist_xvals[mn] = rel_thismon
-                            elif this_c == 'fut':
-                                fut_xvals[mn] = rel_thismon
+                            rel_collect[mn,cent] = rel_thismon
 
-                        else:
+                        if tttpr or intensity:
                             print 'Getting TTT rain for this month'
 
                             raindat = np.where(rdtime[:, 1] == thismon)
@@ -566,19 +577,13 @@ for t in range(nthresh):
                                 rainperttt = ma.masked
                                 per75rain = ma.masked
 
-                            if charac=='intens':
+                            if intensity:
 
-                                if this_c == 'hist':
-                                    hist_xvals[mn] = rainperttt
-                                elif this_c == 'fut':
-                                    fut_xvals[mn] = rainperttt
+                                intens_collect[mn,cent] = rainperttt
 
-                            elif charac=='tttpr':
+                            if tttpr:
 
-                                if this_c == 'hist':
-                                    hist_xvals[mn] = tottttrain
-                                elif this_c == 'fut':
-                                    fut_xvals[mn] = tottttrain
+                                tttpr_collect[mn,cent] = tottttrain
 
 
                         # For mean rainfall
@@ -588,10 +593,7 @@ for t in range(nthresh):
                         zmean_thismon = zonmean[locmon, :]
                         rain4mon = np.ma.average(zmean_thismon, weights=weights)
 
-                        if this_c == 'hist':
-                            hist_yvals[mn] = rain4mon
-                        elif this_c == 'fut':
-                            fut_yvals[mn] = rain4mon
+                        meanpr_collect[mn,cent] = rain4mon
 
                     print 'Now looping seasons to get the aggregate values from those calculated by month'
                     for s in range(len(seas)):
@@ -611,8 +613,17 @@ for t in range(nthresh):
                         nm4s=len(mon4seas)
 
                         # Get the values for these months from previous calculations
-                        col4ag_x=np.zeros(nm4s,dtype=np.float32)
-                        col4ag_y=np.zeros(nm4s,dtype=np.float32)
+                        if number:
+                            numcol_4mon = np.zeros(nm4s,dtype=np.float32)
+                        if relative:
+                            relcol_4mon = np.zeros(nm4s,dtype=np.float32)
+                        if tttpr:
+                            tttcol_4mon = np.zeros(nm4s,dtype=np.float32)
+                        if intensity:
+                            intcol_4mon = np.zeros(nm4s,dtype=np.float32)
+                        mnprcol_4mon = np.zeros(nm4s,dtype=np.float32)
+
+                        # add options for each charac
                         for ms in range(nm4s):
 
                             print 'Check that you have the right index for this month'
@@ -622,33 +633,37 @@ for t in range(nthresh):
                             print mon4seas[ms]
                             print 'the above two should match'
 
-                            if this_c == 'hist':
-                                col4ag_x[ms]=hist_xvals[ind]
-                                col4ag_y[ms]=hist_yvals[ind]
-                            if this_c == 'fut':
-                                col4ag_x[ms]=fut_xvals[ind]
-                                col4ag_y[ms]=fut_yvals[ind]
+                            if number:
+                                numcol_4mon[ms] = num_collect[ind,cent]
+                            if relative:
+                                relcol_4mon[ms] = rel_collect[ind,cent]
+                            if tttpr:
+                                tttcol_4mon[ms] = tttpr_collect[ind,cent]
+                            if intensity:
+                                intcol_4mon[ms] = intens_collect[ind,cent]
 
-                        if charac=='number' or charac=='tttpr':
-                            print 'Summing values over months'
-                            xvals4seas=np.sum(col4ag_x)
+                            mnprcol_4mon[ms] = meanpr_collect[ind,cent]
 
-                        elif charac=='intens' or charac=='relative':
-                            print 'Averaging values over months'
-                            xvals4seas=np.mean(col4ag_x)
+
+                        if number:
+                            numval4seas = np.sum(numcol_4mon)
+                            num_collect[loc4arr,cent] = numval4seas
+                        if relative:
+                            relval4seas = np.mean(relcol_4mon)
+                            rel_collect[loc4arr,cent] = relval4seas
+                        if tttpr:
+                            tttval4seas = np.sum(tttcol_4mon)
+                            tttpr_collect[loc4arr,cent] = tttval4seas
+                        if intensity:
+                            intval4seas = np.mean(intcol_4mon)
+                            intens_collect[loc4arr,cent] = intval4seas
 
                         print 'Calculate mean precip for this month'
-                        meanprval=np.mean(col4ag_y)
-
-                        if this_c == 'hist':
-                            hist_xvals[loc4arr] = xvals4seas
-                            hist_yvals[loc4arr] = meanprval
-                        elif this_c == 'fut':
-                            fut_xvals[loc4arr] = xvals4seas
-                            fut_yvals[loc4arr] = meanprval
+                        meanprval=np.mean(mnprcol_4mon)
+                        meanpr_collect[loc4arr,cent] = meanprval
 
 
-                # Now looping by 4 to get plots
+
                 print 'Now we have calculated everything for 2 timeperiods and 15 seasons, calc change'
 
                 change_xvals=np.zeros(nplot,dtype=np.float32)
@@ -656,8 +671,24 @@ for t in range(nthresh):
 
                 for pt in range(nplot):
 
-                    change_xvals[pt]=fut_xvals[pt]-hist_xvals[pt]
-                    change_yvals[pt]=fut_yvals[pt]-hist_yvals[pt]
+                    if x_charac=='number':
+                        x_hist=num_collect[pt,0]
+                        x_fut=num_collect[pt,1]
+                    elif x_charac=='intens':
+                        x_hist=intens_collect[pt,0]
+                        x_fut=intens_collect[pt,1]
+
+                    change_xvals[pt]=x_fut-x_hist
+
+
+                    if y_charac=='tttpr':
+                        y_hist=tttpr_collect[pt,0]
+                        y_fut=tttpr_collect[pt,1]
+                    elif y_charac=='relative':
+                        y_hist=rel_collect[pt,0]
+                        y_fut=rel_collect[pt,1]
+
+                    change_yvals[pt]=y_fut-y_hist
 
                 # Save data for calculating rsquared
                 xvals[cnt,:] = change_xvals
@@ -706,7 +737,7 @@ for t in range(nthresh):
             tname=seas[pt-12]
         plt.title(tname, loc='center', fontweight='demibold')
 
-        if charac=='number':
+        if x_charac=='number':
             if ttt_dom=='subt':
                 if pt<=11:
                     x1=-11
@@ -741,7 +772,6 @@ for t in range(nthresh):
                     x1=-18
                     x2=5
                     xtks=[-15,-10,-5,0,5]
-
             else:
                 if pt<=11:
                     x1=-8
@@ -760,61 +790,8 @@ for t in range(nthresh):
                     x2=5
                     xtks=[-15,-10,-5,0,5]
 
-        elif charac=='tttpr':
-            if ttt_dom=='subt':
-                if pt <=11:
-                    x1=-1000
-                    x2=600
-                    xtks=[-1000,-500,0,500]
-                elif pt==12:
-                    x1=-5000
-                    x2=1000
-                    xtks=[-5000,-2500,0]
-                elif pt==13:
-                    x1=-3000
-                    x2=1000
-                    xtks=[-3000,-1500,0]
-                elif pt==14:
-                    x1=-1400
-                    x2=400
-                    xtks=[-1000,-500,0]
-            elif ttt_dom=='contsub_nh' or ttt_dom=='madasub_nh':
-                if pt <=11:
-                    x1=-1400
-                    x2=1000
-                    xtks=[-1000,-500,0,500,1000]
-                elif pt==12:
-                    x1=-6000
-                    x2=1000
-                    xtks=[-5000,-2500,0]
-                elif pt==13:
-                    x1=-5000
-                    x2=1000
-                    xtks=[-5000,-2500,0]
-                elif pt==14:
-                    x1=-3000
-                    x2=600
-                    xtks=[-3000,-1500,0]
 
-            else:
-                if pt <=11:
-                    x1=-1400
-                    x2=1000
-                    xtks=[-1000,-500,0,500,1000]
-                elif pt==12:
-                    x1=-6000
-                    x2=1000
-                    xtks=[-5000,-2500,0]
-                elif pt==13:
-                    x1=-5000
-                    x2=1000
-                    xtks=[-5000,-2500,0]
-                elif pt==14:
-                    x1=-3000
-                    x2=600
-                    xtks=[-3000,-1500,0]
-
-        elif charac=='intens':
+        elif x_charac=='intens':
 
             if ttt_dom=='subt':
                 x1=-1.0
@@ -826,26 +803,72 @@ for t in range(nthresh):
                 xtks=[-2.0,-1.0,0,1.0,2.0]
 
 
-        if charac !='relative':
+        plt.xlim(x1,x2)
+        plt.xticks(xtks)
 
-            plt.xlim(x1,x2)
-            plt.xticks(xtks)
+        #Plot y=0 line
+        ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
-            #Plot y=0 line
-            ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
+        if y_charac=='tttpr':
+            if ttt_dom=='subt':
+                if pt <=11:
+                    y1=-1000
+                    y2=600
+                    ytks=[-1000,-500,0,500]
+                elif pt==12:
+                    y1=-5000
+                    y2=1000
+                    ytks=[-5000,-2500,0]
+                elif pt==13:
+                    y1=-3000
+                    y2=1000
+                    ytks=[-3000,-1500,0]
+                elif pt==14:
+                    y1=-1400
+                    y2=400
+                    ytks=[-1000,-500,0]
+            elif ttt_dom=='contsub_nh' or ttt_dom=='madasub_nh':
+                if pt <=11:
+                    y1=-1400
+                    y2=1000
+                    ytks=[-1000,-500,0,500,1000]
+                elif pt==12:
+                    y1=-6000
+                    y2=1000
+                    ytks=[-5000,-2500,0]
+                elif pt==13:
+                    y1=-5000
+                    y2=1000
+                    ytks=[-5000,-2500,0]
+                elif pt==14:
+                    y1=-3000
+                    y2=600
+                    ytks=[-3000,-1500,0]
+            else:
+                if pt <=11:
+                    y1=-1400
+                    y2=1000
+                    ytks=[-1000,-500,0,500,1000]
+                elif pt==12:
+                    y1=-6000
+                    y2=1000
+                    ytks=[-5000,-2500,0]
+                elif pt==13:
+                    y1=-5000
+                    y2=1000
+                    ytks=[-5000,-2500,0]
+                elif pt==14:
+                    y1=-3000
+                    y2=600
+                    ytks=[-3000,-1500,0]
 
-        if pr_dom=='subt':
-            y1=-0.6
-            y2=0.5
-
-        elif pr_dom=='contsub_nh' or pr_dom=='madasub_nh':
-            y1=-1.2
-            y2=1.2
-        else:
-            y1=-1.2
-            y2=1.2
+        elif y_charac=='relative':
+            y1=-50
+            y2=50
+            ytks=[-50,-25,0,25,50]
 
         plt.ylim(y1,y2)
+        plt.yticks(ytks)
 
         #Plot x=0 line
         ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
@@ -865,11 +888,11 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    if charac=='intens' or charac=='tttpr':
+    if intensity or tttpr:
         figsuf=figsuf+under_of
 
-    scatterfig=figdir+'/scatter_15panel.a_TTT_'+charac+'_'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'.'\
-               +'b_'+globp+'_'+pr_dom+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+    scatterfig=figdir+'/scatter_15panel.a_'+x_charac+'.b_'+y_charac+'.'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'_'\
+               +globp+'_'+pr_dom+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
