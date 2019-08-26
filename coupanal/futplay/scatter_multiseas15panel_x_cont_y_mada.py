@@ -371,6 +371,8 @@ for t in range(nthresh):
                                 sset.sel_cen_lon(wlon, elon, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, \
                                                  keys_dd, daynos_dd, tworecdt_dd)
 
+                        if charac=='meanpr':
+
                             print 'Opening ' + rainmeanfile
                             print 'for domain ' + pr_dom
                             rainmean = mync.open_multi(rainmeanfile, globp, name, \
