@@ -64,7 +64,7 @@ under_of='dayof'
 globp='pr'
 
 # Which domain?
-dom='Mada' # Options 'SICZ', 'Cont', 'Mada'
+dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
 
 # dom info
 if dom=='SICZ':
@@ -78,7 +78,9 @@ elif dom=='Cont':
     elon=55.0
     #elon=45.0
     ttt_dom='contsub_nh' # domain for averaging TTT precip
-    pr_dom='contsub_nh'
+    #pr_dom='contsub_nh'
+    pr_dom='madasub_nh'
+
 
 elif dom=='Mada':
     wlon=45.0
