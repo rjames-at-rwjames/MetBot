@@ -41,9 +41,11 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-whplot='intens' # 'number' , 'meanpr', 'intens'
-dom2='mada'
-test_scr=False
+whplot='propdttt' # 'number' , 'meanpr', 'intens', 'propdttt'
+                    # 'propdttt' - proportion of future change from TTT change (precip)
+                    # I have not finished setting this option up yet
+dom2='cont'
+test_scr=True
 group=True
 figdim=[16, 6]
 xplots=2
@@ -68,6 +70,10 @@ if whplot == 'intens':
                             # 'rainperttt' - mean rain on each TTT day, averaged over all days
                             # 'perc75' - mean rain on each TTT day, 75th percentile of all days
                             # 'pertttrain' - percentage of rain from TTT days
+
+if whplot=='propdttt':
+    under_of='dayof'
+
 if whplot=='number':
     relative=True           # An option to calculate change in proportion of TTTs in dom2
                             # Will plot number of TTTs in dom1, in part a
