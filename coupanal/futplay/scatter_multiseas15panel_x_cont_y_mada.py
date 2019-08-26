@@ -54,7 +54,7 @@ peryear = True # counts cbs per year
 weightlats=True
 
 # What type of plot?
-charac='meanpr' # options: 'meanpr','number', 'relative', 'intens', 'tttpr'
+charac='number' # options: 'meanpr','number', 'relative', 'intens', 'tttpr'
 
 under_of='dayof'
 
@@ -65,6 +65,7 @@ globp='pr'
 doms=['Cont','Mada'] # Options 'SICZ', 'Cont', 'Mada'
 ndoms=len(doms)
 domspec='prdoms' # 'tttdoms' or 'prdoms'
+whichcut=45.0 # 45 or 55
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -352,7 +353,7 @@ for t in range(nthresh):
 
                         elif thisdom == 'Cont':
                             wlon = 7.5
-                            elon = 55.0
+                            elon = whichcut
                             # elon=45.0
                             if domspec=='tttdoms':
                                 ttt_dom = 'contsub_nh'  # domain for averaging TTT precip
@@ -808,7 +809,8 @@ for t in range(nthresh):
         figsuf=figsuf+under_of
 
     scatterfig=figdir+'/scatter_15panel_'+charac+'.a_'+doms[0]+'.'\
-               +'b_'+doms[1]+'.'+domspec+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+               +'b_'+doms[1]+'.'+domspec+'.cutlon_'+whichcut+'.'/
+                +frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
