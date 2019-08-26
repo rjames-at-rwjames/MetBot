@@ -809,7 +809,7 @@ for t in range(nthresh):
         figsuf=figsuf+under_of
 
     scatterfig=figdir+'/scatter_15panel_'+charac+'.a_'+doms[0]+'.'\
-               +'b_'+doms[1]+'.'+domspec+'.cutlon_'+whichcut+'.'\
+               +'b_'+doms[1]+'.'+domspec+'.cutlon_'+str(whichcut)+'.'\
                 +'frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
