@@ -64,6 +64,7 @@ globp='pr'
 # Which domain?
 doms=['Cont','Mada'] # Options 'SICZ', 'Cont', 'Mada'
 ndoms=len(doms)
+domspec='prdoms' # 'tttdoms' or 'prdoms'
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -353,14 +354,22 @@ for t in range(nthresh):
                             wlon = 7.5
                             elon = 55.0
                             # elon=45.0
-                            ttt_dom = 'contsub_nh'  # domain for averaging TTT precip
-                            pr_dom = 'contsub_nh'
+                            if domspec=='tttdoms':
+                                ttt_dom = 'contsub_nh'  # domain for averaging TTT precip
+                                pr_dom = 'contsub_nh'
+                            elif domspec=='prdoms':
+                                ttt_dom='CONT_PR'
+                                pr_dom='CONT_PR'
 
                         elif thisdom == 'Mada':
                             wlon = 45.0
                             elon = 70.0
-                            ttt_dom = 'madasub_nh'
-                            pr_dom = 'madasub_nh'
+                            if domspec=='tttdoms':
+                                ttt_dom = 'madasub_nh'
+                                pr_dom = 'madasub_nh'
+                            elif domspec=='prdoms':
+                                ttt_dom='MADA_PR'
+                                pr_dom='MADA_PR'
 
                         if charac!='meanpr':
 
@@ -799,7 +808,7 @@ for t in range(nthresh):
         figsuf=figsuf+under_of
 
     scatterfig=figdir+'/scatter_15panel_'+charac+'.a_'+doms[0]+'.'\
-               +'b_'+doms[1]+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+               +'b_'+doms[1]+'.'+domspec+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
