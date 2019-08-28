@@ -41,11 +41,11 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-whplot='propdttt' # 'number' , 'meanpr', 'intens', 'propdttt'
+whplot='number' # 'number' , 'meanpr', 'intens', 'propdttt'
                     # 'propdttt' - proportion of future change from TTT change (precip)
                     # I have not finished setting this option up yet
-dom2='cont'
-test_scr=True
+dom2='alloc'
+test_scr=False
 group=True
 figdim=[16, 6]
 xplots=2
@@ -129,6 +129,14 @@ elif dom2=='ocean':
     if whplot != 'meanpr':
         contdom_wlon=70.0
         contdom_elon=100.0
+elif dom2=='alloc':
+    contdom_name='Ocean_e45'
+    if whplot!='number':
+        dom_cont = 'subt'
+    if whplot != 'meanpr':
+        contdom_wlon=45.0
+        contdom_elon=100.0
+
 
 
 # Info for each plot
@@ -760,6 +768,7 @@ for t in range(nthresh):
                     plt.ylim(-14, 6)
                 else:
                     ylab = 'change in % of TTTs in this domain'
+                    plt.ylim(-25,25)
 
         elif whplot=='meanpr':
             ylab = 'change in mean precip'
