@@ -56,7 +56,7 @@ weightlats=True
 
 
 # Info for change 1 (x axis)
-charac='number' # options: 'number', 'relative', 'intens', 'tttpr'
+charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
 
 under_of='dayof'
 
@@ -64,7 +64,8 @@ under_of='dayof'
 globp='pr'
 
 # Which domain?
-dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
+dom='Mada' # Options 'SICZ', 'Cont', 'Mada'
+whichend=100.0
 
 # dom info
 if dom=='SICZ':
@@ -84,7 +85,7 @@ elif dom=='Cont':
 
 elif dom=='Mada':
     wlon=45.0
-    elon=70.0
+    elon=whichend
     ttt_dom='madasub_nh'
     pr_dom='madasub_nh'
     #pr_dom='contsub_nh'
