@@ -768,7 +768,7 @@ for t in range(nthresh):
                     plt.ylim(-14, 6)
                 else:
                     ylab = 'change in % of TTTs in this domain'
-                    plt.ylim(-25,25)
+                    plt.ylim(-40,40)
 
         elif whplot=='meanpr':
             ylab = 'change in mean precip'
