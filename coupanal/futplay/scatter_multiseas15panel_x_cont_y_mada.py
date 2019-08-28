@@ -54,7 +54,7 @@ peryear = True # counts cbs per year
 weightlats=True
 
 # What type of plot?
-charac='number' # options: 'meanpr','number', 'relative', 'intens', 'tttpr'
+charac='relative' # options: 'meanpr','number', 'relative', 'intens', 'tttpr'
 
 under_of='dayof'
 
@@ -66,6 +66,7 @@ doms=['Cont','Mada'] # Options 'SICZ', 'Cont', 'Mada'
 ndoms=len(doms)
 domspec='prdoms' # 'tttdoms' or 'prdoms'
 whichcut=45.0 # 45 or 55
+whichend=100.0 # for mada - 70 or 100
 
 # time info
 monthstr = ['Aug', 'Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -364,7 +365,7 @@ for t in range(nthresh):
 
                         elif thisdom == 'Mada':
                             wlon = 45.0
-                            elon = 70.0
+                            elon = whichend
                             if domspec=='tttdoms':
                                 ttt_dom = 'madasub_nh'
                                 pr_dom = 'madasub_nh'
@@ -810,7 +811,7 @@ for t in range(nthresh):
 
     scatterfig=figdir+'/scatter_15panel_'+charac+'.a_'+doms[0]+'.'\
                +'b_'+doms[1]+'.'+domspec+'.cutlon_'+str(whichcut)+'.'\
-                +'frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+                +'endlon_'+str(whichend)+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
