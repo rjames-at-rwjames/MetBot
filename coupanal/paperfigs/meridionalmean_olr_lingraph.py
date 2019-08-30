@@ -271,6 +271,8 @@ legloc = 'center right'
 
 g.legend(handles, labels, loc=legloc, fontsize='xx-small')
 
+figsuf = ''
+
 if group:
     figsuf='grouped'
 
