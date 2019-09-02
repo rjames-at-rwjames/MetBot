@@ -5,7 +5,6 @@
 #
 
 import numpy as np
-from datetime import date
 
 # Option to run disconnected from x11 forwarding session
 runoffline=True
@@ -28,8 +27,8 @@ import coupanal.group_dict as dset_grp
 ### Running options
 test_scr=False # if True will just run on first panel for each dataset
 threshtest=False         # to put olr thresholds in text file - needed for paperfigs
-alphord=True
-group=True
+alphord=False # note this only works if group is False
+group=True    # note this only works if alphord is False
 future=False     # get future thresholds
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
