@@ -25,14 +25,14 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 ### Running options
-test_scr=True # if True will just run on first panel for each dataset
+test_scr=False # if True will just run on first panel for each dataset
 threshtest=False         # to put olr thresholds in text file - needed for paperfigs
 alphord=False # note this only works if group is False
 group=True    # note this only works if alphord is False
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 
-timeper='hist'  # either "hist" "fut" "both" or "change"
+timeper='change'  # either "hist" "fut" "both" or "change"
                 # "hist and "fut" plot with a colour per model
                 # "both plots historical in grey and future in red
                 # "change" plots a colour per model but change
