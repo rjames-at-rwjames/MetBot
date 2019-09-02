@@ -25,13 +25,17 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 ### Running options
-test_scr=False # if True will just run on first panel for each dataset
+test_scr=True # if True will just run on first panel for each dataset
 threshtest=False         # to put olr thresholds in text file - needed for paperfigs
 alphord=False # note this only works if group is False
 group=True    # note this only works if alphord is False
-future=True     # get future thresholds
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
+
+timeper='both'  # either "hist" "fut" "both" or "change"
+                # "hist and "fut" plot with a colour per model
+                # "both plots historical in grey and future in red
+                # "change" plots a colour per model but change
 
 nbins=15 # number of bins for histogram
 
@@ -46,13 +50,11 @@ elif tstep == 'seas':
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
-if future:
-    threshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
-else:
-    threshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
+futthreshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
+histthreshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 figdsu='histogram_bylongitude'
-figdir = bkdir + "/futpaper_play/"+figdsu+"/"
+figdir = bkdir + "/futpaper_play/"+figdsu+"_"+timeper+"/"
 my.mkdir_p(figdir)
 
 ### Dsets
@@ -61,10 +63,10 @@ mods = 'spec'
 if dsets == 'all':
     dsetnames = list(dsetdict.dset_deets)
 elif dsets == 'spec':
-    if future:
-        dsetnames = ['cmip5']
-    else:
+    if timeper=='hist' or timeper=='both':
         dsetnames = ['noaa', 'cmip5']
+    else:
+        dsetnames = ['cmip5']
 ndset = len(dsetnames)
 ndstr = str(ndset)
 
@@ -104,10 +106,7 @@ elif group:
     grmrs=["o","^","*","d","+","v","h","o"]
     gstyls=["-","dotted","dashed","-.","-","dotted","dashed","-."]
 lws = np.full((nallmod), 2)
-lws[0]=5
 zorders = np.full((nallmod), 2)
-zorders[0]=3
-
 
 ### Loop threshs
 if threshtest:
@@ -204,10 +203,10 @@ for t in range(nthresh):
                 moddct = dsetdict.dset_deets[dset][name]
                 labname = moddct['labname']
 
-                # Get threshold
+                # Get thresholds
                 thcnt = 0
-                print 'getting threshold....'
-                with open(threshtxt) as f:
+                print 'getting hist threshold....'
+                with open(histthreshtxt) as f:
                     for line in f:
                         if dset + '\t' + name in line:
                             thresh = line.split()[2]
@@ -218,104 +217,180 @@ for t in range(nthresh):
                         # MIROC-ESM will get threshold for MIROC-ESM-CHEM
                         if thcnt > 0:
                             break
-                thresh = int(thresh)
+                hist_thresh=int(thresh)
+
+                if dset!='noaa':
+
+                    thcnt = 0
+                    print 'getting fut threshold....'
+                    with open(futthreshtxt) as f:
+                        for line in f:
+                            if dset + '\t' + name in line:
+                                thresh = line.split()[2]
+                                print 'thresh=' + str(thresh)
+                                thcnt += 1
+                            # Once you have the threshold stop looping
+                            # this is important for MIROC-ESM - without this
+                            # MIROC-ESM will get threshold for MIROC-ESM-CHEM
+                            if thcnt > 0:
+                                break
+                    fut_thresh=int(thresh)
 
                 # Only continue if the model is found
                 # ... if not it probably doesn't have data
                 if thcnt > 0:
 
-                    if thname == 'actual':
-                        thisthresh = thresh
-                    elif thname == 'lower':
-                        thisthresh = thresh - 5
-                    elif thname == 'upper':
-                        thisthresh = thresh + 5
+                    if thname=='actual':
+                        thth_h = hist_thresh
+                        if dset!='noaa':
+                            thth_f = fut_thresh
+                    elif thname=='lower':
+                        thth_h = hist_thresh - 5
+                        if dset != 'noaa':
+                            thth_f = fut_thresh - 5
+                    elif thname=='upper':
+                        thth_h = hist_thresh + 5
+                        if dset != 'noaa':
+                            thth_f = fut_thresh + 5
                     elif thname == 'hist_th':
-                        thresh_hist_text = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
-                        with open(thresh_hist_text) as f:
-                            for line in f:
-                                if dset + '\t' + name in line:
-                                    hist_th = line.split()[2]
-                        hist_th = int(hist_th)
-                        thisthresh = hist_th
+                        thth_h = hist_thresh
+                        if dset != 'noaa':
+                            thth_f = hist_thresh
 
-                    thre_str = str(int(thisthresh))
+                    # Looping historical and future
+                    print 'Looping historical and future to process TTT event set'
+                    if timeper=='hist':
+                        cents=['hist']
+                        ths=[thth_h]
+                    elif timeper=='fut':
+                        cents=['fut']
+                        ths=[thth_f]
+                    elif timeper=='both' or timeper=='change':
+                        if dset=='noaa':
+                            cents=['hist']
+                            ths=[thth_h]
+                        else:
+                            cents=['hist','fut']
+                            ths=[thth_h,thth_f]
 
-                    print 'opening metbot files...'
-                    outsuf = botpath + name + '_'
-                    if future:
-                        outsuf = outsuf + 'fut_rcp85_'
+                    for cent in range(len(cents)):
 
-                    syfile = outsuf + thre_str + '_' + dset + '-OLR.synop'
-                    s = sy.SynopticEvents((), [syfile], COL=False)
-                    ks = s.events.keys();
-                    ks.sort()  # all
-                    refkey = s.mbskeys[0]
+                        this_c=cents[cent]
+                        this_thresh=ths[cent]
+                        th_thr_str=str(this_thresh)
 
-                    mbsfile = outsuf + thre_str + '_' + dset + "-olr-0-0.mbs"
-                    refmbs, refmbt, refch = blb.mbopen(mbsfile)
+                        print 'opening metbot files...'
+                        outsuf = botpath + name + '_'
+                        if this_c=='fut':
+                            outsuf = outsuf + 'fut_rcp85_'
 
-                    # Get lots of info about event set
-                    print 'Getting more info about each cloud band...'
-                    dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s, refmbs, refmbt)
+                        syfile = outsuf + th_thr_str + '_' + dset + '-OLR.synop'
+                        s = sy.SynopticEvents((), [syfile], COL=False)
+                        ks = s.events.keys();
+                        ks.sort()  # all
 
-                    numleft = len(dates)
-                    print 'Now with ' + str(numleft) + ' dates'
+                        mbsfile = outsuf + th_thr_str + '_' + dset + "-olr-0-0.mbs"
+                        refmbs, refmbt, refch = blb.mbopen(mbsfile)
 
-                    # If wanting first day of event only, subset
-                    print 'Subset by first day?...'
-                    if from_event == 'first':
-                        print 'Selecting first day of event only'
-                        dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                            sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
-                    else:
-                        print 'Retaining all days from each event'
-                        dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
-                            dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
+                        # Get lots of info about event set
+                        print 'Getting more info about each cloud band...'
+                        dates, cXs, cYs, degs, chs, keys, daynos, tworecdt = sset.evset_info(s,refmbs,refmbt)
 
-                    numleft = len(dates_d)
-                    print 'Now with ' + str(numleft) + ' dates'
+                        numleft = len(dates)
+                        print 'Now with ' + str(numleft) + ' dates'
 
-                    # If you want to remove duplicate dates, subset
-                    print 'Removing duplicate dates?'
-                    if rm_samedates:
-                        print 'Removing duplicate dates...'
-                        dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                            sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
+                        # If wanting first day of event only, subset
+                        print 'Subset by first day?...'
+                        if from_event == 'first':
+                            print 'Selecting first day of event only'
+                            dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                                sset.sel_firstday(dates, cXs, cYs, degs, chs, keys, daynos, tworecdt)
+                        else:
+                            print 'Retaining all days from each event'
+                            dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d = \
+                                dates[:], cXs[:], cYs[:], degs[:], chs[:], keys[:], daynos[:], tworecdt[:]
 
-                    else:
-                        print 'Retaining potential duplicate dates... note they may have 2 CBs'
-                        dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
-                            dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
+                        numleft = len(dates_d)
+                        print 'Now with ' + str(numleft) + ' dates'
 
-                    numleft = len(dates_dd)
-                    print 'Now with ' + str(numleft) + ' dates'
+                        # If you want to remove duplicate dates, subset
+                        print 'Removing duplicate dates?'
+                        if rm_samedates:
+                            print 'Removing duplicate dates...'
+                            dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                                sset.rm_dupl_dates(dates_d, cXs_d, cYs_d, degs_d, chs_d, keys_d, daynos_d, tworecdt_d)
 
-                    # selecting a specific season, subset
-                    print 'Selecting months for : ' + tname
-                    dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
-                        sset.sel_seas(months, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd,
-                                      tworecdt_dd)
-                    numleft = len(dates_ddm)
-                    print 'Now with ' + str(numleft) + ' dates'
+                        else:
+                            print 'Retaining potential duplicate dates... note they may have 2 CBs'
+                            dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd = \
+                                dates_d[:], cXs_d[:], cYs_d[:], degs_d[:], chs_d[:], keys_d[:], daynos_d[:], tworecdt_d[:]
 
-                    # Now doing histogram
-                    y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=True)
-                    bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
+                        numleft = len(dates_dd)
+                        print 'Now with ' + str(numleft) + ' dates'
 
-                    if group:
-                        colour = grcl
-                        mk = grmr
-                        ls = grstl
-                    else:
-                        colour = cols[z]
-                        mk = markers[z]
-                        ls = styls[z]
+                        # selecting a specific season, subset
+                        print 'Selecting months for : ' + tname
+                        dates_ddm, cXs_ddm, cYs_ddm, degs_ddm, chs_ddm, keys_ddm, daynos_ddm, tworecdt_ddm = \
+                            sset.sel_seas(months, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, keys_dd, daynos_dd, tworecdt_dd)
+                        numleft = len(dates_ddm)
+                        print 'Now with ' + str(numleft) + ' dates'
 
-                    lw = lws[z]
-                    zord = zorders[z]
+                        # Now doing histogram
+                        y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=True)
+                        bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
 
-                    plt.plot(bincentres, y, c=colour, linestyle=ls, linewidth=lw, zorder=zord, label=labname)
+                        if timeper=='change':
+                            if this_c=='hist':
+                                hist_y=y
+                                hist_bcs=bincentres
+                            elif this_c=='fut':
+                                fut_y=y
+                                fut_bcs=bincentres
+
+                        else:
+
+                            if timeper=='both':
+                                if this_c=='hist':
+                                    colour='gray'
+                                    mk='--'
+                                elif this_c=='fut':
+                                    colour='red'
+                                    mk='dotted'
+                            else:
+                                if group:
+                                    colour = grcl
+                                    mk = grmr
+                                    ls = grstl
+                                else:
+                                    colour = cols[z]
+                                    mk = markers[z]
+                                    ls = styls[z]
+
+                            lw = lws[z]
+                            zord = zorders[z]
+                            if dset=='noaa':
+                                lw = 5
+                                zord = 0
+
+                            plt.plot(bincentres, y, c=colour, linestyle=ls, linewidth=lw, zorder=zord, label=labname)
+
+                    if timeper=='change':
+
+                        change_y=fut_y-hist_y
+
+                        if group:
+                            colour = grcl
+                            mk = grmr
+                            ls = grstl
+                        else:
+                            colour = cols[z]
+                            mk = markers[z]
+                            ls = styls[z]
+
+                        lw = lws[z]
+                        zord = zorders[z]
+
+                        plt.plot(hist_bcs, change_y, c=colour, linestyle=ls, linewidth=lw, zorder=zord, label=labname)
 
                 else:
 
@@ -347,13 +422,8 @@ for t in range(nthresh):
         if test_scr:
             figsuf=figsuf+'_test_scr'
 
-        if future:
-            figsuf=figsuf+'_fut'
-        else:
-            figsuf=figsuf+'_hist'
-
         ### Save figure
-        figname = figdir + 'histogram_bylon.' + tname + '.' + figsuf + '.'+thname+'.png'
+        figname = figdir + 'histogram_bylon_'+timeper+'.' + tname + '.' + figsuf + '.'+thname+'.png'
         print 'Saving figure as ' + figname
         plt.savefig(figname)
 
