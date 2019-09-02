@@ -392,6 +392,9 @@ for t in range(nthresh):
 
                         plt.plot(hist_bcs, change_y, c=colour, linestyle=ls, linewidth=lw, zorder=zord, label=labname)
 
+                        ax.plot([0,100], [0, 0], color='k', linestyle='-', zorder=20)
+
+
                 else:
 
                     print 'No threshold found for model '+name
