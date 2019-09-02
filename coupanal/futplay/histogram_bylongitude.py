@@ -370,7 +370,7 @@ for t in range(nthresh):
                             zord = zorders[z]
                             if dset=='noaa':
                                 lw = 5
-                                zord = 0
+                                zord = 3
 
                             plt.plot(bincentres, y, c=colour, linestyle=ls, linewidth=lw, zorder=zord, label=labname)
 
