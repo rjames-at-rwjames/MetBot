@@ -29,9 +29,11 @@ test_scr=False # if True will just run on first panel for each dataset
 threshtest=False         # to put olr thresholds in text file - needed for paperfigs
 alphord=False # note this only works if group is False
 group=True    # note this only works if alphord is False
-future=False     # get future thresholds
+future=True     # get future thresholds
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
+
+nbins=15 # number of bins for histogram
 
 figdim=[10,6]
 
@@ -59,7 +61,10 @@ mods = 'spec'
 if dsets == 'all':
     dsetnames = list(dsetdict.dset_deets)
 elif dsets == 'spec':
-    dsetnames = ['noaa', 'cmip5']
+    if future:
+        dsetnames = ['cmip5']
+    else:
+        dsetnames = ['noaa', 'cmip5']
 ndset = len(dsetnames)
 ndstr = str(ndset)
 
@@ -96,7 +101,6 @@ if not group:
         "-.","-.","-.","-.","-.","-.","-."]
 elif group:
     grcls=['fuchsia','gold','darkblue','r','blueviolet','springgreen']
-    grcnt=np.zeros(6,dtype=np.int8)
     grmrs=["o","^","*","d","+","v","h","o"]
     gstyls=["-","dotted","dashed","-.","-","dotted","dashed","-."]
 lws = np.full((nallmod), 2)
@@ -137,6 +141,7 @@ for t in range(nthresh):
         # Set up plot
         print "Setting up plot..."
         g, ax = plt.subplots(figsize=figdim)
+        grcnt = np.zeros(6, dtype=np.int8)
 
         cnt = 1
         z=0
@@ -295,7 +300,7 @@ for t in range(nthresh):
                     print 'Now with ' + str(numleft) + ' dates'
 
                     # Now doing histogram
-                    y, binEdges = np.histogram(cXs_ddm, bins=15, density=True)
+                    y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=True)
                     bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
 
                     if group:
@@ -348,7 +353,7 @@ for t in range(nthresh):
             figsuf=figsuf+'_hist'
 
         ### Save figure
-        figname = figdir + 'histogram_bylon.' + tname + '.' + figsuf + '.png'
+        figname = figdir + 'histogram_bylon.' + tname + '.' + figsuf + '.'+thname+'.png'
         print 'Saving figure as ' + figname
         plt.savefig(figname)
 
