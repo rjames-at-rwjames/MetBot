@@ -37,7 +37,7 @@ timeper='change'  # either "hist" "fut" "both" or "change"
                 # "both plots historical in grey and future in red
                 # "change" plots a colour per model but change
 histdens=False  # density or frequency for histogram
-if not hist_dens:
+if not histdens:
     peryear=True
     nyears=35
 else:
