@@ -39,7 +39,8 @@ figdim=[16,10]
 # Season or months
 tstep='seas' # 'seas' or 'mon'
 if tstep == 'mon':
-    mon_ints = np.arange(1, 13, 1) # adjust if you want less than 12 months
+    mon_ints = [12,1,2,3]
+    #mon_ints = np.arange(1, 13, 1) # adjust if you want less than 12 months
 elif tstep == 'seas':
     snames=['DJF','NDJFM'] # adjust for seasons you want
 
@@ -371,11 +372,11 @@ for t in range(nthresh):
                 print 'This is model '+mcnt+' of '+nmstr+' in list'
 
         ### Plot legend and axis
-        plt.xlim(10, 90)
+        plt.xlim(20, 80)
         plt.xlabel('longitude', fontsize=10.0, weight='demibold', color='k')
         plt.subplots_adjust(left=0.2, right=0.8, top=0.85, bottom=0.15)
 
-        plt.yticks(np.arange(1, nallmod), modnm, fontsize=14.0)
+        plt.yticks(np.arange(1, nallmod+1), modnm, fontsize=14.0)
         plt.ylim(0,nallmod+1)
 
         figsuf=''

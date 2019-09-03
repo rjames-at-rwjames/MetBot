@@ -37,6 +37,11 @@ timeper='change'  # either "hist" "fut" "both" or "change"
                 # "both plots historical in grey and future in red
                 # "change" plots a colour per model but change
 histdens=False  # density or frequency for histogram
+if not hist_dens:
+    peryear=True
+    nyears=35
+else:
+    peryear=False
 
 nbins=15 # number of bins for histogram
 
@@ -339,6 +344,9 @@ for t in range(nthresh):
                         # Now doing histogram
                         y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=histdens)
                         bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
+
+                        if peryear:
+                            y=float(y)/nyears
 
                         if timeper=='change':
                             if this_c=='hist':
