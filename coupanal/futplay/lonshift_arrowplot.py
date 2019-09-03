@@ -79,6 +79,8 @@ for d in range(ndset):
 nallmod=np.sum(nm_dset)
 nallmod=int(nallmod)
 
+modnm=["" for x in range(nallmod)] # creates a list of strings for modnames
+
 ### colours
 if not group:
     cols=['b','g','r','c','m','gold','k',\
@@ -332,7 +334,6 @@ for t in range(nthresh):
                         elif this_c=='fut':
                             fut_peak=peaklon
 
-
                     if group:
                         colour = grcl
                         mk = grmr
@@ -345,15 +346,14 @@ for t in range(nthresh):
                     lw = lws[z]
                     zord = zorders[z]
 
+                    print 'Plotting for model '+name
+
                     if dset=='noaa':
                         ax.plot(hist_peak,cnt,c=colour, marker=mk, markeredgecolor=colour,\
                                 markersize=5, zorder=3, label=labname,linestyle='None')
                     else:
-
                         # ax.plot((hist_peak,fut_peak),(cnt,cnt),c=colour, marker=mk, markeredgecolor=colour,\
                         #         markersize=5, linestyle='-', label=labname)
-
-
                         ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
                                    arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
                                                    headwidth=8))
@@ -361,6 +361,8 @@ for t in range(nthresh):
                 else:
 
                     print 'No threshold found for model '+name
+
+                modnm[z] = labname
 
                 z+=1
                 cnt+=1
@@ -371,11 +373,9 @@ for t in range(nthresh):
         ### Plot legend and axis
         plt.xlim(0, 100)
         plt.xlabel('longitude', fontsize=10.0, weight='demibold', color='k')
-        plt.subplots_adjust(left=0.1, right=0.8, top=0.85, bottom=0.15)
+        plt.subplots_adjust(left=0.2, right=0.8, top=0.85, bottom=0.15)
 
-        handles, labels = ax.get_legend_handles_labels()
-
-        plt.yticks(np.arange(1, z), labels, fontsize=14.0)
+        plt.yticks(np.arange(1, nallmod), modnm, fontsize=14.0)
 
 
         figsuf=''
