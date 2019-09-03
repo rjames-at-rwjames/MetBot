@@ -37,11 +37,12 @@ nbins=15 # number of bins for histogram
 figdim=[16,10]
 
 # Season or months
-tstep='mon' # 'seas' or 'mon'
+tstep='seas' # 'seas' or 'mon'
 if tstep == 'mon':
     mon_ints = np.arange(1, 13, 1) # adjust if you want less than 12 months
 elif tstep == 'seas':
-    snames=['DJF','NDJFM'] # adjust for seasons you want
+    snames=['JFM']
+    #snames=['DJF','NDJFM'] # adjust for seasons you want
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
@@ -129,6 +130,8 @@ for t in range(nthresh):
                 months = [1, 2, 3, 11, 12]
             elif snames[st] == 'DJF':
                 months = [1, 2, 12]
+            elif snames[st] == 'JFM':
+                months = [1, 2, 3]
             tname=snames[st]
 
         # Set up plot
