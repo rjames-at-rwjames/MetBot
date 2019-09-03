@@ -25,7 +25,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 ### Running options
-test_scr=True # if True will just run on first panel for each dataset
+test_scr=False # if True will just run on first panel for each dataset
 threshtest=False         # to put olr thresholds in text file - needed for paperfigs
 alphord=False # note this only works if group is False
 group=True    # note this only works if alphord is False
@@ -34,7 +34,7 @@ rm_samedates=False # to prune event set for matching dates - does not currently 
 
 nbins=15 # number of bins for histogram
 
-figdim=[10,10]
+figdim=[16,10]
 
 # Season or months
 tstep='seas' # 'seas' or 'mon'
@@ -371,12 +371,12 @@ for t in range(nthresh):
                 print 'This is model '+mcnt+' of '+nmstr+' in list'
 
         ### Plot legend and axis
-        plt.xlim(0, 100)
+        plt.xlim(10, 90)
         plt.xlabel('longitude', fontsize=10.0, weight='demibold', color='k')
         plt.subplots_adjust(left=0.2, right=0.8, top=0.85, bottom=0.15)
 
         plt.yticks(np.arange(1, nallmod), modnm, fontsize=14.0)
-
+        plt.ylim(0,nallmod+1)
 
         figsuf=''
         if group:
