@@ -25,7 +25,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 ### Running options
-test_scr=True # if True will just run on first panel for each dataset
+test_scr=False # if True will just run on first panel for each dataset
 threshtest=False         # to put olr thresholds in text file - needed for paperfigs
 alphord=False # note this only works if group is False
 group=True    # note this only works if alphord is False
@@ -350,13 +350,23 @@ for t in range(nthresh):
 
                     if dset=='noaa':
                         ax.plot(hist_peak,cnt,c=colour, marker=mk, markeredgecolor=colour,\
-                                markersize=5, zorder=3, label=labname,linestyle='None')
+                                markersize=8, zorder=3, label=labname,linestyle='None')
                     else:
-                        # ax.plot((hist_peak,fut_peak),(cnt,cnt),c=colour, marker=mk, markeredgecolor=colour,\
-                        #         markersize=5, linestyle='-', label=labname)
-                        ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
-                                   arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
-                                                   headwidth=8))
+
+                        if len(hist_peak)>1 or len(fut_peak)>1:
+                            print 'Two peaks detected so plotting all peaks'
+                            ax.plot(hist_peak, cnt, c=colour, marker='o', markeredgecolor=colour, \
+                                    markersize=8, zorder=3, label=labname, linestyle='None')
+                            ax.plot(fut_peak, cnt, c=colour, marker='*', markeredgecolor=colour, \
+                                    markersize=8, zorder=3, label=labname, linestyle='None')
+
+                        else:
+
+                            # ax.plot((hist_peak,fut_peak),(cnt,cnt),c=colour, marker=mk, markeredgecolor=colour,\
+                            #         markersize=5, linestyle='-', label=labname)
+                            ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
+                                       arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
+                                                       headwidth=8))
 
                 else:
 
