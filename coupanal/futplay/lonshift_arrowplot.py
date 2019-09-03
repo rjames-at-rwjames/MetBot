@@ -358,9 +358,18 @@ for t in range(nthresh):
 
                         if len(hist_peak)>1 or len(fut_peak)>1:
                             print 'Two peaks detected so plotting all peaks'
-                            ax.plot(hist_peak, cnt, c=colour, marker='o', markeredgecolor=colour, \
+                            if len(hist_peak)==1:
+                                yvals=cnt
+                            elif len(hist_peak)==2:
+                                yvals=[cnt,cnt]
+                            ax.plot(hist_peak, yvals, c=colour, marker='o', markeredgecolor=colour, \
                                     markersize=8, zorder=3, label=labname, linestyle='None')
-                            ax.plot(fut_peak, cnt, c=colour, marker='*', markeredgecolor=colour, \
+
+                            if len(fut_peak)==1:
+                                yvals=cnt
+                            elif len(fut_peak)==2:
+                                yvals=[cnt,cnt]
+                            ax.plot(fut_peak, yvals, c=colour, marker='*', markeredgecolor=colour, \
                                     markersize=8, zorder=3, label=labname, linestyle='None')
 
                         else:
