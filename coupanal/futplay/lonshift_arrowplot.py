@@ -25,7 +25,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 ### Running options
-test_scr=False # if True will just run on first panel for each dataset
+test_scr=True # if True will just run on first panel for each dataset
 threshtest=False         # to put olr thresholds in text file - needed for paperfigs
 alphord=False # note this only works if group is False
 group=True    # note this only works if alphord is False
@@ -37,10 +37,9 @@ nbins=15 # number of bins for histogram
 figdim=[16,10]
 
 # Season or months
-tstep='seas' # 'seas' or 'mon'
+tstep='mon' # 'seas' or 'mon'
 if tstep == 'mon':
-    mon_ints = [12,1,2,3]
-    #mon_ints = np.arange(1, 13, 1) # adjust if you want less than 12 months
+    mon_ints = np.arange(1, 13, 1) # adjust if you want less than 12 months
 elif tstep == 'seas':
     snames=['DJF','NDJFM'] # adjust for seasons you want
 
