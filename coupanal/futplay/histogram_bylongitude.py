@@ -36,6 +36,7 @@ timeper='change'  # either "hist" "fut" "both" or "change"
                 # "hist and "fut" plot with a colour per model
                 # "both plots historical in grey and future in red
                 # "change" plots a colour per model but change
+histdens=False  # density or frequency for histogram
 
 nbins=15 # number of bins for histogram
 
@@ -336,7 +337,7 @@ for t in range(nthresh):
                         print 'Now with ' + str(numleft) + ' dates'
 
                         # Now doing histogram
-                        y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=True)
+                        y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=histdens)
                         bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
 
                         if timeper=='change':
@@ -424,6 +425,11 @@ for t in range(nthresh):
 
         if test_scr:
             figsuf=figsuf+'_test_scr'
+
+        if histdens:
+            figsuf=figsuf+'_density'
+        else:
+            figsuf=figsuf+'_frequency'
 
         ### Save figure
         figname = figdir + 'histogram_bylon_'+timeper+'.' + tname + '.' + figsuf + '.'+thname+'.png'
