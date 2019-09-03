@@ -1,4 +1,4 @@
-# Wrapper to make histogram by longitude
+# Wrapper to plot shift from hist to future in longitude
 #
 # options for output
 # .... TTT counts
@@ -25,22 +25,16 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 ### Running options
-test_scr=False # if True will just run on first panel for each dataset
+test_scr=True # if True will just run on first panel for each dataset
 threshtest=False         # to put olr thresholds in text file - needed for paperfigs
 alphord=False # note this only works if group is False
 group=True    # note this only works if alphord is False
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 
-timeper='change'  # either "hist" "fut" "both" or "change"
-                # "hist and "fut" plot with a colour per model
-                # "both plots historical in grey and future in red
-                # "change" plots a colour per model but change
-histdens=False  # density or frequency for histogram
-
 nbins=15 # number of bins for histogram
 
-figdim=[10,6]
+figdim=[10,10]
 
 # Season or months
 tstep='seas' # 'seas' or 'mon'
@@ -54,7 +48,7 @@ bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
 futthreshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
 histthreshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
-figdsu='histogram_bylongitude'
+figdsu='lonshift_arrowplot'
 figdir = bkdir + "/futpaper_play/"+figdsu+"_"+timeper+"/"
 my.mkdir_p(figdir)
 
@@ -64,10 +58,7 @@ mods = 'spec'
 if dsets == 'all':
     dsetnames = list(dsetdict.dset_deets)
 elif dsets == 'spec':
-    if timeper=='hist' or timeper=='both':
-        dsetnames = ['noaa', 'cmip5']
-    else:
-        dsetnames = ['cmip5']
+    dsetnames = ['noaa', 'cmip5']
 ndset = len(dsetnames)
 ndstr = str(ndset)
 
@@ -260,19 +251,12 @@ for t in range(nthresh):
 
                     # Looping historical and future
                     print 'Looping historical and future to process TTT event set'
-                    if timeper=='hist':
+                    if dset=='noaa':
                         cents=['hist']
                         ths=[thth_h]
-                    elif timeper=='fut':
-                        cents=['fut']
-                        ths=[thth_f]
-                    elif timeper=='both' or timeper=='change':
-                        if dset=='noaa':
-                            cents=['hist']
-                            ths=[thth_h]
-                        else:
-                            cents=['hist','fut']
-                            ths=[thth_h,thth_f]
+                    else:
+                        cents=['hist','fut']
+                        ths=[thth_h,thth_f]
 
                     for cent in range(len(cents)):
 
@@ -340,89 +324,55 @@ for t in range(nthresh):
                         y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=histdens)
                         bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
 
-                        if timeper=='change':
-                            if this_c=='hist':
-                                hist_y=y
-                                hist_bcs=bincentres
-                            elif this_c=='fut':
-                                fut_y=y
-                                fut_bcs=bincentres
+                        maxbin=np.max(y)
+                        peaklon=bincentres[maxlon]
 
-                        else:
+                        if this_c=='hist':
+                            hist_peak=peaklon
+                        elif this_c=='fut':
+                            fut_peak=peaklon
 
-                            if timeper=='both':
-                                if this_c=='hist':
-                                    colour='gray'
-                                    ls='--'
-                                elif this_c=='fut':
-                                    colour='red'
-                                    ls='dotted'
-                            else:
-                                if group:
-                                    colour = grcl
-                                    mk = grmr
-                                    ls = grstl
-                                else:
-                                    colour = cols[z]
-                                    mk = markers[z]
-                                    ls = styls[z]
 
-                            lw = lws[z]
-                            zord = zorders[z]
-                            if dset=='noaa':
-                                lw = 5
-                                zord = 3
+                    if group:
+                        colour = grcl
+                        mk = grmr
+                        ls = grstl
+                    else:
+                        colour = cols[z]
+                        mk = markers[z]
+                        ls = styls[z]
 
-                            plt.plot(bincentres, y, c=colour, linestyle=ls, linewidth=lw, zorder=zord, label=labname)
+                    lw = lws[z]
+                    zord = zorders[z]
 
-                    if timeper=='change':
+                    if dset=='noaa':
+                        ax.plot((hist_peak,cnt),c=colour, marker=mk, markeredgecolor=colour,\
+                                markersize=5, zorder=3, label=labname)
+                    else:
 
-                        change_y=fut_y-hist_y
-
-                        if group:
-                            colour = grcl
-                            mk = grmr
-                            ls = grstl
-                        else:
-                            colour = cols[z]
-                            mk = markers[z]
-                            ls = styls[z]
-
-                        lw = lws[z]
-                        zord = zorders[z]
-
-                        plt.plot(hist_bcs, change_y, c=colour, linestyle=ls, linewidth=lw, zorder=zord, label=labname)
-
-                        ax.plot([0,100], [0, 0], color='k', linestyle='-', zorder=20)
-
+                        ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
+                                    arrowprops=dict(facecolor=colour, edgecolor=colour, label=name, width=1,
+                                                    headwidth=8))
 
                 else:
 
                     print 'No threshold found for model '+name
 
                 z+=1
-
+                cnt+=1
 
                 print 'Finished running on ' + name
                 print 'This is model '+mcnt+' of '+nmstr+' in list'
 
         ### Plot legend and axis
         plt.xlim(0, 100)
-        #plt.ylim
         plt.xlabel('longitude', fontsize=10.0, weight='demibold', color='k')
-
-        if histdens:
-            ylab='frequency density'
-        else:
-            ylab='frequency'
-        plt.ylabel(ylab, fontsize=10.0, weight='demibold', color='k')
-
         plt.subplots_adjust(left=0.1, right=0.8, top=0.85, bottom=0.15)
 
         handles, labels = ax.get_legend_handles_labels()
-        legloc = 'center right'
 
-        g.legend(handles, labels, loc=legloc, fontsize='xx-small')
+        plt.yticks(np.arange(1, cnt), labels, fontsize=14.0)
+
 
         figsuf=''
         if group:
@@ -432,7 +382,7 @@ for t in range(nthresh):
             figsuf=figsuf+'_test_scr'
 
         ### Save figure
-        figname = figdir + 'histogram_bylon_'+timeper+'.'+ylab+'.' + tname + '.' + figsuf + '.'+thname+'.png'
+        figname = figdir + 'lonshift_arrowplot.' + tname + '.' + figsuf + '.'+thname+'.png'
         print 'Saving figure as ' + figname
         plt.savefig(figname)
 
