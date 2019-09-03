@@ -350,9 +350,13 @@ for t in range(nthresh):
                                 markersize=5, zorder=3, label=labname)
                     else:
 
-                        ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
-                                    arrowprops=dict(facecolor=colour, edgecolor=colour, label=name, width=1,
-                                                    headwidth=8))
+                        ax.plot(([hist_peak,cnt],[fut_peak,cnt]),c=colour, marker=mk, markeredgecolor=colour,\
+                                markersize=5, linestyle='-', label=labname)
+
+
+                        #ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
+                        #            arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
+                        #                            headwidth=8))
 
                 else:
 
@@ -371,7 +375,7 @@ for t in range(nthresh):
 
         handles, labels = ax.get_legend_handles_labels()
 
-        plt.yticks(np.arange(1, cnt), labels, fontsize=14.0)
+        plt.yticks(np.arange(1, z), labels, fontsize=14.0)
 
 
         figsuf=''
