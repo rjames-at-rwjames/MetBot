@@ -346,17 +346,17 @@ for t in range(nthresh):
                     zord = zorders[z]
 
                     if dset=='noaa':
-                        ax.plot((hist_peak,cnt),c=colour, marker=mk, markeredgecolor=colour,\
-                                markersize=5, zorder=3, label=labname)
+                        ax.plot(hist_peak,cnt,c=colour, marker=mk, markeredgecolor=colour,\
+                                markersize=5, zorder=3, label=labname,linestyle='None')
                     else:
 
-                        ax.plot(([hist_peak,cnt],[fut_peak,cnt]),c=colour, marker=mk, markeredgecolor=colour,\
-                                markersize=5, linestyle='-', label=labname)
+                        # ax.plot((hist_peak,fut_peak),(cnt,cnt),c=colour, marker=mk, markeredgecolor=colour,\
+                        #         markersize=5, linestyle='-', label=labname)
 
 
-                        #ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
-                        #            arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
-                        #                            headwidth=8))
+                        ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
+                                   arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
+                                                   headwidth=8))
 
                 else:
 
