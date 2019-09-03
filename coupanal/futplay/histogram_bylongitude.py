@@ -32,14 +32,14 @@ group=True    # note this only works if alphord is False
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 
-timeper='change'  # either "hist" "fut" "both" or "change"
+timeper='hist'  # either "hist" "fut" "both" or "change"
                 # "hist and "fut" plot with a colour per model
                 # "both plots historical in grey and future in red
                 # "change" plots a colour per model but change
 histdens=False  # density or frequency for histogram
 if not histdens:
     peryear=True
-    nyears=35
+    nyears=35.0
 else:
     peryear=False
 
@@ -346,7 +346,7 @@ for t in range(nthresh):
                         bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
 
                         if peryear:
-                            y=float(y)/nyears
+                            y=y/nyears
 
                         if timeper=='change':
                             if this_c=='hist':
