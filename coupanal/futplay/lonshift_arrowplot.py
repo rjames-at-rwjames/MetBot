@@ -49,7 +49,7 @@ futthreshtxt = bkdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
 histthreshtxt = bkdir + '/histpaper_txt/thresholds.fmin.noaa_cmip5.txt'
 
 figdsu='lonshift_arrowplot'
-figdir = bkdir + "/futpaper_play/"+figdsu+"_"+timeper+"/"
+figdir = bkdir + "/futpaper_play/"+figdsu+"/"
 my.mkdir_p(figdir)
 
 ### Dsets
@@ -321,11 +321,11 @@ for t in range(nthresh):
                         print 'Now with ' + str(numleft) + ' dates'
 
                         # Now doing histogram
-                        y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=histdens)
+                        y, binEdges = np.histogram(cXs_ddm, bins=nbins, density=False)
                         bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
 
-                        maxbin=np.max(y)
-                        peaklon=bincentres[maxlon]
+                        maxbin=np.where(y[:]==np.max(y))[0]
+                        peaklon=bincentres[maxbin]
 
                         if this_c=='hist':
                             hist_peak=peaklon
