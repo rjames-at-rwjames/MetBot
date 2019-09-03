@@ -32,7 +32,7 @@ group=True    # note this only works if alphord is False
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 
-timeper='hist'  # either "hist" "fut" "both" or "change"
+timeper='fut'  # either "hist" "fut" "both" or "change"
                 # "hist and "fut" plot with a colour per model
                 # "both plots historical in grey and future in red
                 # "change" plots a colour per model but change
@@ -418,6 +418,11 @@ for t in range(nthresh):
         plt.xlim(0, 100)
         #plt.ylim
         plt.xlabel('longitude', fontsize=10.0, weight='demibold', color='k')
+
+        if timeper=='hist' or timeper=='fut':
+            if not histdens:
+                if peryear:
+                    plt.ylim(0,14)
 
         if histdens:
             ylab='frequency density'
