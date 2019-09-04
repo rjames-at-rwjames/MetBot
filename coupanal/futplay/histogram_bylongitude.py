@@ -43,12 +43,12 @@ if not histdens:
 else:
     peryear=False
 
-nbins=15 # number of bins for histogram
+nbins=10 # number of bins for histogram
 
 figdim=[10,6]
 
 # Season or months
-tstep='seas' # 'seas' or 'mon'
+tstep='mon' # 'seas' or 'mon'
 if tstep == 'mon':
     mon_ints = np.arange(1, 13, 1) # adjust if you want less than 12 months
 elif tstep == 'seas':
