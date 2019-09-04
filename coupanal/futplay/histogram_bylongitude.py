@@ -451,7 +451,7 @@ for t in range(nthresh):
             figsuf=figsuf+'_test_scr'
 
         ### Save figure
-        figname = figdir + 'histogram_bylon_'+timeper+'.'+ylab+'.' + tname + '.' + figsuf + '.'+thname+'.png'
+        figname = figdir + 'histogram_bylon_'+timeper+'.'+str(nbins)+'.'+ylab+'.' + tname + '.' + figsuf + '.'+thname+'.png'
         print 'Saving figure as ' + figname
         plt.savefig(figname)
 
