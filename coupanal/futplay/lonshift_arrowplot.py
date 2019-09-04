@@ -32,7 +32,7 @@ group=True    # note this only works if alphord is False
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 
-nbins=15 # number of bins for histogram
+nbins=10 # number of bins for histogram
 
 figdim=[16,10]
 
@@ -408,7 +408,7 @@ for t in range(nthresh):
             figsuf=figsuf+'_test_scr'
 
         ### Save figure
-        figname = figdir + 'lonshift_arrowplot.' + tname + '.' + figsuf + '.'+thname+'.png'
+        figname = figdir + 'lonshift_arrowplot.'+str(nbins)+'.' + tname + '.' + figsuf + '.'+thname+'.png'
         print 'Saving figure as ' + figname
         plt.savefig(figname)
 
