@@ -142,6 +142,8 @@ for t in range(nthresh):
                 months = [1, 2, 3, 11, 12]
             elif snames[st] == 'DJF':
                 months = [1, 2, 12]
+            elif snames[st] == 'JFM':
+                months = [1, 2, 3]
             tname=snames[st]
 
         # Set up plot
