@@ -5,6 +5,7 @@
 #
 
 import numpy as np
+import numpy.ma as ma
 
 # Option to run disconnected from x11 forwarding session
 runoffline=True
@@ -33,6 +34,7 @@ from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 
 nbins=10 # number of bins for histogram
+ordsizshift=True # to plot in order of size of shift - this is not yet tested
 
 figdim=[16,10]
 
@@ -138,6 +140,8 @@ for t in range(nthresh):
         print "Setting up plot..."
         g, ax = plt.subplots(figsize=figdim)
         grcnt = np.zeros(6, dtype=np.int8)
+
+        peak_collect=np.zeros(nallmod,2,dtype=np.float32)
 
         cnt = 1
         z=0
@@ -336,6 +340,10 @@ for t in range(nthresh):
                             hist_peak=peaklon
                         elif this_c=='fut':
                             fut_peak=peaklon
+                        if len(peaklon)==1:
+                            peak_collect[z,cent]=peaklon
+                        else:
+                            peak_collect[z,cent]=ma.masked
 
                     if group:
                         colour = grcl
@@ -349,36 +357,39 @@ for t in range(nthresh):
                     lw = lws[z]
                     zord = zorders[z]
 
-                    print 'Plotting for model '+name
-
                     if dset=='noaa':
                         ax.plot(hist_peak,cnt,c=colour, marker=mk, markeredgecolor=colour,\
                                 markersize=8, zorder=3, label=labname,linestyle='None')
-                    else:
 
-                        if len(hist_peak)>1 or len(fut_peak)>1:
-                            print 'Two peaks detected so plotting all peaks'
-                            if len(hist_peak)==1:
-                                yvals=cnt
-                            elif len(hist_peak)==2:
-                                yvals=[cnt,cnt]
-                            ax.plot(hist_peak, yvals, c=colour, marker='o', markeredgecolor=colour, \
-                                    markersize=8, zorder=3, label=labname, linestyle='None')
+                    if not ordsizshift:
 
-                            if len(fut_peak)==1:
-                                yvals=cnt
-                            elif len(fut_peak)==2:
-                                yvals=[cnt,cnt]
-                            ax.plot(fut_peak, yvals, c=colour, marker='*', markeredgecolor=colour, \
-                                    markersize=8, zorder=3, label=labname, linestyle='None')
+                        print 'Plotting for model '+name
 
-                        else:
+                        if dset!='noaa':
 
-                            # ax.plot((hist_peak,fut_peak),(cnt,cnt),c=colour, marker=mk, markeredgecolor=colour,\
-                            #         markersize=5, linestyle='-', label=labname)
-                            ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
-                                       arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
-                                                       headwidth=8))
+                            if len(hist_peak)>1 or len(fut_peak)>1:
+                                print 'Two peaks detected so plotting all peaks'
+                                if len(hist_peak)==1:
+                                    yvals=cnt
+                                elif len(hist_peak)==2:
+                                    yvals=[cnt,cnt]
+                                ax.plot(hist_peak, yvals, c=colour, marker='o', markeredgecolor=colour, \
+                                        markersize=8, zorder=3, label=labname, linestyle='None')
+
+                                if len(fut_peak)==1:
+                                    yvals=cnt
+                                elif len(fut_peak)==2:
+                                    yvals=[cnt,cnt]
+                                ax.plot(fut_peak, yvals, c=colour, marker='*', markeredgecolor=colour, \
+                                        markersize=8, zorder=3, label=labname, linestyle='None')
+
+                            else:
+
+                                # ax.plot((hist_peak,fut_peak),(cnt,cnt),c=colour, marker=mk, markeredgecolor=colour,\
+                                #         markersize=5, linestyle='-', label=labname)
+                                ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
+                                           arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
+                                                           headwidth=8))
 
                 else:
 
@@ -391,6 +402,49 @@ for t in range(nthresh):
 
                 print 'Finished running on ' + name
                 print 'This is model '+mcnt+' of '+nmstr+' in list'
+
+        if ordsizshift:
+            siz_shifts=peak_collect[:,1]-peak_collect[:,0]
+            order=np.argsort(siz_shifts)
+            mods_inorder=mnames[order]
+            peaks_inorder=peak_collect[order,:]
+
+            z=1
+            cnt=2
+            for mo in range(len(mods_inorder)):
+                thismod=mods_inorder[mo]
+
+                hist_peak=peaks_inorder[mo,0]
+                fut_peak=peaks_inorder[mo,1]
+
+                if group:
+                    groupdct = dset_grp.dset_deets['cmip5'][thismod]
+                    thisgroup = int(groupdct['group'])
+                    grcl = grcls[thisgroup - 1]
+                    grmr = grmrs[grcnt[thisgroup - 1]]
+                    grstl = gstyls[grcnt[thisgroup - 1]]
+                    grcnt[thisgroup - 1] += 1
+
+                if group:
+                    colour = grcl
+                    mk = grmr
+                    ls = grstl
+                else:
+                    colour = cols[z]
+                    mk = markers[z]
+                    ls = styls[z]
+
+
+                if hist_peak!=ma.masked and fut_peak!=ma.masked:
+
+                    # ax.plot((hist_peak,fut_peak),(cnt,cnt),c=colour, marker=mk, markeredgecolor=colour,\
+                    #         markersize=5, linestyle='-', label=labname)
+                    ax.annotate("", xy=(fut_peak, cnt), xytext=(hist_peak, cnt), \
+                                arrowprops=dict(facecolor=colour, edgecolor=colour, label=labname, width=1,
+                                                headwidth=8))
+
+                z+=1
+                cnt+=1
 
         ### Plot legend and axis
         plt.xlim(20, 80)
@@ -408,7 +462,7 @@ for t in range(nthresh):
             figsuf=figsuf+'_test_scr'
 
         ### Save figure
-        figname = figdir + 'lonshift_arrowplot.'+str(nbins)+'.' + tname + '.' + figsuf + '.'+thname+'.png'
+        figname = figdir + 'lonshift_arrowplot.nbins_'+str(nbins)+'.' + tname + '.' + figsuf + '.'+thname+'.png'
         print 'Saving figure as ' + figname
         plt.savefig(figname)
 
