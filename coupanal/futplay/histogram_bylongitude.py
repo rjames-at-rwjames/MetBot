@@ -425,7 +425,10 @@ for t in range(nthresh):
         if timeper=='hist' or timeper=='fut':
             if not histdens:
                 if peryear:
-                    plt.ylim(0,14)
+                    if tstep=='seas':
+                        plt.ylim(0,14)
+                    elif tstep=='mon':
+                        plt.ylim(0,6)
 
         if histdens:
             ylab='frequency density'
