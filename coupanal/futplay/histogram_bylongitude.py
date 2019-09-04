@@ -32,7 +32,7 @@ group=True    # note this only works if alphord is False
 from_event='all' # 'all' for all dates, 'first' for first in each event
 rm_samedates=False # to prune event set for matching dates - does not currently work for spatiofreq
 
-timeper='fut'  # either "hist" "fut" "both" or "change"
+timeper='hist'  # either "hist" "fut" "both" or "change"
                 # "hist and "fut" plot with a colour per model
                 # "both plots historical in grey and future in red
                 # "change" plots a colour per model but change
@@ -52,7 +52,8 @@ tstep='seas' # 'seas' or 'mon'
 if tstep == 'mon':
     mon_ints = np.arange(1, 13, 1) # adjust if you want less than 12 months
 elif tstep == 'seas':
-    snames=['DJF','NDJFM'] # adjust for seasons you want
+    snames=['JFM']
+    #snames=['DJF','NDJFM'] # adjust for seasons you want
 
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/metbot_multi_dset/"
