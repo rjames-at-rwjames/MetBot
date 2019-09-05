@@ -10,7 +10,7 @@
 
 # at the moment this is designed to work where
 # change 1 is a TTT related change
-# change 2 is a mean precip related change
+# change 2 is some regional mean or gradient that might be a driver
 
 import os
 import sys
@@ -38,7 +38,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=False   # will run on only 1 model
+test_scr=True   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -56,13 +56,10 @@ weightlats=True
 
 # Info for change 1 (x axis)
 charac='relative' # options: 'number', 'relative', 'intens', 'tttpr'
-
 under_of='dayof'
-
-# Info for change 2 (y axis)
 globp='pr'
 
-# Which domain?
+# Which domain? - for TTT / x axis
 dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
 whichend=45.0
 
@@ -71,22 +68,25 @@ if dom=='SICZ':
     wlon = 7.5
     elon = 100.0
     ttt_dom='subt'
-    pr_dom='subt'
 
 elif dom=='Cont':
     wlon=7.5
     elon=whichend
     ttt_dom='contsub_nh' # domain for averaging TTT precip
-    pr_dom='contsub_nh'
-    #pr_dom='madasub_nh'
-
 
 elif dom=='Mada':
     wlon=45.0
     elon=whichend
     ttt_dom='madasub_nh'
-    pr_dom='madasub_nh'
-    #pr_dom='contsub_nh'
+
+# Info for change 2 (y axis)
+driver='scongo_olr'
+
+if driver=='scongo_olr':
+    globv='olr'
+    drv_dom='scongo'
+
+
 
 # time info
 monthstr = ['Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -215,7 +215,6 @@ for t in range(nthresh):
                 grmr=grmrs[grcnt[thisgroup-1]]
                 grcnt[thisgroup-1]+=1
 
-            # Get labname
             moddct = dsetdict.dset_deets[dset][name]
             labname = moddct['labname']
 
@@ -282,18 +281,21 @@ for t in range(nthresh):
                 hist_yvals = np.zeros(nplot, dtype=np.float32)
                 fut_yvals = np.zeros(nplot, dtype=np.float32)
 
+                # Info for rain - for TTTs
                 rys_hist = moddct['yrfname']
                 rys_fut = moddct['futprrun']
-                rys_hist_clim = rys_hist
-                fyear1='2065'
-                fyear2='2099'
-                rys_fut_clim = fyear1+'_'+fyear2
-
                 rainfile_hist = botdir + dset + "/" + name + "." + globp + ".day.mean." + rys_hist + ".nc"
                 rainfile_fut = botdir + dset + "/" + name + "." + globp + ".day.mean.rcp85." + rys_fut + ".nc"
-
-                rys_clims = [rys_hist_clim, rys_fut_clim]
                 rainfiles = [rainfile_hist, rainfile_fut]
+
+
+                # Info for driver file - mean
+                ys_hist_clim = rys_hist
+                fyear1='2065'
+                fyear2='2099'
+                ys_fut_clim = fyear1+'_'+fyear2
+                ys_clims = [ys_hist_clim, ys_fut_clim]
+
 
                 for cent in range(len(cents)):
 
@@ -361,33 +363,33 @@ for t in range(nthresh):
                         sset.sel_cen_lon(wlon, elon, dates_dd, cXs_dd, cYs_dd, degs_dd, chs_dd, \
                                          keys_dd, daynos_dd, tworecdt_dd)
 
-                    # Second get info for mean rain
-                    rys_clim = rys_clims[cent]
+                    # Second get info for driver
+                    ys_clim = ys_clims[cent]
 
-                    rainmeanfile = botdir + dset + '/' + name + '/' \
-                                   + name + '.' + globp + '.mon.mean.' + rys_clim + '.nc'
+                    varmeanfile = botdir + dset + '/' + name + '/' \
+                                   + name + '.' + globv + '.mon.mean.' + ys_clim + '.nc'
 
-                    print 'Opening ' + rainmeanfile
-                    print 'for domain ' + pr_dom
+                    print 'Opening ' + varmeanfile
+                    print 'for domain ' + drv_dom
 
-                    rainmean = mync.open_multi(rainmeanfile, globp, name, \
-                                               dataset=dset, subs=pr_dom)
+                    varmean = mync.open_multi(varmeanfile, globv, name, \
+                                               dataset=dset, subs=drv_dom)
 
-                    rdim = len(rainmean)
-                    if rdim == 5:
-                        rain_monmn, rtime, rlat_mn, rlon, rdtime_monmn = rainmean
-                    elif rdim == 6:
-                        rain, rtime, rlat_mn, rlon, rlev, rdtime_monmn = rainmean
-                        rain_monmn = np.squeeze(rain)
+                    ndim = len(varmean)
+                    if ndim == 5:
+                        var_monmn, time, lat_mn, lon, dtime_monmn = varmean
+                    elif ndim == 6:
+                        var, time, lat_mn, lon, lev, dtime_monmn = varmean
+                        var_monmn = np.squeeze(var)
                     else:
                         print 'Check number of levels in ncfile'
-                    rdtime_monmn[:, 3] = 0
-                    rainmons = rdtime_monmn[:, 1]
+                    dtime_monmn[:, 3] = 0
+                    varmons = dtime_monmn[:, 1]
 
                     if weightlats:
-                        latr = np.deg2rad(rlat_mn)
+                        latr = np.deg2rad(lat_mn)
                         weights = np.cos(latr)
-                        zonmean = np.nanmean(rain_monmn, axis=2)
+                        zonmean = np.nanmean(var_monmn, axis=2)
 
                     # Finally get rain file for intensity
                     if charac=='intens' or charac=='tttpr':
@@ -429,7 +431,6 @@ for t in range(nthresh):
 
 
                     # Now loop mons and seasons to get the values you want!
-
                     print 'Now looping mons to calculate data for each month'
                     for mn in range(len(mons)):
                         thismon = mons[mn]
@@ -556,12 +557,12 @@ for t in range(nthresh):
 
                                 if weightlats:
                                     latr = np.deg2rad(rlat)
-                                    weights = np.cos(latr)
+                                    rweights = np.cos(latr)
 
                                 for st in range(nttt4rain):
                                     if weightlats:
                                         zonmean_ttt = np.ma.mean(masked_rain[st, :, :], axis=1)
-                                        regmean_ttt = np.ma.average(zonmean_ttt, weights=weights)
+                                        regmean_ttt = np.ma.average(zonmean_ttt, weights=rweights)
                                         reg_ttt_mean[st] = regmean_ttt
                                     else:
                                         reg_ttt_mean[st] = np.ma.mean(masked_rain[st, :, :])
@@ -594,17 +595,17 @@ for t in range(nthresh):
                                     fut_xvals[mn] = tottttrain
 
 
-                        # For mean rainfall
-                        print 'Calculating mean rainfall for this cent'
-                        locmon = np.where(rainmons[:] == thismon)[0][0]
+                        # For driver
+                        print 'Calculating mean driver for this cent'
+                        locmon = np.where(varmons[:] == thismon)[0][0]
 
                         zmean_thismon = zonmean[locmon, :]
-                        rain4mon = np.ma.average(zmean_thismon, weights=weights)
+                        var4mon = np.ma.average(zmean_thismon, weights=weights)
 
                         if this_c == 'hist':
-                            hist_yvals[mn] = rain4mon
+                            hist_yvals[mn] = var4mon
                         elif this_c == 'fut':
-                            fut_yvals[mn] = rain4mon
+                            fut_yvals[mn] = var4mon
 
                     print 'Now looping seasons to get the aggregate values from those calculated by month'
                     for s in range(len(seas)):
@@ -828,22 +829,14 @@ for t in range(nthresh):
         #Plot y=0 line
         ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
-        if pr_dom=='subt':
-            y1=-0.6
-            y2=0.5
+        if driver=='scongo_olr':
+            y1=180.0
+            y2=270.0
 
-        elif pr_dom=='contsub_nh' or pr_dom=='madasub_nh':
-            y1=-1.2
-            y2=1.2
-        else:
-            y1=-1.2
-            y2=1.2
+            plt.ylim(y1,y2)
 
-        plt.ylim(y1,y2)
-
-        #Plot x=0 line
-        ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
-
+            #Plot x=0 line
+            ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
@@ -863,7 +856,7 @@ for t in range(nthresh):
         figsuf=figsuf+under_of
 
     scatterfig=figdir+'/scatter_12panel.a_TTT_'+charac+'_'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'.'\
-               +'b_'+globp+'_'+pr_dom+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+               +'b_'+driver+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
