@@ -38,7 +38,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=True   # will run on only 1 model
+test_scr=False   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -99,7 +99,7 @@ seas=['NDJFM','DJF','JFM']
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-figdir=botdir+"futpaper_play/scatter_multiseas12panel_TTT"+charac+"_"+globp+"/"
+figdir=botdir+"futpaper_play/scatter_multiseas12panel_TTT"+charac+"_"+driver+"/"
 my.mkdir_p(figdir)
 
 futthreshtxt = botdir + '/futpaper_txt/thresholds.fmin.fut_rcp85.cmip5.txt'
@@ -829,14 +829,14 @@ for t in range(nthresh):
         #Plot y=0 line
         ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
-        if driver=='scongo_olr':
-            y1=180.0
-            y2=270.0
-
-            plt.ylim(y1,y2)
-
-            #Plot x=0 line
-            ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
+        # if driver=='scongo_olr':
+        #     y1=180.0
+        #     y2=270.0
+        #
+        #     plt.ylim(y1,y2)
+        #
+        #     #Plot x=0 line
+        #     ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
