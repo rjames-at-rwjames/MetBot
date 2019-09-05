@@ -43,6 +43,7 @@ import dicts4p.dsets_qflux as qflux_dict
 
 ### Running options
 test_scr=False  # if True will just run on first panel for each dataset
+future=True
 xplots = 4
 yplots = 7
 alphord=True
@@ -119,7 +120,10 @@ perc_ag_con=75
 ### Get directories
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
-figdir=botdir+"/histpaper_figs/comp_qflux/"
+if future:
+    figdir = botdir + "/futpaper_play/comp_qflux/"
+else:
+    figdir=botdir+"/histpaper_figs/comp_qflux/"
 my.mkdir_p(figdir)
 
 
@@ -138,7 +142,10 @@ if pluscon:
 
 # Loop threshs
 if threshtest:
-    thnames = ['actual', 'lower', 'upper']
+    if future:
+        thnames = ['actual','lower','upper','hist_th']
+    else:
+        thnames=['actual','lower','upper']
 else:
     thnames = ['actual']
 
@@ -176,7 +183,10 @@ for t in range(nthresh):
                 if dsets == 'all':
                     dsetnames = list(dsetdict.dset_deets)
                 elif dsets == 'spec':
-                    dsetnames = ['noaa', 'cmip5']
+                    if future:
+                        dsetnames = ['cmip5']
+                    else:
+                        dsetnames = ['noaa', 'cmip5']
                 ndset = len(dsetnames)
                 ndstr = str(ndset)
 
@@ -282,8 +292,12 @@ for t in range(nthresh):
                         if pluscon:
                             varstr_c = conmastdct[vnamedict_c]
 
-                        ysclim = moddct['yrfname']
-                        ysclim_c = condct['yrfname']
+                        if future:
+                            ysclim = '2065_2099'
+                            ysclim_c = '2065_2099'
+                        else:
+                            ysclim = moddct['yrfname']
+                            ysclim_c = condct['yrfname']
 
                         # Get years for manntest
                         year1 = float(ysclim[0:4])
