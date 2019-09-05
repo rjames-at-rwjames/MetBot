@@ -610,7 +610,7 @@ for t in range(nthresh):
                     for s in range(len(seas)):
 
                         # Find location in 15 plots where this one goes
-                        loc4arr=s+12
+                        loc4arr=s+nmons
 
                         # Specify months for each season
                         if seas[s]=='DJF':
@@ -718,113 +718,89 @@ for t in range(nthresh):
         if pt <=11:
             tname=monthstr[pt]
         else:
-            tname=seas[pt-12]
+            tname=seas[pt-nmons]
         plt.title(tname, loc='center', fontweight='demibold')
 
         if charac=='number':
             if ttt_dom=='subt':
-                if pt<=11:
+                if pt<nmons:
                     x1=-11
                     x2=3
                     xtks=[-10,-5,0]
-                if pt==12:
-                    x1=-70
-                    x2=5
-                    xtks=[-50,-25,0]
-                if pt==13:
+                if pt==nmons:
                     x1=-35
                     x2=5
                     xtks=[-30,-20,-10,0]
-                if pt==14:
+                if pt>nmons:
                     x1=-18
                     x2=3
                     xtks=[-16,-12,-8,-4,0]
             elif ttt_dom == 'contsub_nh' or ttt_dom == 'madasub_nh':
-                if pt<=11:
+                if pt<nmons:
                     x1=-8
                     x2=5
                     xtks=[-8,-4,0,4]
-                if pt==12:
-                    x1=-50
-                    x2=5
-                    xtks=[-40,-20,0]
-                if pt==13:
+                if pt==nmons:
                     x1=-25
                     x2=5
                     xtks=[-20,-10,0]
-                if pt==14:
+                if pt>nmons:
                     x1=-18
                     x2=5
                     xtks=[-15,-10,-5,0,5]
 
             else:
-                if pt<=11:
+                if pt<nmons:
                     x1=-8
                     x2=5
                     xtks=[-8,-4,0,4]
-                if pt==12:
-                    x1=-50
-                    x2=5
-                    xtks=[-40,-20,0]
-                if pt==13:
+                if pt==nmons:
                     x1=-25
                     x2=5
                     xtks=[-20,-10,0]
-                if pt==14:
+                if pt>nmons:
                     x1=-18
                     x2=5
                     xtks=[-15,-10,-5,0,5]
 
         elif charac=='tttpr':
             if ttt_dom=='subt':
-                if pt <=11:
+                if pt <nmons:
                     x1=-1000
                     x2=600
                     xtks=[-1000,-500,0,500]
-                elif pt==12:
-                    x1=-5000
-                    x2=1000
-                    xtks=[-5000,-2500,0]
-                elif pt==13:
+                elif pt==nmons:
                     x1=-3000
                     x2=1000
                     xtks=[-3000,-1500,0]
-                elif pt==14:
+                elif pt>nmons:
                     x1=-1400
                     x2=400
                     xtks=[-1000,-500,0]
             elif ttt_dom=='contsub_nh' or ttt_dom=='madasub_nh':
-                if pt <=11:
+                if pt <nmons:
                     x1=-1400
                     x2=1000
                     xtks=[-1000,-500,0,500,1000]
-                elif pt==12:
-                    x1=-6000
-                    x2=1000
-                    xtks=[-5000,-2500,0]
-                elif pt==13:
+                elif pt==nmons:
                     x1=-5000
                     x2=1000
                     xtks=[-5000,-2500,0]
-                elif pt==14:
+                elif pt>nmons:
                     x1=-3000
                     x2=600
                     xtks=[-3000,-1500,0]
 
             else:
-                if pt <=11:
+                if pt <nmons:
                     x1=-1400
                     x2=1000
                     xtks=[-1000,-500,0,500,1000]
-                elif pt==12:
-                    x1=-6000
-                    x2=1000
-                    xtks=[-5000,-2500,0]
-                elif pt==13:
+                elif pt==nmons:
                     x1=-5000
                     x2=1000
                     xtks=[-5000,-2500,0]
-                elif pt==14:
+                elif pt>nmons:
                     x1=-3000
                     x2=600
                     xtks=[-3000,-1500,0]
