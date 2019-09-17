@@ -829,14 +829,14 @@ for t in range(nthresh):
         #Plot y=0 line
         ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
-        # if driver=='scongo_olr':
-        #     y1=180.0
-        #     y2=270.0
-        #
-        #     plt.ylim(y1,y2)
-        #
-        #     #Plot x=0 line
-        #     ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
+        if driver=='scongo_olr':
+            y1=-10.0
+            y2=30.0
+
+            plt.ylim(y1,y2)
+
+            #Plot x=0 line
+            ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
