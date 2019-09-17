@@ -60,8 +60,8 @@ under_of='dayof'
 globp='pr'
 
 # Which domain? - for TTT / x axis
-dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
-whichend=45.0
+dom='Mada' # Options 'SICZ', 'Cont', 'Mada'
+whichend=70.0
 
 # dom info
 if dom=='SICZ':
@@ -80,11 +80,15 @@ elif dom=='Mada':
     ttt_dom='madasub_nh'
 
 # Info for change 2 (y axis)
-driver='scongo_olr'
+#driver='scongo_olr'
+driver='seaf_olr'
 
 if driver=='scongo_olr':
     globv='olr'
     drv_dom='scongo'
+elif driver=='seaf_olr':
+    globv='olr'
+    drv_dom='seaf'
 
 
 
@@ -829,7 +833,7 @@ for t in range(nthresh):
         #Plot y=0 line
         ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
-        if driver=='scongo_olr':
+        if driver=='scongo_olr' or driver=='seaf_olr':
             y1=-10.0
             y2=30.0
 
