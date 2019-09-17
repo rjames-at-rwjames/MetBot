@@ -80,19 +80,11 @@ elif dom=='Mada':
     ttt_dom='madasub_nh'
 
 # Info for change 2 (y axis)
-#driver='scongo_olr'
-#driver='seaf_olr'
-driver='sEAIO_olr'
+driver='dom_mean'
 
-if driver=='scongo_olr':
-    globv='olr'
-    drv_dom='scongo'
-elif driver=='seaf_olr':
+if driver=='dom_mean':
     globv='olr'
     drv_dom='seaf'
-elif driver=='sEAIO_olr':
-    globv='olr'
-    drv_dom='sEAIO'
 
 
 # time info
@@ -836,14 +828,15 @@ for t in range(nthresh):
         #Plot y=0 line
         ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
-        if driver=='scongo_olr' or driver=='seaf_olr' or driver=='sEAIO_olr':
-            y1=-10.0
-            y2=30.0
+        if driver=='dom_mean':
+            if globv=='olr':
+                y1=-30.0
+                y2=30.0
 
-            plt.ylim(y1,y2)
+                plt.ylim(y1,y2)
 
-            #Plot x=0 line
-            ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
+                #Plot x=0 line
+                ax.plot([0,0],[y1,y2],color='grey',linestyle='--',zorder=31)
 
     plt.subplots_adjust(left=0.08, right=0.8, top=0.90, bottom=0.05, wspace=0.5, hspace=0.5)
 
@@ -862,8 +855,12 @@ for t in range(nthresh):
     if charac=='intens' or charac=='tttpr':
         figsuf=figsuf+under_of
 
+    drvname=driver
+    if dom_mean:
+        drvname=drvname+'_'+globv+'_'+drv_dom
+
     scatterfig=figdir+'/scatter_12panel.a_TTT_'+charac+'_'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'.'\
-               +'b_'+driver+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
+               +'b_'+drvname+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
     plt.close()
