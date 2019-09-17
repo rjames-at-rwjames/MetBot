@@ -104,6 +104,7 @@ def isubs(sub,lat,lon,*args):
     domains['scongo'] = ((-10.0,0.0),(10.0,30.0))
     domains['seaf'] = ((-10.0,0.0),(30.0,50.0)) # south east Africa
     domains['WEIO'] = ((-10.0,0.0),(50.0,70.0)) # west equatorial Indian Ocean
+    domains['sEAIO'] = ((-10.0,0.0),(30.0,70.0)) # East Africa and w equatorial Indian Ocean - south
     domains['trop'] = ((-15.0,0.0),(7.5,100.0))
     domains['trop2'] = ((-10.0,10.0),(7.5,100.0))
     domains['trop3'] = ((-10.0,0.0),(10.0,40.0))

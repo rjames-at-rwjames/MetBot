@@ -81,7 +81,8 @@ elif dom=='Mada':
 
 # Info for change 2 (y axis)
 #driver='scongo_olr'
-driver='seaf_olr'
+#driver='seaf_olr'
+driver='sEAIO_olr'
 
 if driver=='scongo_olr':
     globv='olr'
@@ -89,7 +90,9 @@ if driver=='scongo_olr':
 elif driver=='seaf_olr':
     globv='olr'
     drv_dom='seaf'
-
+elif driver=='sEAIO_olr':
+    globv='olr'
+    drv_dom='sEAIO'
 
 
 # time info
