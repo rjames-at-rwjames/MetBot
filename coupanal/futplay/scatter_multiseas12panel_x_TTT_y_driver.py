@@ -856,7 +856,7 @@ for t in range(nthresh):
         figsuf=figsuf+under_of
 
     drvname=driver
-    if dom_mean:
+    if driver=='dom_mean':
         drvname=drvname+'_'+globv+'_'+drv_dom
 
     scatterfig=figdir+'/scatter_12panel.a_TTT_'+charac+'_'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'.'\
