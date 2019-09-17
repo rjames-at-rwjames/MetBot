@@ -836,7 +836,7 @@ for t in range(nthresh):
         #Plot y=0 line
         ax.plot([x1,x2],[0,0],color='grey',linestyle='--',zorder=30)
 
-        if driver=='scongo_olr' or driver=='seaf_olr':
+        if driver=='scongo_olr' or driver=='seaf_olr' or driver=='sEAIO_olr':
             y1=-10.0
             y2=30.0
 
