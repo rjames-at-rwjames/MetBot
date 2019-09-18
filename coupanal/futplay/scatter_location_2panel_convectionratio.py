@@ -33,7 +33,7 @@ import coupanal.group_dict as dset_grp
 
 
 # Running options
-test_scr=True
+test_scr=False
 threshtest=False
 group=True
 alphord=False
@@ -66,7 +66,7 @@ if levsel:
 else:
     choosel='1'
 dom_a1='scongo'
-dom_a2='seaf'
+dom_a2='sEAIO'
 
 # plot b
 dom_b_wlon=7.5
@@ -585,7 +585,8 @@ for t in range(nthresh):
     if test_scr:
         figsuf=figsuf+'_testmodels'
 
-    scatterfig=figdir+'/scatter_location_2panel_ratio.a.'+seas_a+'.w_'+str(dom_a_elon)+'.'\
+    scatterfig=figdir+'/scatter_location_2panel_ratio.a.'+seas_a+\
+               '.doms_'+dom_a1+'_'+dom_a2+'.w_'+str(dom_a_elon)+'.'\
                +'b.'+seas_b+'.w_'+str(dom_b_elon)+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
     print 'saving figure as '+scatterfig
     plt.savefig(scatterfig,dpi=150)
