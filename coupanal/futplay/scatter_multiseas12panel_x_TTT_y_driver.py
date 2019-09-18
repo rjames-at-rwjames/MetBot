@@ -38,7 +38,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=False   # will run on only 1 model
+test_scr=True   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -60,8 +60,8 @@ under_of='dayof'
 globp='pr'
 
 # Which domain? - for TTT / x axis
-dom='Mada' # Options 'SICZ', 'Cont', 'Mada'
-whichend=70.0
+dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
+whichend=45.0
 
 # dom info
 if dom=='SICZ':
@@ -85,7 +85,9 @@ driver='dom_mean'
 if driver=='dom_mean':
     globv='olr'
     drv_dom='seaf'
-
+elif driver=='ratio_means':
+    globv='olr'
+    drv_dom=['scongo','seaf']
 
 # time info
 monthstr = ['Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \
@@ -368,27 +370,41 @@ for t in range(nthresh):
                     varmeanfile = botdir + dset + '/' + name + '/' \
                                    + name + '.' + globv + '.mon.mean.' + ys_clim + '.nc'
 
-                    print 'Opening ' + varmeanfile
-                    print 'for domain ' + drv_dom
+                    # Loop domains for driver
+                    # if 1 it will just do 1, if ratio it will loop two
+                    for reg in range(len(drv_dom)):
 
-                    varmean = mync.open_multi(varmeanfile, globv, name, \
-                                               dataset=dset, subs=drv_dom)
+                        thisdom=drv_dom[reg]
+                        print 'Opening ' + varmeanfile
+                        print 'for domain ' + thisdom
 
-                    ndim = len(varmean)
-                    if ndim == 5:
-                        var_monmn, time, lat_mn, lon, dtime_monmn = varmean
-                    elif ndim == 6:
-                        var, time, lat_mn, lon, lev, dtime_monmn = varmean
-                        var_monmn = np.squeeze(var)
-                    else:
-                        print 'Check number of levels in ncfile'
-                    dtime_monmn[:, 3] = 0
-                    varmons = dtime_monmn[:, 1]
+                        varmean = mync.open_multi(varmeanfile, globv, name, \
+                                                   dataset=dset, subs=thisdom)
 
-                    if weightlats:
-                        latr = np.deg2rad(lat_mn)
-                        weights = np.cos(latr)
-                        zonmean = np.nanmean(var_monmn, axis=2)
+                        ndim = len(varmean)
+                        if ndim == 5:
+                            var_monmn, time, lat_mn, lon, dtime_monmn = varmean
+                        elif ndim == 6:
+                            var, time, lat_mn, lon, lev, dtime_monmn = varmean
+                            var_monmn = np.squeeze(var)
+                        else:
+                            print 'Check number of levels in ncfile'
+                        dtime_monmn[:, 3] = 0
+                        varmons = dtime_monmn[:, 1]
+
+                        if weightlats:
+                            latr = np.deg2rad(lat_mn)
+                            weights = np.cos(latr)
+                            zonmean = np.nanmean(var_monmn, axis=2)
+
+                        if reg==0:
+                            zonmean_dom1=zonmean
+                            weights_dom1=weights
+                            varmons_dom1=varmons
+                        elif reg==1:
+                            zonmean_dom2=zonmean
+                            weights_dom2=weights
+                            varmons_dom2=varmons
 
                     # Finally get rain file for intensity
                     if charac=='intens' or charac=='tttpr':
@@ -593,18 +609,46 @@ for t in range(nthresh):
                                 elif this_c == 'fut':
                                     fut_xvals[mn] = tottttrain
 
-
                         # For driver
                         print 'Calculating mean driver for this cent'
-                        locmon = np.where(varmons[:] == thismon)[0][0]
+                        for reg in range(len(drv_dom)):
+                            thisdom = drv_dom[reg]
 
-                        zmean_thismon = zonmean[locmon, :]
-                        var4mon = np.ma.average(zmean_thismon, weights=weights)
+                            if reg==0:
+                                zonmean = zonmean_dom1
+                                weights = weights_dom1
+                                varmons = varmons_dom1
+                            elif reg==1:
+                                zonmean = zonmean_dom2
+                                weights = weights_dom2
+                                varmons = varmons_dom2
 
-                        if this_c == 'hist':
-                            hist_yvals[mn] = var4mon
-                        elif this_c == 'fut':
-                            fut_yvals[mn] = var4mon
+                            locmon = np.where(varmons[:] == thismon)[0][0]
+
+                            zmean_thismon = zonmean[locmon, :]
+                            var4mon = np.ma.average(zmean_thismon, weights=weights)
+
+                            if driver=='dom_mean':
+
+                                if this_c == 'hist':
+                                    hist_yvals[mn] = var4mon
+                                elif this_c == 'fut':
+                                    fut_yvals[mn] = var4mon
+
+                            elif driver=='ratio_means':
+
+                                if reg == 0:
+                                    congoconv = var4mon
+                                elif rat == 1:
+                                    eastconv = var4mon
+
+                        if driver=='ratio_means':
+                            ratio = congoconv / eastconv
+
+                            if this_c == 'hist':
+                                hist_yvals[mn] = ratio
+                            elif this_c == 'fut':
+                                fut_yvals[mn] = ratio
 
                     print 'Now looping seasons to get the aggregate values from those calculated by month'
                     for s in range(len(seas)):
@@ -858,6 +902,8 @@ for t in range(nthresh):
     drvname=driver
     if driver=='dom_mean':
         drvname=drvname+'_'+globv+'_'+drv_dom
+    elif driver=='ratio_means':
+        drvname=drvname+'_'+globv+'_'+drv_dom[0]+'_'+drv_dom[1]
 
     scatterfig=figdir+'/scatter_12panel.a_TTT_'+charac+'_'+ttt_dom+'_'+str(wlon)+'_'+str(elon)+'.'\
                +'b_'+drvname+'.frm_event_'+from_event+'.'+figsuf+'.thresh_'+thnames[t]+'.png'
