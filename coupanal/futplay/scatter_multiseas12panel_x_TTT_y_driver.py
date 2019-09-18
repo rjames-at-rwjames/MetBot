@@ -80,11 +80,11 @@ elif dom=='Mada':
     ttt_dom='madasub_nh'
 
 # Info for change 2 (y axis)
-driver='dom_mean'
+driver='ratio_means'
 
 if driver=='dom_mean':
     globv='olr'
-    drv_dom='seaf'
+    drv_dom=['seaf']
 elif driver=='ratio_means':
     globv='olr'
     drv_dom=['scongo','seaf']
