@@ -440,9 +440,9 @@ for t in range(nthresh):
                                 reg_mean = np.nanmean(seasmean)
 
                             if rat==0:
-                                congoconv=reg_mean[:]
+                                congoconv=reg_mean
                             elif rat==1:
-                                eastconv=reg_mean[:]
+                                eastconv=reg_mean
 
                         ratio = congoconv / eastconv
 
