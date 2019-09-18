@@ -63,7 +63,7 @@ under_of='dayof'
 globp='pr'
 
 # Which domain?
-dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
+dom='EAFR' # Options 'SICZ', 'Cont', 'Mada'
 whichend=45.0
 
 # dom info
@@ -87,6 +87,12 @@ elif dom=='Mada':
     ttt_dom='madasub_nh'
     pr_dom='madasub_nh'
     #pr_dom='contsub_nh'
+
+elif dom=='EAFR':
+    wlon=7.5
+    elon=whichend
+    ttt_dom='contsub_nh'
+    pr_dom='east_rain'
 
 # time info
 monthstr = ['Sept', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', \

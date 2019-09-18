@@ -108,6 +108,7 @@ def isubs(sub,lat,lon,*args):
     domains['congo'] = ((-10.0,10.0),(10.0,30.0))
     domains['eaf'] = ((-10.0,10.0),(30.0,50.0)) # east Africa
     domains['EAIO'] = ((-10.0,0.0),(30.0,70.0)) # East Africa and w equatorial Indian Ocean
+    domains['east_rain'] = ((-10.5,5.5),(28.0,42.0)) # East Africa rainfall domain
     domains['trop'] = ((-15.0,0.0),(7.5,100.0))
     domains['trop2'] = ((-10.0,10.0),(7.5,100.0))
     domains['trop3'] = ((-10.0,0.0),(10.0,40.0))
