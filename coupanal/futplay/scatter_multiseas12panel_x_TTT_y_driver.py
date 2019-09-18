@@ -38,7 +38,7 @@ import coupanal.Subset_Events as sset
 import coupanal.group_dict as dset_grp
 
 # Running options
-test_scr=True   # will run on only 1 model
+test_scr=False   # will run on only 1 model
 alphord=False   # models in alphabetical order
 group=True
 threshtest=False
@@ -61,7 +61,7 @@ globp='pr'
 
 # Which domain? - for TTT / x axis
 dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
-whichend=45.0
+whichend=55.0
 
 # dom info
 if dom=='SICZ':
@@ -80,11 +80,11 @@ elif dom=='Mada':
     ttt_dom='madasub_nh'
 
 # Info for change 2 (y axis)
-driver='ratio_means'
+driver='dom_mean'
 
 if driver=='dom_mean':
     globv='olr'
-    drv_dom=['seaf']
+    drv_dom=['scongo']
 elif driver=='ratio_means':
     globv='olr'
     drv_dom=['scongo','seaf']
@@ -901,7 +901,7 @@ for t in range(nthresh):
 
     drvname=driver
     if driver=='dom_mean':
-        drvname=drvname+'_'+globv+'_'+drv_dom
+        drvname=drvname+'_'+globv+'_'+drv_dom[0]
     elif driver=='ratio_means':
         drvname=drvname+'_'+globv+'_'+drv_dom[0]+'_'+drv_dom[1]
 
