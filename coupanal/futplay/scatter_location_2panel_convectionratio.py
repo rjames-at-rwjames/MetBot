@@ -554,7 +554,7 @@ for t in range(nthresh):
         if fg==0:
             xlab='Ratio of OLR congo to east africa in '+seas_a
             ylab='Percentage of '+seas_a+' TTTs west of '+str(dom_a_elon)
-            ax.set_xlim(190,260)
+            #ax.set_xlim(190,260)
             ax.set_ylim(10,100)
         elif fg==1:
             xlab=index + ' number for '+seas_b
