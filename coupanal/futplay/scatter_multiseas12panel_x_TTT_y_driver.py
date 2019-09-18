@@ -639,7 +639,7 @@ for t in range(nthresh):
 
                                 if reg == 0:
                                     congoconv = var4mon
-                                elif rat == 1:
+                                elif reg == 1:
                                     eastconv = var4mon
 
                         if driver=='ratio_means':
