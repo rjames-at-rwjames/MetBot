@@ -63,8 +63,8 @@ under_of='dayof'
 globp='pr'
 
 # Which domain?
-dom='EAFR' # Options 'SICZ', 'Cont', 'Mada'
-whichend=45.0
+dom='Cont' # Options 'SICZ', 'Cont', 'Mada'
+whichend=55.0
 
 # dom info
 if dom=='SICZ':
