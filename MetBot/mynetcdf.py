@@ -115,6 +115,7 @@ def isubs(sub,lat,lon,*args):
     domains['subt'] = ((-35.0,-20.0),(7.5,100.0))
     domains['subt2'] = ((-35.0,-25.0,),(7.5,100.0))
     domains['subt3'] =  ((-35.0,-25.0,),(10.0,40.0))
+    domains['latband'] = ((-47.0,-44.0),(0,360))
     if isinstance(sub,str):
         domain=domains[sub]; getisubs=True
     elif isinstance(sub,tuple):

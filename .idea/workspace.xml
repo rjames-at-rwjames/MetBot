@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="da1d8ab4-5a15-4ca9-8222-e7a9193447e1" name="Default" comment="Small changes to run test">
+    <list default="true" id="c428abf1-e167-4e68-8a0e-7c12155ffd62" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/MetBot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MetBot.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
@@ -25,13 +25,7 @@
       <change beforePath="$PROJECT_DIR$/MetBot/rawseasonalcycle.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/rawseasonalcycle.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/coupanal/get_netcdf_arche_sample.sh" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/get_netcdf_arche_sample.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/coupanal/get_netcdf_ltmean.sh" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/get_netcdf_ltmean.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/group_dict.py" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/group_dict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/paperfigs/CBvar_4panelfig.py" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/paperfigs/CBvar_4panelfig.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/paperfigs/comp_contour_multimodpanels.py" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/paperfigs/comp_contour_multimodpanels.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_4panel.py" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_4panel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_newaxis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_newcriteria.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/coupanal/get_netcdf_ltmean_future.sh" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/get_netcdf_ltmean_future.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/getOLRdata.sh" beforeDir="false" afterPath="$PROJECT_DIR$/test/getOLRdata.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/test_rj.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_rj.py" afterDir="false" />
@@ -64,245 +58,87 @@
       <change beforePath="$PROJECT_DIR$/wrap/scatter_thresh_nttt.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/scatter_thresh_nttt.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wrap/thresh_change_nTTT_fut_th_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/thresh_change_nTTT_fut_th_test.py" afterDir="false" />
     </list>
-    <ignored path="MetBot.iws" />
-    <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/MetBot$generate_TTT_eventset.coverage" NAME="generate_TTT_eventset Coverage Results" MODIFIED="1554815895412" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/coupanal" />
-    <SUITE FILE_PATH="coverage/MetBot$allCMIPplot_ttt_precip_autothresh.coverage" NAME="allCMIPplot_ttt_precip_autothresh Coverage Results" MODIFIED="1523005341916" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/wrap" />
-  </component>
-  <component name="CreatePatchCommitExecutor">
-    <option name="PATCH_PATH" value="" />
-  </component>
-  <component name="DatabaseView">
-    <option name="GROUP_SCHEMA" value="true" />
-    <option name="GROUP_CONTENTS" value="false" />
-    <option name="SORT_POSITIONED" value="false" />
-    <option name="SHOW_TABLE_DETAILS" value="true" />
-    <option name="SHOW_EMPTY_GROUPS" value="false" />
-    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
-  </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/CBvar_4panelfig.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="623">
-                    <caret line="318" selection-start-line="316" selection-end-line="318" />
-                    <folding>
-                      <element signature="e#317#326#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/scatter_number_2panel.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="2261">
-                    <caret line="134" column="43" selection-start-line="134" selection-start-column="43" selection-end-line="134" selection-end-column="43" />
-                    <folding>
-                      <element signature="e#163#172#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/OLRdists_threshs_txtfile_plot.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="5202">
-                    <caret line="309" column="38" selection-start-line="309" selection-start-column="32" selection-end-line="309" selection-end-column="38" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/mapltmean_multimodpanels.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="332">
-                    <caret line="23" column="23" selection-start-line="23" selection-end-line="24" />
-                    <folding>
-                      <element signature="e#182#191#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/centroids_angles_scatter_w_sample.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="3315">
-                    <caret line="199" selection-start-line="139" selection-end-line="199" />
-                    <folding>
-                      <element signature="e#93#102#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
-  <component name="FavoritesManager">
-    <favorites_list name="MetBot" />
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/spatiofreq_multimod.py">
+        <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonic_multimod_comps.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="569">
-              <caret line="282" selection-start-line="282" selection-end-line="282" />
+            <state relative-caret-position="362">
+              <caret line="292" column="58" lean-forward="true" selection-start-line="292" selection-start-column="58" selection-end-line="292" selection-end-column="58" />
               <folding>
-                <element signature="e#133#142#0" expanded="true" />
+                <element signature="e#222#231#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/comp_wave_multimodpanels.py">
+        <entry file="file://$PROJECT_DIR$/coupanal/revplay/comp_wnumber_multimodpanels.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="349">
-              <caret line="334" selection-start-line="334" selection-end-line="334" />
-              <folding>
-                <element signature="e#617#626#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="177">
+              <caret line="285" column="52" selection-start-line="285" selection-end-line="286" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tickfonts</find>
-      <find>fonts</find>
-      <find>edges</find>
-      <find>bias</find>
-      <find>figdim</find>
-      <find>botdir</find>
-      <find>doms</find>
-      <find>cnt</find>
+      <find>mh</find>
+      <find>harmonic_number</find>
+      <find>nh</find>
+      <find>index</find>
+      <find>table</find>
+      <find>txt</find>
+      <find>smpfile</find>
+      <find>mean</find>
+      <find>seas</find>
+      <find>amp_var</find>
+      <find>nlon</find>
+      <find>labname</find>
+      <find>label</find>
+      <find>sub</find>
+      <find>amplitude</find>
+      <find>anoms</find>
       <find>txtfile</find>
-      <find>xvals</find>
-      <find>lobv</find>
-      <find>threshtest</find>
-      <find>xvales</find>
-      <find>alphord</find>
-      <find>mnames</find>
-      <find>adjust</find>
-      <find>plot</find>
-      <find>thresh</find>
-      <find>lon</find>
-      <find>choosel</find>
-      <find>thname</find>
-      <find>seas_sub</find>
-      <find>months</find>
-      <find>mons</find>
-      <find>name2</find>
-      <find>yrs</find>
-      <find>ys</find>
-      <find>allfi</find>
-      <find>test_scr</find>
-      <find>nos4cbar</find>
+      <find>wcb</find>
+      <find>smpdata</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="thresh_test" />
-      </map>
-    </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py" />
-        <option value="$PROJECT_DIR$/MetBot/mast_dset_dict.py" />
-        <option value="$PROJECT_DIR$/wrap/allCMIPplot_sc_pr_TTTprops.py" />
-        <option value="$PROJECT_DIR$/wrap/allCMIPplot_oneplot_change_sc_dPR.py" />
-        <option value="$PROJECT_DIR$/MetBot/SynopticAnatomy.py" />
-        <option value="$PROJECT_DIR$/wrap/plot_ttt_ts_sc_sf_loop_autothresh.py" />
-        <option value="$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py" />
-        <option value="$PROJECT_DIR$/MetBot/dimensions_dict.py" />
-        <option value="$PROJECT_DIR$/MetBot/AdvancedPlots.py" />
-        <option value="$PROJECT_DIR$/MetBot/dset_dict.py" />
-        <option value="$PROJECT_DIR$/coupanal/OLRdists_threshs_txtfile_plot.py" />
-        <option value="$PROJECT_DIR$/coupanal/generate_TTT_eventset.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/OLRdists_threshs_txtfile_plot.py" />
-        <option value="$PROJECT_DIR$/wrap/CBvar_4panelfig_backup.py" />
-        <option value="$PROJECT_DIR$/MetBot/EventStats.py" />
-        <option value="$PROJECT_DIR$/coupanal/Plotting_Blob.py" />
-        <option value="$PROJECT_DIR$/coupanal/sample_dict.py" />
-        <option value="$PROJECT_DIR$/coupanal/get_arche_sample.py" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.txt" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.pr.txt" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.gpth.txt" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.olr.txt" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.omega.txt" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.q.txt" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.T.txt" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.u.txt" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.v.txt" />
-        <option value="$PROJECT_DIR$/coupanal/Plotting_Blobs.py" />
-        <option value="$PROJECT_DIR$/coupanal/testplot_all_sampled_cbs.py" />
-        <option value="$PROJECT_DIR$/MetBot/MetBlobs.py" />
-        <option value="$PROJECT_DIR$/coupanal/get_arche_sample_dates4netcdf.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/centroids_angles_scatter_w_sample.py" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4py/dsets_wave.py" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4p/dsets_wave.py" />
-        <option value="$PROJECT_DIR$/coupanal/dicts4p/dsets_qflux.py" />
-        <option value="$PROJECT_DIR$/coupanal/get_netcdf_arche_sample.sh" />
-        <option value="$PROJECT_DIR$/coupanal/Subset_Events.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/comp_wave_multimodpanels.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/comp_qflux_multimodpanels.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_newaxis.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_newcriteria.py" />
-        <option value="$PROJECT_DIR$/coupanal/get_netcdf_ltmean.sh" />
-        <option value="$PROJECT_DIR$/coupanal/group_dict.py" />
+        <option value="$PROJECT_DIR$/coupanal/revplay/harmonics_playwrap_wilks.py" />
+        <option value="$PROJECT_DIR$/coupanal/revplay/harmonics_playwrap.py" />
+        <option value="$PROJECT_DIR$/coupanal/revplay/harmonics_code.py" />
         <option value="$PROJECT_DIR$/MetBot/mynetcdf.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/comp_contour_multimodpanels.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/mapltmean_multimodpanels.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_4panel.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/scatter_number_2panel.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/CBvar_4panelfig.py" />
-        <option value="$PROJECT_DIR$/coupanal/paperfigs/spatiofreq_multimod.py" />
+        <option value="$PROJECT_DIR$/coupanal/revplay/harmonic_multimod_comps.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="-20" />
+    <option name="y" value="3" />
+    <option name="width" value="1132" />
+    <option name="height" value="704" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="1ZD1bbNBD4FcOPT3qAz4cVGCdXY" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -321,37 +157,43 @@
               <item name="coupanal" type="462c0819:PsiDirectoryNode" />
               <item name="paperfigs" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="MetBot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
+              <item name="coupanal" type="462c0819:PsiDirectoryNode" />
+              <item name="revplay" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MetBot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
+              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
-    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
-    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="full.screen.before.presentation.mode" value="true" />
-    <property name="js.eslint.eslintPackage" value="" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="Z:\PyCharm4CT\MetBot\coupanal\paperfigs" />
-      <recent name="Z:\PyCharm4CT\MetBot\coupanal" />
-      <recent name="Z:\PyCharm4CT\MetBot\coupanal\dicts4p" />
-      <recent name="Z:\PyCharm4CT\MetBot\coupanal\dicts4py" />
-      <recent name="Z:\PyCharm4CT\MetBot\coupanal\dicts4CDO" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="Z:\PyCharm4CT\MetBot\wrap\coup_play" />
-      <recent name="Z:\PyCharm4CT\MetBot\coupanal\dicts4p" />
-      <recent name="Z:\PyCharm4CT\MetBot\coupanal\paperfigs" />
+      <recent name="Z:\PyCharm4CT\MetBot\coupanal\revplay" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -366,1028 +208,147 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.generate_TTT_eventset">
-    <configuration default="true" type="tests" factoryName="Attests">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="MetBot" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="INTERPRETER_PATH" value="/bin/bash" />
-      <option name="PROJECT_INTERPRETER" value="false" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <module name="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="allCMIPplot_ttt_precip_autothresh" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="MetBot" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="ssh://bras2392@linux.ouce.ox.ac.uk:22/soge-home/students/bras2392/.conda_envs/bras2392python/bin/python" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/wrap" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="false" />
-      <option name="ADD_SOURCE_ROOTS" value="false" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <PathMappingSettings>
-        <option name="pathMappings">
-          <list>
-            <mapping local-root="Z:" remote-root="/ouce-home/students/bras2392" />
-          </list>
-        </option>
-      </PathMappingSettings>
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="generate_TTT_eventset" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="MetBot" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/coupanal" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/coupanal/generate_TTT_eventset.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="js.build_tools.gulp">
-      <node-interpreter>project</node-interpreter>
-      <node-options />
-      <gulpfile />
-      <tasks />
-      <arguments />
-      <envs />
-      <method v="2" />
-    </configuration>
-    <list>
-      <item itemvalue="Python.allCMIPplot_ttt_precip_autothresh" />
-      <item itemvalue="Python.generate_TTT_eventset" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.generate_TTT_eventset" />
-        <item itemvalue="Python.allCMIPplot_ttt_precip_autothresh" />
-      </list>
-    </recent_temporary>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="da1d8ab4-5a15-4ca9-8222-e7a9193447e1" name="Default" comment="" />
-      <created>1485937718275</created>
+      <changelist id="c428abf1-e167-4e68-8a0e-7c12155ffd62" name="Default Changelist" comment="" />
+      <created>1584358924388</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1485937718275</updated>
-      <workItem from="1554815560342" duration="551000" />
-      <workItem from="1556016170139" duration="16000" />
-      <workItem from="1556017360281" duration="3450000" />
-      <workItem from="1556100900423" duration="8220000" />
-      <workItem from="1556182768897" duration="3689000" />
-      <workItem from="1556190409222" duration="1210000" />
-      <workItem from="1556525717627" duration="7926000" />
-      <workItem from="1556616695755" duration="8857000" />
-      <workItem from="1556701349845" duration="10137000" />
-      <workItem from="1556712002988" duration="26000" />
-      <workItem from="1556786826826" duration="979000" />
-      <workItem from="1556788774303" duration="3622000" />
-      <workItem from="1556875670297" duration="7633000" />
-      <workItem from="1556893675657" duration="2626000" />
-      <workItem from="1557134240025" duration="7372000" />
-      <workItem from="1557309769452" duration="7420000" />
-      <workItem from="1557912988465" duration="7545000" />
-      <workItem from="1557999528735" duration="7573000" />
-      <workItem from="1558085145058" duration="4405000" />
-      <workItem from="1558343007383" duration="5058000" />
-      <workItem from="1558431438764" duration="7055000" />
-      <workItem from="1558517325176" duration="19410000" />
-      <workItem from="1558629075603" duration="1000000" />
-      <workItem from="1559126735233" duration="956000" />
-      <workItem from="1560779771255" duration="69000" />
-      <workItem from="1560780172245" duration="134000" />
-      <workItem from="1560849654560" duration="16723000" />
-      <workItem from="1560944217844" duration="1057000" />
-      <workItem from="1560947625963" duration="2970000" />
-      <workItem from="1560975368936" duration="1005000" />
-      <workItem from="1560981248707" duration="539000" />
-      <workItem from="1561453877618" duration="4228000" />
-      <workItem from="1561541288423" duration="9182000" />
-      <workItem from="1561973643639" duration="5601000" />
-      <workItem from="1562064494003" duration="2356000" />
-      <workItem from="1562074214324" duration="2611000" />
-      <workItem from="1562160098044" duration="1456000" />
+      <updated>1584358924388</updated>
+      <workItem from="1584358938088" duration="10603000" />
+      <workItem from="1584614860954" duration="5645000" />
+      <workItem from="1584628566023" duration="9721000" />
+      <workItem from="1584642937364" duration="2108000" />
+      <workItem from="1584648300047" duration="999000" />
     </task>
-    <task id="LOCAL-00008" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521637870024</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1521637870024</updated>
-    </task>
-    <task id="LOCAL-00009" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521637989884</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1521637989884</updated>
-    </task>
-    <task id="LOCAL-00010" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521638136854</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1521638136854</updated>
-    </task>
-    <task id="LOCAL-00011" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521638951588</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1521638951588</updated>
-    </task>
-    <task id="LOCAL-00012" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521639028056</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1521639028056</updated>
-    </task>
-    <task id="LOCAL-00013" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521639084792</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1521639084792</updated>
-    </task>
-    <task id="LOCAL-00014" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521708183438</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1521708183438</updated>
-    </task>
-    <task id="LOCAL-00015" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521708342414</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1521708342414</updated>
-    </task>
-    <task id="LOCAL-00016" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521708422417</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1521708422417</updated>
-    </task>
-    <task id="LOCAL-00017" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521708794089</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1521708794089</updated>
-    </task>
-    <task id="LOCAL-00018" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521708927208</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1521708927208</updated>
-    </task>
-    <task id="LOCAL-00019" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521709014516</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1521709014516</updated>
-    </task>
-    <task id="LOCAL-00020" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521709276379</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1521709276379</updated>
-    </task>
-    <task id="LOCAL-00021" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521709464083</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1521709464083</updated>
-    </task>
-    <task id="LOCAL-00022" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521710003122</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1521710003122</updated>
-    </task>
-    <task id="LOCAL-00023" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521710208467</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1521710208467</updated>
-    </task>
-    <task id="LOCAL-00024" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521710253842</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1521710253842</updated>
-    </task>
-    <task id="LOCAL-00025" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521710316901</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1521710316901</updated>
-    </task>
-    <task id="LOCAL-00026" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521710442805</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1521710442805</updated>
-    </task>
-    <task id="LOCAL-00027" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521710540555</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1521710540555</updated>
-    </task>
-    <task id="LOCAL-00028" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521710743269</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1521710743269</updated>
-    </task>
-    <task id="LOCAL-00029" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521712546217</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1521712546217</updated>
-    </task>
-    <task id="LOCAL-00030" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521712850602</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1521712850602</updated>
-    </task>
-    <task id="LOCAL-00031" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521805346612</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1521805346612</updated>
-    </task>
-    <task id="LOCAL-00032" summary="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix">
-      <created>1521807541086</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1521807541086</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Edits to TTT precip">
-      <created>1523358631627</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1523358631627</updated>
-    </task>
-    <task id="LOCAL-00034" summary="Some edits made whilst grouping CMIP5 TTT representations &#10;E.g. new wrappers to animate OLR and precip">
-      <created>1524138924026</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1524138924026</updated>
-    </task>
-    <task id="LOCAL-00035" summary="New edits to get future TTTs&#10;">
-      <created>1524239780666</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1524239780666</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Edits to allow future longterm means to be selected&#10;and to change seasonal cycle plotting for multi-panel CMIP5">
-      <created>1524574579159</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1524574579159</updated>
-    </task>
-    <task id="LOCAL-00037" summary="New wrapper to plot future OLR distributions">
-      <created>1525110444206</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1525110444206</updated>
-    </task>
-    <task id="LOCAL-00038" summary="New wrappers to do future thresh test and map future pr change from TTTs">
-      <created>1527176861037</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1527176861037</updated>
-    </task>
-    <task id="LOCAL-00039" summary="Quite a few changes from June, to test future OLR thresholds">
-      <created>1529927900150</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1529927900150</updated>
-    </task>
-    <task id="LOCAL-00040" summary="New wrapper to plot change in TTT intensity (PDFs of rain under CBs)">
-      <created>1530696259877</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1530696259877</updated>
-    </task>
-    <task id="LOCAL-00041" summary="New wrapper to plot change in TTT intensity (PDFs of rain under CBs)">
-      <created>1530696419595</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1530696419595</updated>
-    </task>
-    <task id="LOCAL-00042" summary="New wrappers to plot regional mean precip and regional mean pr from TTTs">
-      <created>1531323338795</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1531323338795</updated>
-    </task>
-    <task id="LOCAL-00043" summary="Editting wrappers to get bar charts of pr from TTTs and change in pr from TTTs">
-      <created>1532939190682</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1532939190682</updated>
-    </task>
-    <task id="LOCAL-00044" summary="Editing wrappers to get change in percent rainfall from TTTs">
-      <created>1533042542579</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1533042542579</updated>
-    </task>
-    <task id="LOCAL-00045" summary="Editing wrappers to get change in percent rainfall from TTTs">
-      <created>1533206312367</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1533206312367</updated>
-    </task>
-    <task id="LOCAL-00046" summary="Editing nevents bar comparison to include new UM models and plot events per year">
-      <created>1533225723338</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1533225723338</updated>
-    </task>
-    <task id="LOCAL-00047" summary="Editing OLR dist wrapper to for new UM models">
-      <created>1533228131613</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1533228131613</updated>
-    </task>
-    <task id="LOCAL-00048" summary="Edits to make OLR mean scripts work for UM">
-      <created>1533290105918</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1533290105918</updated>
-    </task>
-    <task id="LOCAL-00049" summary="Edits to get new regions for scatterplotting in groupplay">
-      <created>1533894325239</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1533894325239</updated>
-    </task>
-    <task id="LOCAL-00050" summary="Edits to get new regions for zonal and meridional means">
-      <created>1533911466198</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1533911466199</updated>
-    </task>
-    <task id="LOCAL-00051" summary="Edits to get new regions for regional means">
-      <created>1534264241246</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1534264241247</updated>
-    </task>
-    <task id="LOCAL-00052" summary="Edits to get new regions for regional means">
-      <created>1534511024400</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1534511024400</updated>
-    </task>
-    <task id="LOCAL-00053" summary="Edits to get new regions for regional means">
-      <created>1534945760537</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1534945760574</updated>
-    </task>
-    <task id="LOCAL-00054" summary="Edits to get new regions for regional means">
-      <created>1535542697682</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1535542697683</updated>
-    </task>
-    <task id="LOCAL-00055" summary="Small changes to get CDR 2 - up to 2013">
-      <created>1535908752955</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1535908752956</updated>
-    </task>
-    <task id="LOCAL-00056" summary="Small changes to run test">
-      <created>1554816065084</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1554816065084</updated>
-    </task>
-    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="174667000" />
-  </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
+    <option name="totallyTimeSpent" value="18473000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" x="2620" y="48" width="519" height="947" id="Project" order="0" visible="true" weight="0.24520256" />
-      <window_info id="Structure" order="1" weight="0.24253732" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.290469" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32934782" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32924694" />
+      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32942432" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32936078" />
-      <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Version Control" order="11" weight="0.22823219" />
-      <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="13" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Remote Host" order="3" />
+      <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="5" />
-      <window_info anchor="right" x="0" y="0" width="434" height="856" id="Documentation" order="6" side_tool="true" weight="0.32995737" />
     </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" x="2620" y="48" width="519" height="947" id="Project" order="0" visible="true" weight="0.20469083" />
-      <window_info id="Structure" order="1" weight="0.24305555" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32934782" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32942432" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32936078" />
-      <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Version Control" order="11" weight="0.22823219" />
-      <window_info anchor="bottom" id="Docker" order="12" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="13" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Remote Host" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="SciView" order="5" />
-    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="Vcs.Log.UiProperties">
-    <option name="RECENTLY_FILTERED_USER_GROUPS">
-      <collection />
-    </option>
-    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
-      <collection />
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="Editing precip wrapper to generate for CMIP5" />
-    <MESSAGE value="New wrapper and changes to AdvancedPlots - to try to get rainmaps for allCMIP in one matrix" />
-    <MESSAGE value="Edits to TTT precip" />
-    <MESSAGE value="Some edits made whilst grouping CMIP5 TTT representations &#10;E.g. new wrappers to animate OLR and precip" />
-    <MESSAGE value="&#10;" />
-    <MESSAGE value="New edits to get future TTTs&#10;" />
-    <MESSAGE value="Edits to allow future longterm means to be selected&#10;and to change seasonal cycle plotting for multi-panel CMIP5" />
-    <MESSAGE value="New wrapper to plot future OLR distributions" />
-    <MESSAGE value="Many changes - mainly associated with future OLR distributions" />
-    <MESSAGE value="New wrappers to do future thresh test and map future pr change from TTTs" />
-    <MESSAGE value="Quite a few changes from June, to test future OLR thresholds" />
-    <MESSAGE value="New wrapper to plot change in TTT intensity (PDFs of rain under CBs)" />
-    <MESSAGE value="New wrappers to plot regional mean precip and regional mean pr from TTTs" />
-    <MESSAGE value="Editting wrappers to get bar charts of pr from TTTs and change in pr from TTTs" />
-    <MESSAGE value="Editing wrappers to get change in percent rainfall from TTTs" />
-    <MESSAGE value="Editing nevents bar comparison to include new UM models and plot events per year" />
-    <MESSAGE value="Editing OLR dist wrapper to for new UM models" />
-    <MESSAGE value="Edits to make OLR mean scripts work for UM" />
-    <MESSAGE value="Edits to get new regions for scatterplotting in groupplay" />
-    <MESSAGE value="Edits to get new regions for zonal and meridional means" />
-    <MESSAGE value="Edits to get new regions for regional means" />
-    <MESSAGE value="Small changes to get CDR 2 - up to 2013" />
-    <MESSAGE value="Small changes to run test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small changes to run test" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py</url>
-          <line>214</line>
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py</url>
-          <line>213</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="WindowStateProjectService">
+    <state x="-1180" y="275" key="FileChooserDialogImpl" timestamp="1584384049667">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1180" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1584384049667" />
+    <state x="463" y="165" key="SettingsEditor" timestamp="1584359242371">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="463" y="165" key="SettingsEditor/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1584359242371" />
+    <state x="668" y="347" key="com.intellij.ide.util.TipDialog" timestamp="1584358942505">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="668" y="347" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1584358942505" />
+    <state x="0" y="0" width="1558" height="1027" key="dock-window-1" timestamp="1584362358262">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="0" y="0" width="1558" height="1027" key="dock-window-1/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1584362358262" />
+    <state x="23" y="45" width="1558" height="865" key="dock-window-2" timestamp="1584384136639">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="23" y="45" width="1558" height="865" key="dock-window-2/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1584384136639" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_sc_pr_TTTprops.py">
+    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonics_code.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="20" column="35" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_CHANGE.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1680">
-          <caret line="117" selection-start-line="117" selection-end-line="118" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/scatter_nttt_precip.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="346" column="56" selection-start-line="346" selection-start-column="51" selection-end-line="346" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/SynopticAnatomy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="512" column="15" lean-forward="true" selection-start-line="512" selection-start-column="15" selection-end-line="512" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/find_saddle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="40" selection-start-line="13" selection-start-column="40" selection-end-line="13" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/get_ttcbs_loop_autothresh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-289">
-          <caret line="213" column="37" lean-forward="true" selection-start-line="213" selection-start-column="37" selection-end-line="213" selection-end-column="37" />
+        <state relative-caret-position="-930">
+          <caret line="70" column="24" selection-start-line="70" selection-start-column="24" selection-end-line="70" selection-end-column="24" />
           <folding>
-            <element signature="e#848#866#0" />
+            <element signature="e#0#27#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/dimensions_dict.py">
+    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonics_playwrap_wilks.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" column="44" selection-start-line="29" selection-start-column="44" selection-end-line="29" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/mast_dset_dict.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="145" selection-start-line="32" selection-start-column="145" selection-end-line="32" selection-end-column="145" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/plot_ttt_ts_sc_sf_loop_autothresh.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2941">
-          <caret line="173" selection-start-line="173" selection-end-line="176" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/AdvancedPlots.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="838">
-          <caret line="1305" selection-start-line="1305" selection-end-line="1305" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/mytools.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="33371">
-          <caret line="1963" column="14" selection-start-line="1963" selection-start-column="4" selection-end-line="1963" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/CBvar_4panelfig_backup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="205" column="9" selection-start-line="205" selection-start-column="4" selection-end-line="205" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.q.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.T.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.v.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="40" selection-start-column="40" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.gpth.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.omega.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.pr.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="4" selection-start-column="4" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/testplot_all_sampled_cbs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4267">
-          <caret line="253" column="28" selection-start-line="253" selection-start-column="28" selection-end-line="253" selection-end-column="28" />
+        <state relative-caret-position="272">
+          <caret line="16" column="19" selection-start-line="16" selection-end-line="17" />
           <folding>
-            <element signature="e#104#122#0" expanded="true" />
+            <element signature="e#31#49#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/Plotting_Blobs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="82" lean-forward="true" selection-start-line="22" selection-start-column="82" selection-end-line="22" selection-end-column="82" />
-          <folding>
-            <element signature="e#175#193#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.u.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/get_netcdf_arche_sample.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="2" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4p/dsets_wave.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="31" selection-start-column="31" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4p/dsets_qflux.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/generate_TTT_eventset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="29" lean-forward="true" selection-start-line="25" selection-end-line="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/get_arche_sample_dates4netcdf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="100" selection-start-line="100" selection-end-line="102" selection-end-column="97" />
-          <folding>
-            <element signature="e#141#150#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/EventStats.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="46" column="58" lean-forward="true" selection-start-line="46" selection-start-column="58" selection-end-line="46" selection-end-column="58" />
-          <folding>
-            <element signature="e#122#150#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/sample_dict.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="122" selection-start-line="8" selection-start-column="122" selection-end-line="8" selection-end-column="122" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MetBot/MetBlobs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="864">
-          <caret line="498" column="5" selection-start-line="498" selection-start-column="5" selection-end-line="498" selection-end-column="5" />
+        <state relative-caret-position="204">
+          <caret line="20" column="18" lean-forward="true" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/Subset_Events.py">
+    <entry file="file://$PROJECT_DIR$/MetBot/mytools.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonics_playwrap.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="841">
-          <caret line="253" column="12" lean-forward="true" selection-start-line="253" selection-start-column="12" selection-end-line="253" selection-end-column="12" />
+        <state relative-caret-position="425">
+          <caret line="34" column="39" selection-start-line="34" selection-end-line="35" />
           <folding>
-            <element signature="e#114#132#0" expanded="true" />
+            <element signature="e#31#72#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/coup_play/scatter_groupdefinition.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7795">
-          <caret line="54" selection-start-line="53" selection-end-line="54" />
-          <folding>
-            <element signature="e#260#269#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/coup_play/scatter_groupdefinition_newaxis.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="657">
-          <caret line="583" column="33" selection-start-line="583" selection-start-column="33" selection-end-line="583" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/filterdict_default.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="107" selection-start-line="3" selection-start-column="82" selection-end-line="3" selection-end-column="107" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/fill_between_demo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-153" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.olr.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="41" selection-start-column="41" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/comp_qflux_multimodpanels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="1333" column="27" lean-forward="true" selection-start-line="1333" selection-start-column="27" selection-end-line="1333" selection-end-column="27" />
-          <folding>
-            <element signature="e#618#627#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/comp_contour_multimodpanels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="593" column="41" selection-start-line="593" selection-start-column="41" selection-end-line="593" selection-end-column="41" />
-          <folding>
-            <element signature="e#585#594#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/dset_dict.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="841">
-          <caret line="53" column="648" selection-start-line="53" selection-start-column="641" selection-end-line="53" selection-end-column="648" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/group_dict.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="36" column="59" selection-start-line="36" selection-start-column="59" selection-end-line="36" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/get_netcdf_ltmean.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="11" selection-start-column="11" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/dicts4CDO/dset_info_4CDO.28models.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonic_multimod_comps.py___jb_tmp___" />
     <entry file="file://$PROJECT_DIR$/MetBot/mynetcdf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="67" column="50" selection-start-line="67" selection-start-column="50" selection-end-line="67" selection-end-column="50" />
+        <state relative-caret-position="204">
+          <caret line="117" column="38" selection-start-line="117" selection-start-column="38" selection-end-line="117" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_4panel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="255" lean-forward="true" selection-start-line="248" selection-end-line="255" />
-          <folding>
-            <element signature="e#398#407#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="311">
+          <caret line="805" selection-start-line="805" selection-end-line="806" selection-end-column="40" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wrap/coup_play/scatter_groupdefinition_newcriteria.py">
+    <entry file="file://$PROJECT_DIR$/coupanal/revplay/comp_wnumber_multimodpanels.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="552" column="23" selection-start-line="552" selection-start-column="17" selection-end-line="552" selection-end-column="23" />
-          <folding>
-            <element signature="e#260#269#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="177">
+          <caret line="285" column="52" selection-start-line="285" selection-end-line="286" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/scatter_number_2panel.py">
+    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonic_multimod_comps.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2261">
-          <caret line="134" column="43" selection-start-line="134" selection-start-column="43" selection-end-line="134" selection-end-column="43" />
+        <state relative-caret-position="362">
+          <caret line="292" column="58" lean-forward="true" selection-start-line="292" selection-start-column="58" selection-end-line="292" selection-end-column="58" />
           <folding>
-            <element signature="e#163#172#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/OLRdists_threshs_txtfile_plot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5202">
-          <caret line="309" column="38" selection-start-line="309" selection-start-column="32" selection-end-line="309" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/centroids_angles_scatter_w_sample.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3315">
-          <caret line="199" selection-start-line="139" selection-end-line="199" />
-          <folding>
-            <element signature="e#93#102#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/mapltmean_multimodpanels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="23" column="23" selection-start-line="23" selection-end-line="24" />
-          <folding>
-            <element signature="e#182#191#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/comp_wave_multimodpanels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="334" selection-start-line="334" selection-end-line="334" />
-          <folding>
-            <element signature="e#617#626#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/CBvar_4panelfig.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="623">
-          <caret line="318" selection-start-line="316" selection-end-line="318" />
-          <folding>
-            <element signature="e#317#326#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/spatiofreq_multimod.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="569">
-          <caret line="282" selection-start-line="282" selection-end-line="282" />
-          <folding>
-            <element signature="e#133#142#0" expanded="true" />
+            <element signature="e#222#231#0" expanded="true" />
           </folding>
         </state>
       </provider>
