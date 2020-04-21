@@ -2,7 +2,11 @@
 # gpth at 200 - following Todd and Washington (1999)
 # should be 24 models available
 # uses adaptation of "harmonics_code.py" (original by Callum Munday)
-
+#
+# Options for outputs:
+# a table with the harmonics of the composite mean
+# a line graph showing the mean value for each wavenumber across the composites
+# a histogram (ish) showing the number of times each wave number is dominant
 
 import os
 import sys
@@ -15,6 +19,7 @@ if runoffline==True:
 import math as mh
 import numpy as np
 import scipy
+import matplotlib.pyplot as plt
 
 cwd=os.getcwd()
 sys.path.append(cwd)
@@ -28,7 +33,18 @@ import MetBot.mynetcdf as mync
 import MetBot.MetBlobs as blb
 import harmonics_code as hc
 
+compmean_table=True
+inddayanal=True # proceed to individual day analysis for the graphs
+lineplot=False
+showcompmn=False
+histplot=False
+psoutput=False   # playing around with phase outputs
+txtplay=False
 
+ampplot=True
+amphist=True
+ridgemean=True
+ridgehist=True
 
 ### Running options
 test_scr=False  # if True will just run on first model from each dataset
@@ -36,6 +52,7 @@ alphord=True
 sample='blon'
 wcb=['cont','mada'] # which cloud band composite? Options: cont, mada
 threshtest=False
+ctyp = 'anom_mon' # 'anom_mon' or 'anom_seas'
 
 globv='gpth'
 levsel=True
@@ -60,8 +77,24 @@ sub='latband'
 bkdir=cwd+"/../../../../CTdata/"
 botdir=bkdir+"metbot_multi_dset/"
 txtdir=botdir+"/revplay/harmonics_table/"
+figdir=botdir+"/revplay/harmonics_plot/"
 my.mkdir_p(txtdir)
+my.mkdir_p(figdir)
 
+
+### Display options for plot
+cols = ['k', 'g', 'r', 'c', 'm', 'gold', 'b', \
+        'g', 'r', 'c', 'm', 'gold', 'b', 'indigo', \
+        'g', 'r', 'c', 'm', 'gold', 'b', 'indigo', \
+        'g', 'r', 'c', 'm', 'gold', 'b', 'indigo']
+styls = ["solid", "solid", "solid", "solid", "solid", "solid", "solid", \
+         "dashed", "dashed", "dashed", "dashed", "dashed", "dashed", "dashed", \
+         "dotted", "dotted", "dotted", "dotted", "dotted", "dotted", "dotted", \
+         "-.", "-.", "-.", "-.", "-.", "-.", "-."]
+lws = np.full((28), 2)
+lws[0] = 5
+zorders = np.full((28), 2)
+zorders[0] = 3
 
 # Loop threshs
 if threshtest:
@@ -81,13 +114,87 @@ for t in range(nthresh):
         # Set up table
         print "Setting up table..."
 
+        if psoutput:
+            txtsuf='incl_ps.'
+        else:
+            txtsuf=''
+
         print 'Opening txtfile'
         if test_scr:
-            txtname = txtdir + "/harmonics.thresh_" + thname + "." + type + ".testmodels.txt"
+            txtname = txtdir + "/harmonics.thresh_" + thname + "." + type + "."+txtsuf+".testmodels.txt"
         else:
-            txtname = txtdir + "/harmonics.thresh_" + thname + "." + type + ".txt"
+            txtname = txtdir + "/harmonics.thresh_" + thname + "." + type + "."+txtsuf+"txt"
 
         txtfile = open(txtname, "w")
+
+        # Set up plot
+        if lineplot:
+            plt.figure(num='raw', figsize=[10, 6])
+            ax = plt.subplot(111)
+
+            if showcompmn:
+                figsuf='.star_compmn'
+            else:
+                figsuf=''
+
+            if test_scr:
+                figname = figdir + "/harmonics.linegraph.thresh_" + thname + "." + type + "."+ ctyp +".testmodels."+figsuf+"png"
+            else:
+                figname = figdir + "/harmonics.linegraph.thresh_" + thname + "." + type + "."+ ctyp +"."+figsuf+"png"
+
+        if histplot:
+            plt.figure(num='hist', figsize=[10, 6])
+            ax = plt.subplot(111)
+
+            if test_scr:
+                histfig = figdir + "/harmonics.histplot_domwns.thresh_" + thname + "." + type + "."+ ctyp +".testmodels."+figsuf+"png"
+            else:
+                histfig = figdir + "/harmonics.histplot_domwns.thresh_" + thname + "." + type + "."+ ctyp +"."+figsuf+"png"
+
+        if psoutput:
+            plt.figure(num='ps', figsize=[10, 6])
+            ax = plt.subplot(111)
+
+            if test_scr:
+                psfig = figdir + "/harmonics.ps_wave4_histogram.thresh_" + thname + "." + type + "."+ ctyp +".testmodels."+figsuf+"png"
+            else:
+                psfig = figdir + "/harmonics.ps_wave4_histogram.thresh_" + thname + "." + type + "."+ ctyp +"."+figsuf+"png"
+
+        if ampplot:
+            plt.figure(num='amp', figsize=[10, 6])
+            ax = plt.subplot(111)
+
+            if test_scr:
+                ampname = figdir + "/harmonics.ampfig.thresh_" + thname + "." + type + "."+ ctyp +".testmodels.png"
+            else:
+                ampname = figdir + "/harmonics.ampfig.thresh_" + thname + "." + type + "."+ ctyp +".png"
+
+        if amphist:
+            plt.figure(num='a_hist', figsize=[10, 6])
+            ax = plt.subplot(111)
+
+            if test_scr:
+                ahistfig = figdir + "/harmonics.amp_histogram.thresh_" + thname + "." + type + "."+ ctyp +".testmodels.png"
+            else:
+                ahistfig = figdir + "/harmonics.amp_histogram.thresh_" + thname + "." + type + "."+ ctyp +".png"
+
+        if ridgemean:
+            plt.figure(num='rdg_mn', figsize=[10, 6])
+            ax = plt.subplot(111)
+
+            if test_scr:
+                rdg_mean_name = figdir + "/harmonics.ridge_means.thresh_" + thname + "." + type + "."+ ctyp +".testmodels.png"
+            else:
+                rdg_mean_name = figdir + "/harmonics.ridge_means.thresh_" + thname + "." + type + "."+ ctyp +".png"
+
+        if ridgehist:
+            plt.figure(num='rdg_hist', figsize=[10, 6])
+            ax = plt.subplot(111)
+
+            if test_scr:
+                rdg_hist_fig = figdir + "/harmonics.ridge_histogram.thresh_" + thname + "." + type + "."+ ctyp +".testmodels.png"
+            else:
+                rdg_hist_fig = figdir + "/harmonics.ridge_histogram.thresh_" + thname + "." + type + "."+ ctyp +".png"
 
         cnt = 1
 
@@ -97,10 +204,12 @@ for t in range(nthresh):
             dsetnames = list(dsetdict.dset_deets)
         elif dsets == 'spec':
             dsetnames = ['noaa', 'cmip5']
+            #dsetnames = ['cmip5']
         ndset = len(dsetnames)
         ndstr = str(ndset)
 
         print "Looping datasets"
+        z = 0
         for d in range(ndset):
             dset=dsetnames[d]
             dcnt=str(d+1)
@@ -120,6 +229,7 @@ for t in range(nthresh):
                     mnames_tmp = ['cdr2']
                 elif dset == 'cmip5':
                     mnames_tmp = list(dsetdict.dset_deets[dset])
+                    #mnames_tmp = ['BNU-ESM']
             nmod = len(mnames_tmp)
             nmstr = str(nmod)
 
@@ -262,28 +372,49 @@ for t in range(nthresh):
                     else:
                         meandata = meandata[idx, :, :]
 
-                    # get seasonal mean
-                    if len(lat)==1:
-                        thesemons = np.zeros((nmon, nlon), dtype=np.float32)
-                        for zz in range(len(mons)):
-                            thesemons[zz, :] = meandata[mons[zz] - 1, :]
+                    print 'Getting latmean for climatology'
+                    if len(lat)>1:
+                        clim_ltmns=np.squeeze(np.mean(meandata,1))
                     else:
-                        thesemons=np.zeros((nmon,nlat,nlon), dtype=np.float32)
-                        for zz in range(len(mons)):
-                            thesemons[zz, :, :] = meandata[mons[zz] - 1, :, :]
-                    seasmean = np.nanmean(thesemons, 0)
+                        clim_ltmns=meandata
+                    print clim_ltmns
 
-                    print 'Getting latmean for variable'
-                    seas_ltmn=np.squeeze(np.mean(seasmean,0))
-                    print seas_ltmn
+                    if ctyp=='anom_seas':
+                        # get seasonal mean
+                        if len(lat)==1:
+                            thesemons = np.zeros((nmon, nlon), dtype=np.float32)
+                            for zz in range(len(mons)):
+                                thesemons[zz, :] = clim_ltmns[mons[zz] - 1, :]
+                        else:
+                            thesemons=np.zeros((nmon,nlat,nlon), dtype=np.float32)
+                            for zz in range(len(mons)):
+                                thesemons[zz, :, :] = clim_ltmns[mons[zz] - 1, :, :]
+                        seas_ltmn = np.nanmean(thesemons, 0)
 
-                    anoms = np.asarray([smp_ltmn[x, :] - seas_ltmn for x in range(len(smp_ltmn[:, 0]))])
+                        anoms = np.asarray([smp_ltmn[x, :] - seas_ltmn for x in range(len(smp_ltmn[:, 0]))])
+
+                    elif ctyp=='anom_mon':
+
+                        anoms = np.zeros((nsamp, nlon), dtype=np.float32)
+                        for day in range(nsamp):
+                            mon_thisday = smpdtime[day, 1]
+                            this_monmean = clim_ltmns[mon_thisday - 1]
+                            this_anom = smp_ltmn[day, :] - this_monmean
+                            anoms[day, :] = this_anom
 
                     anom_comp=np.nanmean(anoms,0)
 
-                    # Do harmonic analysis
+                    # Do harmonic analysis on composite mean
                     lonnum = np.arange(1, nlon + 1)
-                    list_C, list_ps, ex_var_list, amp_var_list = hc.higher_harmonics_fx(anom_comp, lonnum, nh=20)
+                    list_C, list_phi, list_ps, ex_var_list, amp_var_list = hc.higher_harmonics_fx(anom_comp, lonnum, nh=20)
+
+                    # Alternatives I tested
+
+                    # with raw longitudes - doesn't work - ex var list adds up to more than 100%
+                    # list_C, list_ps, ex_var_list, amp_var_list = hc.higher_harmonics_fx(anom_comp, lon, nh=20)
+
+                    # with absolutes rather than anomalies - yields a different result
+                    #list_C, list_ps, ex_var_list, amp_var_list = hc.higher_harmonics_fx(compdata, lonnum, nh=20)
 
                     # Output table
                     print 'Now writing values to textfile for this model'
@@ -316,7 +447,173 @@ for t in range(nthresh):
                         + str(round(ex_var_list[9], 2)) + "\t" \
                         + "\n")
 
+                    if psoutput:
+                        print 'Third phase shift'
+                        txtfile.write(labname + "\t" + "phase shift"+ "\t"\
+                            + str(round(list_ps[0], 2)) + "\t"\
+                            + str(round(list_ps[1], 2)) + "\t" \
+                            + str(round(list_ps[2], 2)) + "\t" \
+                            + str(round(list_ps[3], 2)) + "\t" \
+                            + str(round(list_ps[4], 2)) + "\t" \
+                            + str(round(list_ps[5], 2)) + "\t" \
+                            + str(round(list_ps[6], 2)) + "\t" \
+                            + str(round(list_ps[7], 2)) + "\t" \
+                            + str(round(list_ps[8], 2)) + "\t" \
+                            + str(round(list_ps[9], 2)) + "\t" \
+                            + "\n")
+
+                    # Find the wavenumber with peak variance explained
+                    max=np.max(ex_var_list)
+                    peak=np.where(ex_var_list == max)[0]
+                    dom_wn=peak[0]+1
+
+                    if inddayanal:
+
+                        # Now loop composite days and get harmonics for each one
+                        nwv=20
+                        amps_samp=np.zeros((nsamp,nwv),dtype=np.float32)
+                        vars_samp=np.zeros((nsamp,nwv),dtype=np.float32)
+                        ps_samp=np.zeros((nsamp,nwv),dtype=np.float32)
+                        close_ridges = np.zeros((nsamp,nwv),dtype=np.float32)
+                        peakvar_samp=np.zeros(nwv,dtype=np.float32)
+                        list_ps_w4=[]
+
+                        for dt in range(nsamp):
+                            this_anom=anoms[dt,:]
+                            list_C, list_phi, list_ps, ex_var_list, amp_var_list = hc.higher_harmonics_fx(this_anom, lonnum, nh=20)
+                            amps_samp[dt,:]=list_C
+                            vars_samp[dt,:]=ex_var_list
+                            ps_samp[dt,:]=list_ps
+
+                            this_max=np.max(ex_var_list)
+                            this_peak=np.where(ex_var_list == this_max)[0][0]
+                            if this_peak==3:
+                                list_ps_w4.append(list_ps[3])
+                            peakvar_samp[this_peak] += 1
+
+                            for w in range(nwv):
+                                wn=w+1
+                                # Find ridge nearest southern Africa
+                                this_phi=list_phi[wn-1]
+                                firstridge=this_phi/wn
+                                f_rdg_deg=mh.degrees(firstridge)
+                                if f_rdg_deg < 0:
+                                    f_rdg_deg = 360.0 + f_rdg_deg
+                                ridges=np.zeros(wn)
+                                for r in range(wn):
+                                    if r==0:
+                                        ridges[r] = f_rdg_deg
+                                    else:
+                                        this_ridge=ridges[r-1]+(360.0/wn)
+                                        if this_ridge > 360.0:
+                                            ridges[r]= this_ridge - 360.0
+                                        else:
+                                            ridges[r]= this_ridge
+                                ridges=np.sort(ridges)
+
+                                ridges_afcentre=np.zeros(wn)
+                                for r in range(wn):
+                                    this_rdg=ridges[r]
+                                    if this_rdg > 180.0:
+                                        new_rdg = this_rdg - 360.0
+                                    else:
+                                        new_rdg = this_rdg
+                                    ridges_afcentre[r]=new_rdg
+
+                                dreamlon=33.0
+                                clost_rdg = hc.find_nearest(ridges_afcentre,dreamlon)
+
+                                close_ridges[dt,w]=clost_rdg
+
+                            if txtplay:
+                                if dt == 1:
+                                    txtfl2 = txtdir + "/sampleseries.txt"
+
+                                    txtfl2_fl = open(txtfl2, "w")
+
+                                    for ln in range(nlon):
+
+                                        txtfl2_fl.write(str(round(lon[ln],2)) + "\t"
+                                                  + str(round(lonnum[ln], 2)) + "\t" \
+                                                  + str(round(this_anom[ln], 2)) + "\t" \
+                                                  + "\n")
+
+                                    txtfl2_fl.close()
+
+                        # Get mean values for each wavenumber
+                        means_amps=np.mean(amps_samp,0)
+                        means_vars=np.mean(vars_samp,0)
+                        means_rdgs=np.mean(close_ridges,0)
+
+                        ps_w4=np.asarray(list_ps_w4)
+
+                        wvnums = np.arange(1, 11)
+
+                        if lineplot:
+
+                            # Plot
+                            plt.figure(num='raw')
+                            plt.plot(wvnums,means_vars[0:10],c=cols[z],linestyle=styls[z], linewidth=lws[z], zorder=zorders[z], label=labname)
+
+                            if showcompmn:
+                                # Add peak value for composite mean
+                                plt.plot(dom_wn,max,marker='*',c=cols[z],markeredgecolor=cols[z], linestyle='None',zorder=zorders[z])
+
+                        if histplot:
+
+                            # Plot
+                            plt.figure(num='hist')
+                            plt.plot(wvnums, peakvar_samp[0:10], c=cols[z], linestyle=styls[z], linewidth=lws[z],
+                                     zorder=zorders[z], label=labname)
+
+                        if psoutput:
+                            # Plot
+                            plt.figure(num='ps')
+                            print 'Printing ps values for wave 4'
+                            print ps_w4
+                            ndot=len(ps_w4)
+                            print "n = "+str(ndot)
+                            yvals=np.zeros(ndot)
+                            yvals[:]=cnt
+                            plt.plot(ps_w4, yvals, marker='*', c=cols[z],markeredgecolor=cols[z], linestyle='None',
+                                     zorder=zorders[z], label=labname)
+
+
+                        if ampplot:
+
+                            # Plot
+                            plt.figure(num='amp')
+                            plt.plot(wvnums,means_amps[0:10],c=cols[z],linestyle=styls[z], linewidth=lws[z], zorder=zorders[z], label=labname)
+
+                        if amphist:
+
+                            # Plot
+                            plt.figure(num='a_hist')
+                            data4w4=amps_samp[:,3]
+                            y, binEdges = np.histogram(data4w4, bins=15, density=True)
+                            bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
+                            plt.plot(bincentres, y, c=cols[z], linestyle=styls[z], linewidth=lws[z], zorder=zorders[z],
+                                 label=labname)
+
+                        if ridgemean:
+
+                            # Plot
+                            plt.figure(num='rdg_mn')
+                            plt.plot(wvnums,means_rdgs[0:10],c=cols[z],linestyle=styls[z], linewidth=lws[z], zorder=zorders[z], label=labname)
+
+                        if ridgehist:
+
+                            # Plot
+                            plt.figure(num='rdg_hist')
+                            data4w4=close_ridges[:,3]
+                            y, binEdges = np.histogram(data4w4, bins=15, density=True)
+                            bincentres = 0.5 * (binEdges[1:] + binEdges[:-1])
+                            plt.plot(bincentres, y, c=cols[z], linestyle=styls[z], linewidth=lws[z], zorder=zorders[z],
+                                 label=labname)
+
+
                     cnt += 1
+                    z += 1
 
                 else:
 
@@ -325,7 +622,105 @@ for t in range(nthresh):
                     print
                     'Moving to next model....'
                     cnt += 1
+                    z += 1
 
         print "Finalising table..."
         txtfile.close()
         print 'saving txtfile as ' + txtname
+
+        if lineplot:
+            print "Finalising line plot"
+            plt.figure(num='raw')
+
+            plt.xlabel('wavenumber',fontsize=10.0, weight='demibold', color='k')
+            plt.ylabel('mean variance explained',fontsize=10.0, weight='demibold', color='k')
+
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+            ax.legend(loc='center left', bbox_to_anchor=[1, 0.5], fontsize='xx-small')
+
+            plt.savefig(figname)
+            print 'Saving figure as ' + figname
+
+        if histplot:
+            print "Finalising hist plot"
+            plt.figure(num='hist')
+
+            plt.xlabel('wavenumber', fontsize=10.0, weight='demibold', color='k')
+            plt.ylabel('freq most dominant', fontsize=10.0, weight='demibold', color='k')
+
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+            ax.legend(loc='center left', bbox_to_anchor=[1, 0.5], fontsize='xx-small')
+
+            plt.savefig(histfig)
+            print 'Saving figure as ' + histfig
+
+        if psoutput:
+            print
+            "Finalising ps plot"
+            plt.figure(num='ps')
+
+            plt.xlabel('ps for wave 4', fontsize=10.0, weight='demibold', color='k')
+
+            plt.savefig(psfig)
+            print
+            'Saving figure as ' + psfig
+
+
+        if ampplot:
+            print "Finalising line plot"
+            plt.figure(num='amp')
+
+            plt.xlabel('wavenumber',fontsize=10.0, weight='demibold', color='k')
+            plt.ylabel('mean amplitude',fontsize=10.0, weight='demibold', color='k')
+
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+            ax.legend(loc='center left', bbox_to_anchor=[1, 0.5], fontsize='xx-small')
+
+            plt.savefig(ampname)
+            print 'Saving figure as ' + ampname
+
+        if amphist:
+            print "Finalising amp hist plot"
+            plt.figure(num='a_hist')
+
+            plt.xlabel('amplitudes of wave 4', fontsize=10.0, weight='demibold', color='k')
+
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+            ax.legend(loc='center left', bbox_to_anchor=[1, 0.5], fontsize='xx-small')
+
+            plt.savefig(ahistfig)
+            print 'Saving figure as ' + ahistfig
+
+        if ridgemean:
+
+            print "Finalising line plot"
+            plt.figure(num='rdg_mn')
+
+            plt.xlabel('wavenumber',fontsize=10.0, weight='demibold', color='k')
+            plt.ylabel('mean lon of ridge',fontsize=10.0, weight='demibold', color='k')
+
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+            ax.legend(loc='center left', bbox_to_anchor=[1, 0.5], fontsize='xx-small')
+
+            plt.savefig(rdg_mean_name)
+            print 'Saving figure as ' + rdg_mean_name
+
+        if ridgehist:
+            print "Finalising ridge hist plot"
+            plt.figure(num='rdg_hist')
+
+            plt.xlabel('closest lon of wave 4', fontsize=10.0, weight='demibold', color='k')
+
+            box = ax.get_position()
+            ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+            ax.legend(loc='center left', bbox_to_anchor=[1, 0.5], fontsize='xx-small')
+
+            plt.savefig(rdg_hist_fig)
+            print 'Saving figure as ' + rdg_hist_fig
+
+        plt.close('all')

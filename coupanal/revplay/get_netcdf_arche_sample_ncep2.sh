@@ -5,14 +5,14 @@
 #    uses dictionaries in "dicts4CDO" - recently edited to use CDR2 and ERAI
 
 # Find input and output directories
-alldir=../../../CTdata
+alldir=../../../../CTdata
 mbdir=$alldir/metbot_multi_dset
 tmpdir=$mbdir/tmp_foo/
 
 mkdir -p $tmpdir
 rm $tmpdir/foo*
 
-dset_dict=./dicts4CDO/dset_info_4CDO.28models.txt
+dset_dict=./dicts4CDO_ncep/dset_info_4CDO.28models.txt
 onlynew=True
 
 threshtest=True
@@ -49,7 +49,7 @@ for thname in actual;do
 
                 echo "Running on"
                 echo $var
-                dict=./dicts4CDO/dset_info_4CDO.28models.$var.ncep.txt
+                dict=./dicts4CDO_ncep/dset_info_4CDO.28models.$var.ncep.txt
                 name2=$(grep -w $name $dict | gawk '{print $3}' | head -1)
                 dset2=$(grep -w $name $dict | gawk '{print $4}' | head -1)
                 ysname=$(grep -w $name $dict | gawk '{print $5}' | head -1)

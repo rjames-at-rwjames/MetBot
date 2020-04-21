@@ -133,6 +133,7 @@ def higher_harmonics_fx(obs, time,nh=20):
     #this section works out the amplitude and phaseshift
     #1st work out A1 and B1 using formulae
     list_ps=[]
+    list_phi=[]
     list_C=[]
     for h in harm_funcs:
         list_A=[]
@@ -162,6 +163,7 @@ def higher_harmonics_fx(obs, time,nh=20):
 
         #convert phase angle in radians to degrees.
         ps_deg=mh.degrees(phi)
+        list_phi.append(phi)
         list_ps.append(ps_deg)
         list_C.append(C)
     sum_amps=np.sum(list_C)
@@ -178,4 +180,9 @@ def higher_harmonics_fx(obs, time,nh=20):
 
         ex_var_list.append(ex_variance)
 
-    return list_C, list_ps, ex_var_list, amp_var_list
+    return list_C, list_phi, list_ps, ex_var_list, amp_var_list
+
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return array[idx]

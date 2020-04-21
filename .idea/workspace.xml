@@ -1,179 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c428abf1-e167-4e68-8a0e-7c12155ffd62" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/MetBot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MetBot.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/remote-mappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/remote-mappings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/RainStats.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/RainStats.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/SynopticAnatomy.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/SynopticAnatomy.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/SynopticPlot.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/SynopticPlot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/climate_index_definitions.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/climate_index_definitions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/dimensions_dict.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/dimensions_dict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/filterdict.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/filterdict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/filterdict_default.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/filterdict_default.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/find_saddle.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/find_saddle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/massweight_vertintegral.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/massweight_vertintegral.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/mast_dset_dict.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/mast_dset_dict.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/mynetcdf.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/mynetcdf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/mytools.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/mytools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/rawdatafreq.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/rawdatafreq.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MetBot/rawseasonalcycle.py" beforeDir="false" afterPath="$PROJECT_DIR$/MetBot/rawseasonalcycle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/get_netcdf_arche_sample.sh" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/get_netcdf_arche_sample.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/get_netcdf_ltmean.sh" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/get_netcdf_ltmean.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/coupanal/get_netcdf_ltmean_future.sh" beforeDir="false" afterPath="$PROJECT_DIR$/coupanal/get_netcdf_ltmean_future.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/getOLRdata.sh" beforeDir="false" afterPath="$PROJECT_DIR$/test/getOLRdata.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_rj.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_rj.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/allCMIPplot_OLRhist.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_OLRhist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/allCMIPplot_bars_pr_TTTprops.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_bars_pr_TTTprops.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/allCMIPplot_dTTTintensity.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_dTTTintensity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/allCMIPplot_oneplot_change_sc_dPR.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_oneplot_change_sc_dPR.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/allCMIPplot_sc_dPR.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_sc_dPR.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/allCMIPplot_sc_dPR_TTTs.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_sc_dPR_TTTs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/allCMIPplot_sc_pr_TTTprops.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_sc_pr_TTTprops.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/allCMIPplot_ttt_precip_autothresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/get.anim.olr.cmip5.daily.sh" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/get.anim.olr.cmip5.daily.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/get.anim.olr.pr.cmip5.daily.sh" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/get.anim.olr.pr.cmip5.daily.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/get_ttcbs_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/get_ttcbs_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/get_ttcbs_test_onlyflagged.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/get_ttcbs_test_onlyflagged.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_cmip_loopALLdays4anim_largerdom.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_cmip_loopALLdays4anim_largerdom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_cmip_loopALLdays4anim_olr_pr.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_cmip_loopALLdays4anim_olr_pr.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_compare_olr_dist_thresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_freqbymonth_centroids_angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_freqbymonth_centroids_angles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_nttt_bar_multi_dset_autothresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_nttt_bar_multi_dset_autothresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_nttt_bar_multi_dset_oldthresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_nttt_bar_multi_dset_oldthresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_sc_allmodels.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_sc_allmodels.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_time_centroids_angles.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_time_centroids_angles.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_ttt_olr_autothresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_ttt_olr_autothresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_ttt_omega_autothresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_ttt_omega_autothresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_ttt_precip_autothresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_ttt_precip_autothresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_ttt_qflux_autothresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_ttt_qflux_autothresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/plot_ttt_ts_sc_sf_loop_oldthresh.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/plot_ttt_ts_sc_sf_loop_oldthresh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/scatter_nttt_precip.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/scatter_nttt_precip.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/scatter_thresh_nttt.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/scatter_thresh_nttt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wrap/thresh_change_nTTT_fut_th_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/wrap/thresh_change_nTTT_fut_th_test.py" afterDir="false" />
-    </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <list default="true" id="c428abf1-e167-4e68-8a0e-7c12155ffd62" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonic_multimod_comps.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="362">
-              <caret line="292" column="58" lean-forward="true" selection-start-line="292" selection-start-column="58" selection-end-line="292" selection-end-column="58" />
-              <folding>
-                <element signature="e#222#231#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/coupanal/revplay/comp_wnumber_multimodpanels.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="285" column="52" selection-start-line="285" selection-end-line="286" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>mh</find>
-      <find>harmonic_number</find>
-      <find>nh</find>
-      <find>index</find>
-      <find>table</find>
-      <find>txt</find>
-      <find>smpfile</find>
-      <find>mean</find>
-      <find>seas</find>
-      <find>amp_var</find>
-      <find>nlon</find>
-      <find>labname</find>
-      <find>label</find>
-      <find>sub</find>
-      <find>amplitude</find>
-      <find>anoms</find>
-      <find>txtfile</find>
-      <find>wcb</find>
-      <find>smpdata</find>
-    </findStrings>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/coupanal/revplay/harmonics_playwrap_wilks.py" />
-        <option value="$PROJECT_DIR$/coupanal/revplay/harmonics_playwrap.py" />
-        <option value="$PROJECT_DIR$/coupanal/revplay/harmonics_code.py" />
-        <option value="$PROJECT_DIR$/MetBot/mynetcdf.py" />
-        <option value="$PROJECT_DIR$/coupanal/revplay/harmonic_multimod_comps.py" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-20" />
-    <option name="y" value="3" />
-    <option name="width" value="1132" />
-    <option name="height" value="704" />
-  </component>
   <component name="ProjectId" id="1ZD1bbNBD4FcOPT3qAz4cVGCdXY" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="MetBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MetBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
-              <item name="coupanal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MetBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
-              <item name="coupanal" type="462c0819:PsiDirectoryNode" />
-              <item name="paperfigs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MetBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
-              <item name="coupanal" type="462c0819:PsiDirectoryNode" />
-              <item name="revplay" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MetBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
-              <item name="MetBot" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
-  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -182,7 +26,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/coupanal/revisedfigs" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -193,20 +37,14 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="Z:\PyCharm4CT\MetBot\coupanal\revisedfigs" />
+      <recent name="Z:\PyCharm4CT\MetBot\coupanal\paperfigs" />
+      <recent name="Z:\PyCharm4CT\MetBot\coupanal\revplay" />
+      <recent name="Z:\PyCharm4CT\MetBot\coupanal\revplay\dicts4CDO_ncep" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="Z:\PyCharm4CT\MetBot\coupanal\revplay" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -223,135 +61,74 @@
       <workItem from="1584628566023" duration="9721000" />
       <workItem from="1584642937364" duration="2108000" />
       <workItem from="1584648300047" duration="999000" />
+      <workItem from="1584879243585" duration="2749000" />
+      <workItem from="1584894171121" duration="14792000" />
+      <workItem from="1584958575368" duration="5547000" />
+      <workItem from="1584981166392" duration="1292000" />
+      <workItem from="1585043647869" duration="1228000" />
+      <workItem from="1585048792735" duration="10002000" />
+      <workItem from="1585226724957" duration="1660000" />
+      <workItem from="1585314376066" duration="2714000" />
+      <workItem from="1585565856112" duration="13699000" />
+      <workItem from="1585594086180" duration="685000" />
+      <workItem from="1585649303606" duration="2100000" />
+      <workItem from="1585762224224" duration="2892000" />
+      <workItem from="1585825533491" duration="13236000" />
+      <workItem from="1585905252730" duration="808000" />
+      <workItem from="1586080766380" duration="24318000" />
+      <workItem from="1586165143761" duration="6500000" />
+      <workItem from="1587039574421" duration="1261000" />
     </task>
     <servers />
-  </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18473000" />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.290469" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32924694" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info anchor="bottom" id="Python Console" order="12" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="Database" order="4" />
-    </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="-1180" y="275" key="FileChooserDialogImpl" timestamp="1584384049667">
-      <screen x="-1920" y="0" width="1920" height="1040" />
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1585062327268">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="-1180" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1584384049667" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1585062327268" />
     <state x="463" y="165" key="SettingsEditor" timestamp="1584359242371">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="463" y="165" key="SettingsEditor/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1584359242371" />
-    <state x="668" y="347" key="com.intellij.ide.util.TipDialog" timestamp="1584358942505">
+    <state x="-1252" y="347" key="com.intellij.ide.util.TipDialog" timestamp="1587039612534">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1252" y="347" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1587039612534" />
+    <state x="668" y="347" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1586080955980" />
+    <state x="668" y="347" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585594086774" />
+    <state x="0" y="0" width="1476" height="1019" key="dock-window-1" timestamp="1586166324296">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="668" y="347" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1584358942505" />
-    <state x="0" y="0" width="1558" height="1027" key="dock-window-1" timestamp="1584362358262">
+    <state x="0" y="0" width="1476" height="1019" key="dock-window-1/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1586166324296" />
+    <state x="-1489" y="0" width="1505" height="1027" key="dock-window-1/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1585827018418" />
+    <state x="211" y="0" width="1480" height="1020" key="dock-window-2" timestamp="1586104138565">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="0" y="0" width="1558" height="1027" key="dock-window-1/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1584362358262" />
-    <state x="23" y="45" width="1558" height="865" key="dock-window-2" timestamp="1584384136639">
+    <state x="211" y="0" width="1480" height="1020" key="dock-window-2/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1586104138565" />
+    <state x="0" y="0" width="1505" height="1027" key="dock-window-2/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1585853037526" />
+    <state x="0" y="0" width="1480" height="1020" key="dock-window-3" timestamp="1586123048906">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="23" y="45" width="1558" height="865" key="dock-window-2/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1584384136639" />
+    <state x="0" y="0" width="1480" height="1020" key="dock-window-3/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1586123048906" />
+    <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1586104217053">
+      <screen x="-1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="-1297" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.0.1920.1040@-1920.0.1920.1040" timestamp="1586104217053" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1920.0.1920.1040@0.0.1920.1040" timestamp="1585831032992" />
   </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonics_code.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-930">
-          <caret line="70" column="24" selection-start-line="70" selection-start-column="24" selection-end-line="70" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonics_playwrap_wilks.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="19" selection-start-line="16" selection-end-line="17" />
-          <folding>
-            <element signature="e#31#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/MetBlobs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="20" column="18" lean-forward="true" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MetBot/mytools.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonics_playwrap.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="34" column="39" selection-start-line="34" selection-end-line="35" />
-          <folding>
-            <element signature="e#31#72#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonic_multimod_comps.py___jb_tmp___" />
-    <entry file="file://$PROJECT_DIR$/MetBot/mynetcdf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="117" column="38" selection-start-line="117" selection-start-column="38" selection-end-line="117" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/paperfigs/scatter_groupdefinition_4panel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="805" selection-start-line="805" selection-end-line="806" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/revplay/comp_wnumber_multimodpanels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="285" column="52" selection-start-line="285" selection-end-line="286" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/coupanal/revplay/harmonic_multimod_comps.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="292" column="58" lean-forward="true" selection-start-line="292" selection-start-column="58" selection-end-line="292" selection-end-column="58" />
-          <folding>
-            <element signature="e#222#231#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/coupanal/revisedfigs/scatter_qfluxes_3panel.py</url>
+          <line>675</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
